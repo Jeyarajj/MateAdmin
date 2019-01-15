@@ -14,6 +14,7 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+
 // Apollo Config
 export const apolloProvider = new VueApollo({
   defaultClient: apolloClient
