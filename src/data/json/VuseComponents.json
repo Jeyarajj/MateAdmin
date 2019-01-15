@@ -1,0 +1,37 @@
+{
+  "chartjs": {
+    "components": [],
+    "examples": [
+      "barExample",
+      "lineExample",
+      "doughnutExample",
+      "pieExample",
+      "radarExample",
+      "bubbleExample",
+      "lineFilledExample",
+      "scatterExample"
+    ],
+    "spec": false
+  },
+  "vuetrend": {
+    "components": ["trend"],
+    "examples": [
+      "standard"
+    ],
+    "spec": false
+  },
+  "vuebar": {
+    "components": ["bars"],
+    "examples": [
+      "standard"
+    ],
+    "spec": false
+  },
+  "formui": {
+    "components": ["v-form"],
+    "examples": [
+      "basic"
+    ],
+    "spec": false
+  }
+}
