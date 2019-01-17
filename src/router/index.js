@@ -1,17 +1,17 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-import _ from 'lodash'
+import _ from 'lodash';
 
-import Router from 'vue-router'
-import { store } from '../store/index'
-import { routes } from './routes'
+import Router from 'vue-router';
+import { store } from '../store/index';
+import { routes } from './routes';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
   routes
-})
+});
 
 /*
  * router.beforeEach((to, from, next) => { if (to.meta.requiresAuth) { const
@@ -32,7 +32,7 @@ const router = new Router({
  *
  * @returns {Boolean} A Boolean value which will say if redirection will happen or not.
  */
-function checkForDirectURLAccess (to, from, next, isAuthenticated, isVerified) {
+function checkForDirectURLAccess(to, from, next, isAuthenticated, isVerified) {
   if (to.matched.some(route => route.meta.privateRouteGuard)) {
     return to.meta.privateRouteGuard(
       to,
@@ -40,34 +40,34 @@ function checkForDirectURLAccess (to, from, next, isAuthenticated, isVerified) {
       next,
       isAuthenticated,
       isVerified
-    )
+    );
   }
-  const toParameters = _.cloneDeep(to.params)
+  const toParameters = _.cloneDeep(to.params);
 
   if (to.matched.some(route => route.meta.redirectOnURLAccess)) {
-    let newTargetURL = to.meta.redirectOnURLAccess
+    let newTargetURL = to.meta.redirectOnURLAccess;
     for (const parameter in toParameters) {
       if (toParameters.hasOwnProperty(parameter)) {
-        const parameterValue = toParameters[parameter]
+        const parameterValue = toParameters[parameter];
         if (parameterValue) {
           newTargetURL = newTargetURL
             .split(`:${parameter}`)
-            .join(parameterValue)
+            .join(parameterValue);
         }
       }
     }
     next({
       path: newTargetURL
-    })
-    return true
+    });
+    return true;
   } else if (to.matched.some(route => route.meta.verified) && !isVerified) {
     next({
       path: '/'
-    })
-    return true
+    });
+    return true;
   } else {
-    next()
-    return false
+    next();
+    return false;
   }
 }
 
@@ -83,7 +83,7 @@ function checkForDirectURLAccess (to, from, next, isAuthenticated, isVerified) {
  *
  * @returns {Boolean} A Boolean value which will say if redirection will happen or not.
  */
-function checkForAuthenticatedAccess (
+function checkForAuthenticatedAccess(
   to,
   from,
   next,
@@ -98,29 +98,29 @@ function checkForAuthenticatedAccess (
         next,
         isAuthenticated,
         isVerified
-      )
+      );
     } else {
       next({
         path: '/',
         query: {
           redirect: to.fullPath
         }
-      })
-      return true
+      });
+      return true;
     }
   } else {
-    return checkForDirectURLAccess(to, from, next, isAuthenticated, isVerified)
+    return checkForDirectURLAccess(to, from, next, isAuthenticated, isVerified);
   }
 }
 
-export default router
+export default router;
 
 /**
  * Main Authentication Guard for Vue Router.
  */
 router.beforeEach((to, from, next) => {
-  let willRedirect = false
-  let initializedStore = store.getters
+  let willRedirect = false;
+  let initializedStore = store.getters;
   // if (initializedStore) {
   //   const abilities = defineAbilitiesFor(initializedStore.getters.rolePermission)
   //   const canNavigate = to.matched.some(route => {
@@ -135,7 +135,7 @@ router.beforeEach((to, from, next) => {
   // Firebase might not have been initialized yet so we don't know if the authentication is valid.
   // We should wait for Firebase initialization if the user is attempting to access any router other than the root path.
   if (to.path === '/') {
-    next()
+    next();
   } else if (initializedStore) {
     willRedirect = checkForAuthenticatedAccess(
       to,
@@ -143,30 +143,35 @@ router.beforeEach((to, from, next) => {
       next,
       initializedStore.isAuthenticated,
       initializedStore.isUserEmailVerified
-    )
+    );
   } else {
     window.firebaseWaitInterval = window.setInterval(() => {
-      let initializedStore = store.getters
+      let initializedStore = store.getters;
       if (initializedStore) {
         // Firebase has been initialized and we can see if the user has been authenticated or not
-        window.clearInterval(window.firebaseWaitInterval)
+        window.clearInterval(window.firebaseWaitInterval);
         willRedirect = checkForAuthenticatedAccess(
           to,
           from,
           next,
           initializedStore.isAuthenticated,
           initializedStore.isUserEmailVerified
-
-        )
+        );
       }
-    }, 200)
+    }, 200);
   }
-  // if (willRedirect) {
-  //   next('/')
+  if (initializedStore) {
+    if (!initializedStore.isAuthenticated) {
+      next('/');
+      return true;
+    }
+  }
+  // if (!willRedirect) {
+  //   next('/');
   // }
   // Clear Header Bar notices when the user navigates to another route.
   // Will not disperse the notice if the route is supposed to be redirected to somewhere else.
   if (initializedStore && !willRedirect) {
-    // initializedStore.dispatch('disperseLastNotice')
+    initializedStore.dispatch('disperseLastNotice');
   }
-})
+});

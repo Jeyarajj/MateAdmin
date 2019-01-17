@@ -9,14 +9,10 @@
   >
     <v-toolbar-side-icon
       class="hidden-lg-and-up"
-      @click.stop="$store.dispatch('toggleDrawer', ! navDrawer)"></v-toolbar-side-icon>
+      @click.stop="$store.dispatch('toggleDrawer', ! navDrawer)"
+    ></v-toolbar-side-icon>
     <v-toolbar-title v-text="title" class="ml-0 hidden-lg-and-up"></v-toolbar-title>
-    <v-btn
-      icon
-      light
-      class="hidden-md-and-down"
-      @click.stop="toggleMiniVariantMode"
-    >
+    <v-btn icon light class="hidden-md-and-down" @click.stop="toggleMiniVariantMode">
       <v-tooltip bottom v-if="navMiniVarient" color="sidebar">
         <v-icon slot="activator">fas fa-arrow-circle-right</v-icon>
         <span>Expand</span>
@@ -36,18 +32,12 @@
     <v-spacer></v-spacer>
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
-        <img
-          :src="authUser.avatar"
-          :alt="authUser.name"
-        >
+        <img :src="authUser.avatar" :alt="authUser.name">
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img
-              :src="authUser.avatar"
-              :alt="authUser.name"
-            >
+            <img :src="authUser.avatar" :alt="authUser.name">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
@@ -86,35 +76,34 @@
   </v-toolbar>
 </template>
 <script>
-  import { authUser } from '@/data/dummyData'
-  import { mapActions,mapGetters } from 'vuex'
+import { authUser } from "@/data/dummyData";
+import { mapActions, mapGetters } from "vuex";
 
-  export default {
-    data () {
-      return {
-        title: 'Vuse'
-      }
-    },
-    computed: {
-      //...mapGetters(['userToken']),
-      authUser () {
-        return authUser
-      }
-    },
-  //   watch: {
-  //   userToken (value) {
-  //     if(value === null)
-  //     this.$router.push('/')
-  //   }
-  // },
-    methods: {
-      ...mapActions({
+export default {
+  data() {
+    return {
+      title: "Vuse"
+    };
+  },
+  computed: {
+    ...mapGetters(["userToken", "isAuthenticated"]),
+    authUser() {
+      return authUser;
+    }
+  },
+  watch: {
+    userToken(value) {
+      if (value === null) this.$router.push("/");
+    }
+  },
+  methods: {
+    ...mapActions({
       logout: "logout"
     }),
-      toggleMiniVariantMode () {
-        this.$store.dispatch('toggleMiniVariantMode')
-        this.$store.dispatch('toggleMiniVarient')
-      }
+    toggleMiniVariantMode() {
+      this.$store.dispatch("toggleMiniVariantMode");
+      this.$store.dispatch("toggleMiniVarient");
     }
   }
+};
 </script>
