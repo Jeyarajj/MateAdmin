@@ -172,6 +172,6 @@ router.beforeEach((to, from, next) => {
   // Clear Header Bar notices when the user navigates to another route.
   // Will not disperse the notice if the route is supposed to be redirected to somewhere else.
   if (initializedStore && !willRedirect) {
-    initializedStore.dispatch('disperseLastNotice');
+    //initializedStore.dispatch('disperseLastNotice');
   }
 });

@@ -20,7 +20,7 @@
       <v-list>
         <v-list-tile>
           <v-list-tile-avatar>
-            <img src="/static/mate_logo.png">
+            <img src="../../assets/mate_logo.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title class="headline">Hi Admin</v-list-tile-title>

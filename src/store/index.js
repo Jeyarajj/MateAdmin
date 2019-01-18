@@ -6,6 +6,8 @@ import { config } from './secret/firebase_config';
 
 // components
 import { user } from './user/user';
+import navigation from './modules/navigation'
+import swatch from './modules/swatch'
 
 
 Vue.use(Vuex)
@@ -13,6 +15,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   modules: {  
     user,
+    navigation,
+    swatch
   },
   actions: {
     initFirebase: function () {

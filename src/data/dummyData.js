@@ -19,7 +19,7 @@ export const users = [
     firstname: 'Jack',
     lastname: 'Johnson',
     email: 'jack@example.com',
-    avatar: `/static/doc-images/lists/men1.png`,
+    avatar: `/assets/ali.jpg`,
     mood: 'Vuse - Powerful VuejS admin template.',
     status: {
       color: 'success',
@@ -32,7 +32,7 @@ export const users = [
     firstname: 'Bruce',
     lastname: 'Canta',
     email: 'bruce@example.com',
-    avatar: `/static/doc-images/lists/jack.png`,
+    avatar: `/assets/ali.jpg`,
     mood: 'Vuse - Powerful VuejS admin template.',
     status: {
       color: 'warning',
@@ -45,7 +45,7 @@ export const users = [
     firstname: 'Camelia',
     lastname: 'Lopez',
     email: 'camelia@example.com',
-    avatar: `/static/doc-images/lists/julieta.png`,
+    avatar: `/assets/ali.jpg`,
     mood: 'Vuse - Powerful VuejS admin template.',
     status: {
       color: 'grey',
@@ -58,7 +58,7 @@ export const users = [
     firstname: 'Denis',
     lastname: 'Richard',
     email: 'denis@example.com',
-    avatar: `/static/doc-images/lists/2.jpg`,
+    avatar: `/assets/ali.jpg`,
     mood: 'Vuse - Powerful VuejS admin template.',
     status: {
       color: 'secondary',
@@ -71,7 +71,7 @@ export const users = [
     firstname: 'Mia',
     lastname: 'Willson',
     email: 'mia@example.com',
-    avatar: `/static/doc-images/lists/lily.png`,
+    avatar: `/assets/ali.jpg`,
     mood: 'Vuse - Powerful VuejS admin template.',
     status: {
       color: 'success',

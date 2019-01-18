@@ -11,78 +11,80 @@ export default [
   { icon: 'dashboard', title: 'Home', name: 'Dashboard' },
   
   {
-    title: 'User',
-    group: 'pages/authentication',
-    icon: 'people',
+    title: 'Users Management',
+    group: 'usersmanagement',
+    icon: 'error',
     items: [
-      { name: 'ManageUsers', title: 'ManageUsers' },
-      { name: 'ManageRoles', title: 'ManageRoles' },
-    ]
-  },
-  {
-    title: 'Institutions',
-    group: 'pages/Institutions',
-    icon: 'text_fields',
-    items: [
-      { name: 'Manage Courses', title: 'Manage Courses' },
-      { name: 'Manage Scholarship', title: 'Manage Scholarship' },
-    ]
-  },
-  {
-    title: 'Subscriptions',
-    group: 'pages/Subscriptions',
-    icon: 'insert_chart',
-    items: [
-      { name: 'Manage Ad Packages', title: 'Manage Ad Packages' },
+      { name: 'UsersRoles', title: 'Manage User Roles' },
+      { name: 'UsersList', title: 'Manage Users' }
     ]
   },
 
   {
-    title: 'Events',
-    group: 'pages/Events',
-    icon: 'timer',
-    items: [
-      { name: 'Manage Fairs', title: 'Manage Fairs' },
-      { name: 'Manage Webinars', title:'Manage Webinars'}
-    ]
-  },
-  {
-    title: 'Content',
-    group: 'pages/Content',
-    icon: 'collections',
-    items: [
-      { name: 'Manage Web Content', title: 'Manage Web Content' },
-      { name: 'Manage Articles', title: 'Manage Articles' },
-      { name: 'Manage Comments', title: 'Manage Comments' },
-    ]
-  },
-  {
-    title: 'Billing',
-    group: 'pages/Billing',
-    icon: 'attach_money',
-    items: [
-      { name: 'Invoices', title: 'Invoices' },
-      { name: 'View Payment Gateways', title: 'View Payment Gateways' },
-    ]
-  },
-  {
-    title: 'Settings',
-    group: 'pages/Billing',
-    icon: 'build',
-    items: [
-      { name: 'Profile settings', title: 'Profile settings' },
-      { name: 'Notification settings', title: 'Notification settings' },
-      { name: 'Security & Privacy', title: 'Security & Privacy' },
-      { name: 'HomePage settings', title: 'HomePage settings' },
-    ]
-  },
-  {
-    title: 'Reports',
-    group: 'pages/Reports',
+    title: 'Institutions',
+    group: 'institutions',
     icon: 'error',
     items: [
-      { name: 'Custom Reports Preview', title: 'Custom Reports Preview' },
-      { name: 'Bulk Download', title: 'Bulk Download' }
+      { name: 'InstitutionsOverview', title: 'Overview' },
+      { name: 'InstitutionsList', title: 'Manage Institutions' },
+      { name: 'ManageCourses', title: 'Manage Courses' },
+      { name: 'Institutionsbulkimport', title: 'Bulk Import' }
+    ]
+  },
+
+  // { header: 'Users Management' },
+  // { icon: 'chat', name: 'UsersList', title: 'Users List' },
+  // { icon: 'chat', name: 'UsersRoles', title: 'Users Roles' },
+
+  {
+    title: 'Students',
+    group: 'students',
+    icon: 'help',
+    items: [
+      { title: 'Students List', name: 'StudentsList' },
+      { title: 'Students Applications', name: 'StudentsApplications' }
+    ]
+  },
+
+  {
+    title: 'Counsellor',
+    group: 'counsellor',
+    icon: 'help',
+    items: [
+      { title: 'Students Applications Process', name: 'StudentApplicationsprocess' },
+      { title: 'Students Request', name: 'StudentRequest' }
+    ]
+  },
+
+  {
+    title: 'Content',
+    group: 'content',
+    icon: 'help',
+    items: [
+      { title: 'Manage Web Content', name: 'ManageWebContent' },
+      { title: 'Manage Articles', name: 'ManageArticles' },
+      { title: 'Manage Comments', name: 'ManageComments' }
+    ]
+  },
+
+  {
+    title: 'Settings',
+    group: 'settings',
+    icon: 'help',
+    items: [
+      { title: 'Home Page', name: 'HomePage' },
+      { title: 'Notifications', name: 'Notify' },
+      { title: 'Profile', name: 'ProfileSettings' },
+      { title: 'Security & Privacy', name: 'SecurityPrivacy' }
+    ]
+  },
+
+  {
+    title: 'Scholarships',
+    group: 'scholarships',
+    icon: 'help',
+    items: [
+      { title: 'Scholarships', name: 'ScholarshipsPage' }
     ]
   },
   

@@ -214,58 +214,58 @@
       <!-- Profile and linear statistic -->
       <v-layout row wrap>
         <v-flex lg4 sm12 xs12>
-          <profile-card
+          <!-- <profile-card
             :name="authUser.name"
             :avatar="authUser.avatar"
             :mobiles="[{number: '(650) 555-2468', type: 'home'}, {number: '(323) 888-8642', type: 'Work'}]"
             :emails="[{name: 'mia@example.com', type: 'home'}, {name: 'jack@example.com', type: 'Work'}]"
             :address="{line1: '1400, Main Steet', line2: 'Los Angelas, LA 89987'}"
-          ></profile-card>
+          ></profile-card> -->
         </v-flex>
         <v-flex lg8 sm12 xs12>
           <v-layout row wrap>
             <v-flex lg6 md6 sm12 xs12>
-              <linear-statistic
+              <!-- <linear-statistic
                 title="Sales"
                 sub-title="Sales increase"
                 icon="trending_up"
                 color="primary"
                 :value="15"
               >
-              </linear-statistic>
+              </linear-statistic> -->
             </v-flex>
             <v-flex lg6 md6 sm12 xs12>
-              <linear-statistic
+              <!-- <linear-statistic
                 title="Orders"
                 sub-title="Increase"
                 icon="trending_up"
                 color="warning"
                 :value="30"
               >
-              </linear-statistic>
+              </linear-statistic> -->
             </v-flex>
             <v-flex lg6 md6 sm12 xs12>
-              <linear-statistic
+              <!-- <linear-statistic
                 title="Revenue"
                 sub-title="Revenue increase"
                 icon="trending_up"
                 color="secondary"
                 :value="50"
               >
-              </linear-statistic>
+              </linear-statistic> -->
             </v-flex>
             <v-flex lg6 md6 sm12 xs12>
-              <linear-statistic
+              <!-- <linear-statistic
                 title="Cost"
                 sub-title="Cost reduce"
                 icon="trending_down"
                 color="purple"
                 :value="25"
               >
-              </linear-statistic>
+              </linear-statistic> -->
             </v-flex>
             <v-flex sm12 xs12>
-              <plain-table-order></plain-table-order>
+              <!-- <plain-table-order></plain-table-order> -->
             </v-flex>
           </v-layout>
         </v-flex>
