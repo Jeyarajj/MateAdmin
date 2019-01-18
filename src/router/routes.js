@@ -5,15 +5,19 @@ import AppToolbar from '@/layouts/App/Toolbar';
 import AppFooter from '@/layouts/App/Footer';
 import Dashboard from '@/views/Dashboard/Dashboardv1';
 import ForgotPasswordPage from '@/views/pages/Authentication/ForgotPasswordPage';
+
 // User Management
 import UsersList from '@/views/pages/UsersManagement/UsersList'
-import UsersRoles from '@/views/pages/UsersManagement/UsersRoles'
+//import UsersRoles from '@/views/pages/UsersManagement/UsersRoles'
+import UserRoles from '@/components/User/rolepermission';
 
 // Settings
 import HomePage from '@/views/pages/Settings/HomePage'
 import Notify from '@/views/pages/Settings/Notify'
 import ProfileSettings from '@/views/pages/Settings/ProfileSettings'
 import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy'
+
+
 
 export const routes = [
   {
@@ -29,7 +33,7 @@ export const routes = [
     meta: { layout: 'auth' }
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     components: {
       default: Dashboard,
       sidebar: AppSidebar,
@@ -75,5 +79,5 @@ export const routes = [
     components: { default: SecurityPrivacy, sidebar: AppSidebar, header: AppToolbar, footer: AppFooter },
     name: 'settings/SecurityPrivacy'
   },
-  
+      
 ];

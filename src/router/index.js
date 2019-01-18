@@ -160,12 +160,12 @@ router.beforeEach((to, from, next) => {
       }
     }, 200);
   }
-  if (initializedStore) {
-    if (!initializedStore.isAuthenticated) {
-      next('/');
-      return true;
-    }
-  }
+  // if (initializedStore) {
+  //   if (!initializedStore.isAuthenticated) {
+  //     next('/');
+  //     return true;
+  //   }
+  // }
   // if (!willRedirect) {
   //   next('/');
   // }
