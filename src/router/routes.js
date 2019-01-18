@@ -5,6 +5,7 @@ import AppToolbar from '@/layouts/App/Toolbar';
 import AppFooter from '@/layouts/App/Footer';
 import Dashboard from '@/views/Dashboard/Dashboardv1';
 import ForgotPasswordPage from '@/views/pages/Authentication/ForgotPasswordPage';
+import RolePermission from '@/components/User/rolepermission';
 export const routes = [
   {
     path: '/',
@@ -19,7 +20,7 @@ export const routes = [
     meta: { layout: 'auth' }
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     components: {
       default: Dashboard,
       sidebar: AppSidebar,
@@ -30,9 +31,23 @@ export const routes = [
     meta: {
       authenticated: true
     }
-    // children: [{
-    //   path: 'admin',
-    //   component: Admin
-    // }]
+  },
+  {
+    path: '/pages/authentication/ManageRoles',
+    name: 'pages/authentication/ManageRoles',
+    components: {
+      default: RolePermission,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    meta: {
+      authenticated: true
+    }
   }
+  // children: [{
+  //   path: 'roles',
+  //   component: RolePermission
+  // }]
+  // }
 ];

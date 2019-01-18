@@ -1,9 +1,9 @@
 import * as firebase from 'firebase';
 // import TrashIconAsset from '@/assets/svg-icons/trash-2.svg'
 import route from './../../router';
-//import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
-//import {apolloClient} from '../../apollo-controller/index'
+import { apolloClient } from '../../apollo-controller/index';
 export const userActions = {
   login: function(context, payload) {
     if (payload === 'facebook') {
@@ -84,8 +84,8 @@ export const userActions = {
             userProviderData: user.providerData
           });
         });
-        //context.dispatch('checkpermission', user.uid)
-        //context.dispatch('basicProfileinfo', user.uid)
+        context.dispatch('checkpermission', user.uid);
+        context.dispatch('basicProfileinfo', user.uid);
       } else {
         context.commit('removeUserCredentials');
       }
@@ -137,49 +137,55 @@ export const userActions = {
         });
     }
   },
-  // checkpermission: function (context, payload) {
-  //   const jobQuery = gql`
-  //         query($token: String!) {
-  //           rolePermissionOut(token: $token){
-  //             _id
-  //             role_name
-  //             created_by
-  //             role_permission {
-  //               module_name
-  //               create
-  //               update
-  //               delete
-  //             }
-  //         }
-  //       }
-  //     `
-  //   apolloClient.query({
-  //     query: jobQuery,
-  //     variables: {
-  //       token: payload
-  //     }
-  //   }).then(result => context.commit('permissionSetup', result)).catch((err) => {
-  //     console.log(err)
-  //   })
-  // },
-  // basicProfileinfo: function (context, payload) {
-  //   const profileInfo = gql`
-  //     query($uid: String!){
-  //       getBasicInfo(uid: $uid){
-  //         _id
-  //         id
-  //       }
-  //     }
-  //   `
-  //   apolloClient.query({
-  //     query: profileInfo,
-  //     variables: {
-  //       uid: payload
-  //     }
-  //   }).then(result => context.commit('setBasicInfoUserProfile', result)).catch((err) => {
-  //     console.log(err)
-  //   })
-  // },
+  checkpermission: function(context, payload) {
+    const jobQuery = gql`
+      query($token: String!) {
+        rolePermissionOut(token: $token) {
+          _id
+          role_name
+          created_by
+          role_permission {
+            module_name
+            create
+            update
+            delete
+          }
+        }
+      }
+    `;
+    apolloClient
+      .query({
+        query: jobQuery,
+        variables: {
+          token: payload
+        }
+      })
+      .then(result => context.commit('permissionSetup', result))
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  basicProfileinfo: function(context, payload) {
+    const profileInfo = gql`
+      query($uid: String!) {
+        getBasicInfo(uid: $uid) {
+          _id
+          id
+        }
+      }
+    `;
+    apolloClient
+      .query({
+        query: profileInfo,
+        variables: {
+          uid: payload
+        }
+      })
+      .then(result => context.commit('setBasicInfoUserProfile', result))
+      .catch(err => {
+        console.log(err);
+      });
+  },
   checkIfUserLogin: function(context) {
     let expirationDate = new Date(localStorage.getItem('expirationDate'));
     let token = localStorage.getItem('token');
