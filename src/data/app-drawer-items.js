@@ -9,13 +9,13 @@ export default [
   //   ]
   // },
   { icon: 'dashboard', title: 'Home', name: 'Dashboard' },
-  
+
   {
     title: 'Users Management',
     group: 'usersmanagement',
     icon: 'error',
     items: [
-      { name: 'UsersRoles', title: 'Manage User Roles' },
+      { name: 'UserRoles', title: 'Manage User Roles' },
       { name: 'UsersList', title: 'Manage Users' }
     ]
   },
@@ -51,7 +51,10 @@ export default [
     group: 'counsellor',
     icon: 'help',
     items: [
-      { title: 'Students Applications Process', name: 'StudentApplicationsprocess' },
+      {
+        title: 'Students Applications Process',
+        name: 'StudentApplicationsprocess'
+      },
       { title: 'Students Request', name: 'StudentRequest' }
     ]
   },
@@ -83,9 +86,6 @@ export default [
     title: 'Scholarships',
     group: 'scholarships',
     icon: 'help',
-    items: [
-      { title: 'Scholarships', name: 'ScholarshipsPage' }
-    ]
-  },
-  
-]
+    items: [{ title: 'Scholarships', name: 'ScholarshipsPage' }]
+  }
+];

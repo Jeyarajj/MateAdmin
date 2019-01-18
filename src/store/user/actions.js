@@ -143,12 +143,15 @@ export const userActions = {
         rolePermissionOut(token: $token) {
           _id
           role_name
+          role_description
           created_by
           role_permission {
             module_name
             create
             update
             delete
+            list
+            publish
           }
         }
       }
