@@ -16,7 +16,7 @@ import HomePage from '@/views/pages/Settings/HomePage';
 import Notify from '@/views/pages/Settings/Notify';
 import ProfileSettings from '@/views/pages/Settings/ProfileSettings';
 import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
-
+import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
 export const routes = [
   {
     path: '/',
@@ -62,6 +62,17 @@ export const routes = [
       footer: AppFooter
     },
     name: 'usersmanagement/UserRoles'
+  },
+
+  {
+    path: '/Institution/InstitutionsList',
+    components: {
+      default: InstitutionsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'institutions/InstitutionsList'
   },
 
   {

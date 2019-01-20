@@ -5,6 +5,9 @@ import Vue from 'vue';
 const now = new Date();
 
 export const userMutations = {
+  updateFiles: function(state, files) {
+    state.files = files;
+  },
   setUserCredential: function(state, payload) {
     let expiresIn2hrs = new Date(now.getTime() + 3600 * 2000);
     let expiresIn1week = new Date(now.getTime() + 3600 * (24000 * 7)); // 24000 = 24hrs, 7 = 7days
