@@ -7,9 +7,9 @@ import Dashboard from '@/views/Dashboard/Dashboardv1';
 import ForgotPasswordPage from '@/views/pages/Authentication/ForgotPasswordPage';
 
 // User Management
-import UsersList from '@/views/pages/UsersManagement/UsersList';
+import UsersList from '@/components/UserManagement/userslist';
 //import UsersRoles from '@/views/pages/UsersManagement/UsersRoles'
-import UserRoles from '@/components/User/rolepermission';
+import UserRoles from '@/components/UserManagement/rolepermission';
 
 // Settings
 import HomePage from '@/views/pages/Settings/HomePage';
@@ -25,7 +25,7 @@ export const routes = [
     meta: { layout: 'auth' }
   },
   {
-    path: '/pages/authentication/forgot-password',
+    path: '/ForgotPassword',
     components: { default: ForgotPasswordPage },
     name: 'ForgotPasswordPage',
     meta: { layout: 'auth' }

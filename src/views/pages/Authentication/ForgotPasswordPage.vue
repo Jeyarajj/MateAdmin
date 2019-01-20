@@ -1,99 +1,139 @@
 <template>
-  <v-img
-    :src="backgroundImg"
-    class="page-vimg"
-  >
+  <v-img :src="backgroundImg" class="page-vimg">
     <v-container fill-height pa-0>
       <v-layout align-center>
         <v-flex xs12>
           <v-card
             class="text-xs-center margin-auto border-radius6 box-white-500-glow elevation-10 auth-box"
           >
+            <v-alert :value="showSuccess" type="success">{{successMessage}}</v-alert>
+             <v-alert :value="showError" type="error">{{errormessage}}</v-alert>
             <v-layout align-center justify-center row fill-height wrap>
               <v-flex xs12 class="text-xs-center mt-3">
-                <v-toolbar absolute dense flat class="transparent pos-top-1px">
-                  <v-toolbar-title class="body-2 grey--text cursor-pointer"
-                    @click="stageHandler" v-if="stage !== 1">Back</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn icon :to="{ name: 'pages/authentication/LoginPage' }">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </v-toolbar>
-                <v-stepper v-model="stage" class="no-box-shadow reset-top-padding border-radius6">
-                  <v-stepper-header class="hide">
-                    <v-stepper-step step="1" :complete="stage > 1">Name of step 1</v-stepper-step>
-                    <v-stepper-step step="2" :complete="stage > 2">Name of step 2</v-stepper-step>
-                    <v-stepper-step step="3">Name of step 3</v-stepper-step>
-                  </v-stepper-header>
+                <img
+                  src="../../../assets/mate_logo.png"
+                  alt="`Mate`"
+                  class="text-xs-center"
+                  height="100"
+                >
+                <div class="headline">Forgot your password? No problem</div>
+                <v-form
+                  @submit.prevent="$v.$invalid ? null : sendForgotPasswordEmail(form.email)"
+                  ref="form"
+                >
+                  <v-layout wrap row pa-4>
+                    <v-flex xs12 pa-0>
+                      <v-text-field
+                        color="primary"
+                        label="Email"
+                        v-model="form.email"
+                        required
+                        :error-messages="fieldErrors('form.email')"
+                        @blur="$v.form.email.$touch()"
+                      ></v-text-field>
+                    </v-flex>
 
-                  <v-stepper-content step="1" class="px-0">
-                    <send-passcode @next="sendPasscodeSuccessHandler"></send-passcode>
-                  </v-stepper-content>
-
-                  <v-stepper-content step="2" class="px-0">
-                    <verify-passcode @next="verifyPasscodeSuccessHandler" :email="email"></verify-passcode>
-                  </v-stepper-content>
-
-                  <v-stepper-content step="3" class="px-0">
-                    <password-reset @next="resetPasswordSuccessHandler" :code="code" :email="email"></password-reset>
-                  </v-stepper-content>
-                </v-stepper>
+                    <v-flex xs12>
+                      <v-layout row wrap text-xs-center>
+                        <!-- ForgotPassword form submit -->
+                        <v-flex xs12 class="no-mrpd">
+                          <v-btn
+                            color="act"
+                            type="submit"
+                            :disabled="$v.$invalid"
+                            block
+                            :class="$v.$invalid ? '' : 'white--text'"
+                          >SEND EMAIL</v-btn>
+                        </v-flex>
+                        <!-- Back to login -->
+                        <v-flex xs12>
+                          <router-link
+                            :to="{ name: 'LoginPage' }"
+                            tag="div"
+                            class="grey--text cursor-pointer"
+                          >
+                            <strong>Go Back to Login ?</strong>
+                          </router-link>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
               </v-flex>
             </v-layout>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      absolute
-      top
-      right
-      color="act"
-    >
-      <span>Password reset successfully</span>
-      <v-icon dark>check_circle</v-icon>
-    </v-snackbar>
   </v-img>
 </template>
 
 <script>
-  // import SendPasscode from '@/views/Pages/Authentication/ForgotPasswordWizard/SendPasscode'
-  // import PasswordReset from '@/views/Pages/Authentication/ForgotPasswordWizard/PasswordReset'
-  // import VerifyPasscode from '@/views/Pages/Authentication/ForgotPasswordWizard/VerifyPasscode'
+import { required, email } from "vuelidate/lib/validators";
+import validationMixin from "@/mixins/validationMixin";
+import { mapActions, mapGetters } from "vuex";
 
-  // export default {
-  //   components: {
-  //     SendPasscode,
-  //     VerifyPasscode,
-  //     PasswordReset
-  //   },
-  //   data () {
-  //     return {
-  //       snackbar: false,
-  //       stage: 1,
-  //       email: null,
-  //       code: null,
-  //       backgroundImg: '/static/doc-images/HexesisMaterial01.png'
-  //     }
-  //   },
-  //   methods: {
-  //     stageHandler () {
-  //       if (this.stage > 1) {
-  //         this.stage -= 1
-  //       }
-  //     },
-  //     sendPasscodeSuccessHandler (data) {
-  //       this.email = data.email
-  //       this.stage = 2
-  //     },
-  //     verifyPasscodeSuccessHandler (data) {
-  //       this.code = data.code
-  //       this.stage = 3
-  //     },
-  //     resetPasswordSuccessHandler () {
-  //       this.snackbar = true
-  //     }
-  //   }
-  // }
+const defaultForm = {
+  email: ""
+};
+export default {
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      email: {
+        required,
+        email
+      }
+    }
+  },
+  validationMessages: {
+    form: {
+      email: {
+        required: "Please enter email",
+        email: "Email must be valid"
+      }
+    }
+  },
+  data() {
+    return {
+      form: Object.assign({}, defaultForm),
+      //backgroundImg: '../../../assets/HexesisMaterial01.png'
+      backgroundImg: "",
+      showSuccess: false,
+      showError:false,
+      successMessage: null,
+      errormessage:null
+    };
+  },
+  components: {},
+  computed: {
+    ...mapGetters(["wasEmailSend", "authWarningMsg", "isAuthenticated"])
+  },
+  watch: {
+    isAuthenticated(value) {
+      if (value) {
+        this.$router.push("/dashboard");
+      }
+    },
+    wasEmailSend(value) {
+      if (value) {
+        this.showSuccess = true;
+        this.successMessage = "Email Send Successfully.Please check your Email";
+      }
+    },
+    authWarningMsg(value) {
+      if (value) {
+        this.showError = true;
+        this.errormessage = value;
+      } else {
+        this.showError = false;
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      sendForgotPasswordEmail: "sendForgotPasswordEmail"
+    })
+  }
+};
 </script>

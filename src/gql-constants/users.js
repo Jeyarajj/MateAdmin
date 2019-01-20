@@ -58,14 +58,10 @@ export const GET_ROLES = gql`
       _id
       role_name
       created_by
-      role_description
       role_permission {
         create
         update
         delete
-        list
-        publish
-        module_name
       }
     }
   }
