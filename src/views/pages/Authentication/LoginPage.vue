@@ -63,7 +63,7 @@
                         <!-- Forgot password -->
                         <v-flex xs12>
                           <router-link
-                            :to="{ name: 'pages/authentication/ForgotPasswordPage' }"
+                            :to="{ name: 'ForgotPasswordPage' }"
                             tag="div"
                             class="grey--text cursor-pointer"
                           >
