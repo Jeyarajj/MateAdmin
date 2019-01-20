@@ -43,30 +43,30 @@
                 <v-flex xs12 sm12 md12>
                   <v-textarea v-model="editedItem.description" label="Description min 200 words "></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm12 md4>
+                <v-flex xs12 sm12 md12>
                   <ul>
                     <li v-if="institutionFiles.name">
                       <span>{{institutionFiles.name}}</span> -
                       <span>{{institutionFiles.size | formatSize}}</span>
                       <img :src="fileurl(institutionFiles.name)" width="50" height="auto">
+                      <span @click="removeImage(institutionFiles.name)">Remove</span>
                     </li>
                   </ul>
-                  <!-- <file-upload
+                  <file-upload
                     class="btn btn-primary"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    :value="institutionFiles"
                     @input="inputUpdate"
                     ref="upload"
                   >
                     <i class="fa fa-plus"></i>
                     Upload Logo
-                  </file-upload>-->
-                  <img :src="imageUrl" height="150" v-if="imageUrl">
+                  </file-upload>
+                  <!-- <img :src="imageUrl" height="150" v-if="imageUrl">
                   <v-text-field
-                    label="Select Image"
+                    label="Upload Image"
                     @click="pickFile"
                     v-model="imageName"
                     prepend-icon="attach_file"
@@ -77,7 +77,7 @@
                     ref="image"
                     accept="image/*"
                     @change="onFilePicked"
-                  >
+                  >-->
                   <!-- <input type="file" @change="inputUpdate"> -->
                 </v-flex>
               </v-layout>
@@ -121,7 +121,10 @@ export default {
     country: ["Japan", "Corea"],
     imageUrl: "",
     imageName: "",
-
+    bannerUrl: "",
+    bannerName: "",
+    multipleUrl: "",
+    multipleName: "",
     headers: [
       {
         text: "Dessert (100g serving)",
@@ -171,28 +174,10 @@ export default {
   },
 
   methods: {
-    pickFile() {
-      this.$refs.image.click();
-    },
-
-    onFilePicked(e) {
-      const files = e.target.files;
-      if (files[0] !== undefined) {
-        this.imageName = files[0].name;
-        if (this.imageName.lastIndexOf(".") <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
-          this.imageUrl = fr.result;
-          this.imageFile = files[0]; // this is an image file that can be sent to server...
-        });
-      } else {
-        this.imageName = "";
-        this.imageFile = "";
-        this.imageUrl = "";
-      }
+    removeImage(name) {
+      console.log(name);
+      let fileName = "Institution/" + name;
+      this.$store.dispatch("delete", fileName);
     },
     fileurl(name) {
       return baseUrl + encodeURI(name);
