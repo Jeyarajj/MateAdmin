@@ -1,6 +1,6 @@
 // import { headerData } from '../shared/header'
-import { userActions } from './actions'
-import { userMutations } from './mutations'
+import { userActions } from './actions';
+import { userMutations } from './mutations';
 
 export const user = {
   state: {
@@ -15,7 +15,8 @@ export const user = {
     userProviderData: null,
     rolePermission: [],
     userDisplayname: null,
-    roleid: null
+    roleid: null,
+    files: []
   },
   getters: {
     isAuthenticated: state => state.isAuthenticated,
@@ -28,8 +29,9 @@ export const user = {
     userProviderData: state => state.userProviderData,
     userDisplayname: state => state.userDisplayname,
     roleid: state => state.roleid,
+    files: state => state.files,
     rolePermission: state => state.rolePermission // use this state to get the particular user permission By Bala
   },
   mutations: userMutations,
   actions: userActions
-}
+};

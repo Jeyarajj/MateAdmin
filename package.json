@@ -14,6 +14,7 @@
     "apollo-client": "^2.4.8",
     "apollo-link": "^1.2.6",
     "apollo-link-http": "^1.5.9",
+    "aws-sdk": "^2.391.0",
     "chartjs-plugin-style": "^0.3.2",
     "cropperjs": "^1.4.3",
     "firebase": "^5.7.2",
