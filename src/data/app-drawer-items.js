@@ -8,7 +8,7 @@ export default [
   //     { name: 'Dashboardv1', title: 'Dashboard V1', prependIcon: 'dashboard' }
   //   ]
   // },
-  { icon: 'dashboard', title: 'Home', name: 'Dashboard' },
+  { icon: 'dashboard', title: 'Home', name: 'dashboard' },
 
   {
     title: 'Users Management',

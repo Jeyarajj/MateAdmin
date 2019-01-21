@@ -46,16 +46,8 @@
         <img ref="editImage" :src="files[0].url" />
       </div>
       <div class="text-center p-4">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          @click.prevent="$refs.upload.clear"
-        >
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary" @click.prevent="editSave">
-          Save
-        </button>
+        <v-btn color="primary" type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</v-btn>
+        <v-btn color="success" type="submit" class="btn btn-primary" @click.prevent="editSave">Change</v-btn>
       </div>
     </div>
   </div>

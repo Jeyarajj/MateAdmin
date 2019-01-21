@@ -36,18 +36,14 @@
     <v-spacer></v-spacer>
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
-        <img
-          :src="authUser.avatar"
-          :alt="authUser.name"
-        >
+        <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
+        <img src="../../assets/ali.jpg">
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img
-              :src="authUser.avatar"
-              :alt="authUser.name"
-            >
+            <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
+             <img src="../../assets/ali.jpg">
           </v-list-tile-avatar>
 
           <v-list-tile-content>

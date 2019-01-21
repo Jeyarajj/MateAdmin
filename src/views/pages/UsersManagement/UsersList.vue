@@ -32,11 +32,12 @@
         <td class="text-xs-right">{{ props.item.calories }}</td>
         <td class="text-xs-right">{{ props.item.fat }}</td>
         <td class="text-xs-right">
-          <v-flex xs12 sm3>
             <v-btn @click="profileDialog = true"  flat icon color="primary">
               <v-icon>remove_red_eye</v-icon>
             </v-btn>
-          </v-flex>
+            <v-btn @click="profileEditDialog = true"  flat icon color="primary">
+              <v-icon>edit</v-icon>
+            </v-btn>
         </td>
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -135,31 +136,6 @@
                     label="City"
                     v-model="form.city"></v-text-field>
                 </v-flex>
-                <v-flex xs12>
-                  <v-menu
-                    ref="datepicker"
-                    :close-on-content-click="false"
-                    v-model="datepicker"
-                    :nudge-right="40"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="form.formatedBirthday"
-                      label="Date of Birth"
-                      hint="MM/DD/YYYY format"
-                      persistent-hint
-                      prepend-icon="cake"
-                      @blur="form.birthdate = parseDate(form.formatedBirthday)"
-                    ></v-text-field>
-                    <v-date-picker v-model="form.birthdate" no-title @input="datepicker = false"></v-date-picker>
-                  </v-menu>
-                </v-flex>
                 
               </v-layout>
             </v-container>
@@ -188,8 +164,7 @@
                   text-xs-center
                   layout
                   align-center
-                  justify-center
-                  >
+                  justify-center>
         <v-avatar size="150">
       <img
         src="https://cdn.vuetifyjs.com/images/john.jpg"
@@ -275,6 +250,126 @@
       </v-card>
     </v-dialog>
 
+     <!-- Profile Edit -->
+      <v-dialog
+      v-model="profileEditDialog"
+      max-width="600">
+      <v-card>
+        <v-card-title class="headline">Edit Profile</v-card-title>
+        <v-card>
+          <v-flex xs12
+                  text-xs-center
+                  layout
+                  align-center
+                  justify-center id="avatarpreview">
+                      <AvatarUpload />
+                  </v-flex>
+
+        <v-card-title primary-title>
+          <div>
+
+            <v-form @submit.prevent="$v.$invalid ? null : submit()" ref="form">
+          <v-container grid-list-xl fluid>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field
+                  color="primary"
+                  prepend-icon="person"
+                  label="First name"
+                  v-model="form.profileeditname"
+                  :error-messages="fieldErrors('form.profileeditname')"
+                  @blur="$v.form.profileeditname.$touch()"
+                  required
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  color="primary"
+                  prepend-icon="email"
+                  label="Email"
+                  v-model="form.profileeditemail"
+                  :error-messages="fieldErrors('form.profileeditemail')"
+                  @blur="$v.form.profileeditemail.$touch()"
+                  required
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  color="primary"
+                  prepend-icon="phone"
+                  label="Phone No."
+                  v-model="form.profileeditphone"
+                  :error-messages="fieldErrors('form.profileeditphone')"
+                  @blur="$v.form.profileeditphone.$touch()"
+                  required
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                  <v-menu
+                    ref="datepicker"
+                    :close-on-content-click="false"
+                    v-model="datepicker"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      slot="activator"
+                      v-model="form.formatedBirthday"
+                      label="Date of Birth"
+                      hint="MM/DD/YYYY format"
+                      persistent-hint
+                      prepend-icon="cake"
+                      @blur="form.birthdate = parseDate(form.formatedBirthday)"
+                    ></v-text-field>
+                    <v-date-picker v-model="form.birthdate" no-title @input="datepicker = false"></v-date-picker>
+                  </v-menu>
+                </v-flex>
+                 <v-flex xs12>
+                <v-text-field
+                  color="primary"
+                  prepend-icon="location_city"
+                  label="City"
+                  v-model="form.profileeditcity"
+                  :error-messages="fieldErrors('form.profileeditcity')"
+                  @blur="$v.form.profileeditcity.$touch()"
+                  required
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  color="primary"
+                  prepend-icon="location_on"
+                  label="Country"
+                  v-model="form.profileeditcountry"
+                  :error-messages="fieldErrors('form.profileeditcountry')"
+                  @blur="$v.form.profileeditcountry.$touch()"
+                  required
+                ></v-text-field>
+              </v-flex>      
+
+              </v-layout>
+          </v-container>
+          </v-form>
+         
+          </div>
+        </v-card-title>
+
+      </v-card>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="primary"  @click="profileEditDialog = false">Close</v-btn>
+          <v-btn color="success" @click="profileEditDialog = false">Update</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
 </div>
 </template>
   
@@ -294,6 +389,11 @@
     components: {
     AvatarUpload
   },
+   profileeditname: '',
+   profileeditemail:'',
+   profileeditphone: '',
+   profileeditcity: '',
+   profileeditcountry: '',
     validations: {
       form: {
         first: { required },
@@ -303,7 +403,12 @@
           validNumber,
           maxLength: maxLength(15),
           minLength: minLength(7)
-        }
+        },
+        profileeditname: { required },
+        profileeditemail: { required },
+        profileeditphone: { required },
+        profileeditcity: { required },
+        profileeditcountry: { required },
       }
     },
     validationMessages: {
@@ -316,7 +421,12 @@
           maxLength: 'Max 14 digits',
           minLength: 'Min 7 digits',
           validNumber: 'Phone number must be a valid number'
-        }
+        },
+         profileeditname: { required: 'Enter Profile Name' },
+        profileeditemail: { required: 'Enter Profile Email' },
+        profileeditphone: { required: 'Enter Profile Phone No.' },
+        profileeditcity: { required: 'Enter City' },
+        profileeditcountry: { required: 'Enter Country' },
       }
     },
     data () {
@@ -543,6 +653,7 @@
         },
         contactDialog: false,
         profileDialog: false,
+        profileEditDialog: false,
         isEditformMod: false,
         editIndex: null,
         datepicker: false
