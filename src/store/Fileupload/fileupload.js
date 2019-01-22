@@ -5,11 +5,13 @@ import { FileMutation } from './mutation';
 export const FileUpload = {
   state: {
     updated: false,
-    institutionFiles: []
+    institutionFiles: [],
+    institutionBanner: []
   },
   getters: {
     updated: state => state.updated,
-    institutionFiles: state => state.institutionFiles
+    institutionFiles: state => state.institutionFiles,
+    institutionBanner: state => state.institutionBanner
   },
   mutations: FileMutation,
   actions: FileAction

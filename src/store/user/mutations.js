@@ -57,5 +57,11 @@ export const userMutations = {
   },
   setRememberMe: function(state, payload) {
     state.rememberMe = payload;
+  },
+  cities: function(state, payload) {
+    state.cities = payload.data.locations;
+  },
+  countries: function(state, payload) {
+    state.countries = payload.data.locations;
   }
 };

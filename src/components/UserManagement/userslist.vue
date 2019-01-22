@@ -197,13 +197,130 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary"  @click="profileDialog = false">Close</v-btn>
+          <v-btn color="primary" @click="profileDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- User Update view -->
-    <v-dialog v-model="updateDialog" max-width="300">
+    <v-dialog v-model="updateDialog" max-width="600">
+      <v-card>
+        <v-card-title class="headline">Edit Profile</v-card-title>
+        <v-card>
+          <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
+            <AvatarUpload/>
+          </v-flex>
+
+          <v-card-title primary-title>
+            <div>
+              <v-form @submit.prevent="$v.$invalid ? null : submit()" ref="form">
+                <v-container grid-list-xl fluid>
+                  <v-layout wrap>
+                    <v-flex xs12>
+                      <v-text-field
+                        color="primary"
+                        prepend-icon="person"
+                        label="First name"
+                        v-model="updatedata.updates.name.first"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        color="primary"
+                        prepend-icon="email"
+                        label="Email"
+                        v-model="updatedata.updates.email"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        color="primary"
+                        prepend-icon="phone"
+                        label="Phone No."
+                        v-model="updatedata.updates.phone"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-menu
+                        ref="datepicker"
+                        :close-on-content-click="false"
+                        v-model="datepicker"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <v-text-field
+                          slot="activator"
+                          v-model="updatedata.updates.birthdate"
+                          label="Date of Birth"
+                          hint="MM/DD/YYYY format"
+                          persistent-hint
+                          prepend-icon="cake"
+                        ></v-text-field>
+                        <v-date-picker
+                          v-model="updatedata.updates.birthdate"
+                          no-title
+                          @input="datepicker = false"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-flex>
+                    <v-flex xs12>
+                      <!-- <v-select
+                        :items="cities"
+                        item-text="name"
+                        item-value="_id"
+                        label="City"
+                        v-model="city"
+                        outline
+                      ></v-select>-->
+                      <v-text-field
+                        color="primary"
+                        prepend-icon="location_city"
+                        label="City"
+                        v-model="updatedata.updates.address.city"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <!--  <v-select
+                        :items="countries"
+                        item-text="name"
+                        item-value="_id"
+                        label="Country"
+                        v-model="country"
+                        outline
+                      ></v-select>-->
+                      <v-text-field
+                        color="primary"
+                        prepend-icon="location_on"
+                        label="Country"
+                        v-model="updatedata.updates.address.country"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-form>
+            </div>
+          </v-card-title>
+        </v-card>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="primary" @click="updateDialog = false">Close</v-btn>
+          <v-btn color="success" @click="updateclick()">Update</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- <v-dialog v-model="updateDialog" max-width="300">
       <v-card>
         <v-card-title class="headline">Profile Details</v-card-title>
 
@@ -216,7 +333,14 @@
 
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" text-xs-center>John Doe</h3>
+              <v-list justify-center sm12>
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-text-field v-model="updatedata.updates.name.first" label="Name"></v-text-field>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+              <v-divider inset></v-divider>
 
               <v-list justify-center sm12>
                 <v-list-tile>
@@ -244,13 +368,34 @@
                 <v-divider inset></v-divider>
 
                 <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon>cake</v-icon>
-                  </v-list-tile-action>
-
                   <v-list-tile-content>
-                    <v-list-tile-title>1st Jan 1990</v-list-tile-title>
-                  </v-list-tile-content>
+                    <v-menu
+                      ref="menu"
+                      :close-on-content-click="false"
+                      v-model="menu"
+                      :nudge-right="40"
+                      :return-value.sync="date"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        v-model="date"
+                        label="Picker in menu"
+                        prepend-icon="event"
+                        readonly
+                      ></v-text-field>
+                      <v-date-picker v-model="date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
+    <v-date-picker v-model="updatedata.updates.dob"></v-date-picker>-->
+    <!-- </v-list-tile-content>
                 </v-list-tile>
 
                 <v-divider inset></v-divider>
@@ -272,8 +417,15 @@
                     <v-icon>location_on</v-icon>
                   </v-list-tile-action>
 
-                  <v-list-tile-content>
-                    <v-text-field v-model="updatedata.updates.address.country" label="Country"></v-text-field>
+    <v-list-tile-content>-->
+    <!-- <v-select
+                      :items="nationalities"
+                      item-text="country"
+                      item-value="nationalities"
+                      v-model="form.role_id"
+                      label="Country"
+    ></v-select>-->
+    <!-- <v-text-field v-model="updatedata.updates.address.country" label="Country"></v-text-field>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -292,13 +444,14 @@
           <v-btn color="primary" @click="updateDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog>-->
   </div>
 </template>
   
 <script>
 import { rgba as Gradients } from "@/data/gradients";
 import { filter, findIndex } from "lodash";
+
 import {
   GET_USERS,
   GET_ROLES,
@@ -320,14 +473,14 @@ import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
 
 export default {
   mixins: [validationMixin],
-  name: "avatarpreview",
+  name: "UserList",
   components: {
     AvatarUpload
   },
   validations: {
     form: {
-      email: { required,email },
-      role_id: { required },
+      email: { required, email },
+      role_id: { required }
     }
   },
   validationMessages: {
@@ -337,7 +490,7 @@ export default {
         email: "Email must be valid"
       },
       role_id: {
-        required: "Role is required",
+        required: "Role is required"
       }
     }
   },
@@ -346,6 +499,8 @@ export default {
       search: "",
       errormessage: "",
       showerror: false,
+      city: [],
+      country: [],
       headers: [
         {
           text: "Name",
@@ -383,7 +538,6 @@ export default {
       updatedata: {
         token: "",
         userid: "",
-        // userid: 'w11FJRD4cGc59BDaJlZJusjVxoG3',
         updates: {
           customClaims: {
             role: ""
@@ -401,6 +555,7 @@ export default {
           ],
           username: "",
           nationality: "",
+          birthdate: new Date().toISOString().substr(0, 10),
           phone: "",
           address: {
             street: "",
@@ -473,11 +628,21 @@ export default {
           path: `/UsersManagement/UsersList`,
           query: { id: pageType, uid: data.id }
         });
-
         this.updatedata.updates.email = data.email;
         this.updatedata.updates.phone = data.phone;
-        this.updatedata.updates.address.street = data.address.street;
-        this.updatedata.updates.address.city = data.address.city;
+        this.updatedata.updates.birthdate = data.birthdate;
+        if (data.address == null) {
+          this.updatedata.updates.address.street = "";
+          this.updatedata.updates.address.city = "";
+          // this.city = {};
+          // this.country = {};
+        } else {
+          this.updatedata.updates.address.street = data.address.street;
+          this.updatedata.updates.address.city = data.address.city;
+          this.updatedata.updates.address.country = data.address.country;
+          // this.city = { _id: data.address.city };
+          // this.country = { _id: data.address.country };
+        }
       } else {
         this.$router.push({ path: "/dashboard" });
       }
@@ -497,6 +662,7 @@ export default {
           middle: updatedata.updates.name.middle
         },
         email: updatedata.updates.email,
+        birthdate: updatedata.updates.birthdate,
         languages: [
           {
             name: updatedata.updates.languages.name
@@ -528,6 +694,7 @@ export default {
                 ) {
                   this.updates._id = data.data.user.profile.update._id;
                   this.allusers[i] = this.updates;
+                  break;
                 } else {
                   continue;
                 }
@@ -592,7 +759,6 @@ export default {
         this.allusers = data.public_profiles;
       },
       error(error) {
-        console.log("sssssss");
         console.log(error);
       }
     },
@@ -607,20 +773,24 @@ export default {
         return data.getAllRoles;
       },
       error(error) {
-        console.log("sssssss");
         console.log(error);
       }
     }
   },
   computed: {
-    ...mapGetters(["userBasicInfoProfile"])
-  },
-  watch: {
-    contactDialog(from, to) {
-      if (to) {
-        this.resetContactForm();
-      }
-    }
+    ...mapGetters([
+      "userBasicInfoProfile",
+      "nationalities",
+      "cities",
+      "countries"
+    ])
   }
+  // watch: {
+  //   contactDialog(from, to) {
+  //     if (to) {
+  //       this.resetContactForm();
+  //     }
+  //   }
+  // }
 };
 </script>

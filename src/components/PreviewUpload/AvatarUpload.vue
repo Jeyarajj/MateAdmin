@@ -13,17 +13,18 @@
                 : 'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm'
             "
             class="rounded-circle"
-          />
-          <h4 class="pt-2">or<br />Drop files anywhere to upload</h4>
+          >
+          <h4 class="pt-2">or
+            <br>Drop files anywhere to upload
+          </h4>
         </label>
       </div>
       <div class="text-center p-2">
         <file-upload
           extensions="gif,jpg,jpeg,png,webp"
-          accept="image/png,image/gif,image/jpeg,image/webp"
+          accept="image/png, image/gif, image/jpeg, image/webp"
           name="avatar"
           class="btn btn-primary"
-          post-action="/upload/post"
           :drop="!edit"
           v-model="files"
           @input-filter="inputFilter"
@@ -31,31 +32,20 @@
           ref="upload"
           required
         >
-         
-         <v-btn round color="primary" dark>Upload <v-icon right dark>cloud_upload</v-icon></v-btn>
-        
+          <v-btn round color="primary" dark>Upload
+            <v-icon right dark>cloud_upload</v-icon>
+          </v-btn>
         </file-upload>
-
-        
-
       </div>
     </div>
 
     <div class="avatar-edit" v-show="files.length && edit">
       <div class="avatar-edit-image" v-if="files.length">
-        <img ref="editImage" :src="files[0].url" />
+        <img ref="editImage" :src="files[0].url">
       </div>
       <div class="text-center p-4">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          @click.prevent="$refs.upload.clear"
-        >
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary" @click.prevent="editSave">
-          Save
-        </button>
+        <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="editSave">Save</button>
       </div>
     </div>
   </div>
@@ -101,8 +91,8 @@
 </style>
 
 <script>
-import Cropper from 'cropperjs'
-import FileUpload from 'vue-upload-component'
+import Cropper from "cropperjs";
+import FileUpload from "vue-upload-component";
 export default {
   components: {
     FileUpload
@@ -117,14 +107,14 @@ export default {
   },
 
   watch: {
-    loader () {
-        const l = this.loader
-        this[l] = !this[l]
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
 
-        setTimeout(() => (this[l] = false), 3000)
+      setTimeout(() => (this[l] = false), 3000);
 
-        this.loader = null
-      },
+      this.loader = null;
+    },
 
     edit(value) {
       if (value) {

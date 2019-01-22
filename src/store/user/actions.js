@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 // import TrashIconAsset from '@/assets/svg-icons/trash-2.svg'
 import route from './../../router';
 import gql from 'graphql-tag';
+import { LOCATION_CITY, LOCATION_COUNTRY } from '../../gql-constants/locations';
 
 import { apolloClient } from '../../apollo-controller/index';
 export const userActions = {
@@ -136,6 +137,25 @@ export const userActions = {
           context.commit('setErrorAuthNotification', error.message);
         });
     }
+  },
+  location: function(context, payload) {
+    apolloClient
+      .query({
+        query: LOCATION_CITY
+      })
+      .then(result => context.commit('cities', result))
+      .catch(err => {
+        console.log(err);
+      });
+
+    apolloClient
+      .query({
+        query: LOCATION_COUNTRY
+      })
+      .then(result => context.commit('countries', result))
+      .catch(err => {
+        console.log(err);
+      });
   },
   checkpermission: function(context, payload) {
     const jobQuery = gql`

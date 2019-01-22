@@ -16,7 +16,9 @@ export const user = {
     rolePermission: [],
     userDisplayname: null,
     roleid: null,
-    files: []
+    files: [],
+    cities: [],
+    countries: []
   },
   getters: {
     isAuthenticated: state => state.isAuthenticated,
@@ -30,6 +32,8 @@ export const user = {
     userDisplayname: state => state.userDisplayname,
     roleid: state => state.roleid,
     files: state => state.files,
+    cities: state => state.cities,
+    countries: state => state.countries,
     rolePermission: state => state.rolePermission // use this state to get the particular user permission By Bala
   },
   mutations: userMutations,

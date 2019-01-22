@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import 'vue-country-region-select';
 import VueRouter from 'vue-router';
 import router from './router/index';
 import { store } from './store/index';
@@ -70,6 +71,7 @@ new Vue({
   created() {
     this.$store.dispatch('initFirebase');
     this.$store.dispatch('checkIfUserLogin');
+    this.$store.dispatch('location');
   },
   render: h => h(App)
 }).$mount('#app');

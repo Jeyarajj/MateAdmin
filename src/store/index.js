@@ -7,6 +7,7 @@ import { config } from './secret/firebase_config';
 // components
 import { user } from './user/user';
 import { FileUpload } from './Fileupload/fileupload';
+import { nationalities } from './locale/nationalities';
 import navigation from './modules/navigation';
 import swatch from './modules/swatch';
 
@@ -17,6 +18,7 @@ export const store = new Vuex.Store({
     user,
     FileUpload,
     navigation,
+    nationalities,
     swatch
   },
   actions: {

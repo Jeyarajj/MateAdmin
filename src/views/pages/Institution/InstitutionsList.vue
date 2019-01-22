@@ -31,12 +31,22 @@
                     outline
                   ></v-select>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <!-- <v-flex xs12 sm6 md4>
                   <v-select :items="city" label="City" v-model="editedItem.city" outline></v-select>
+                </v-flex>-->
+                <v-flex xs12 sm6 md4>
+                  <country-select v-model="editedItem.country" :country="country" topCountry="US"/>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-select :items="country" label="Country" v-model="editedItem.country" outline></v-select>
+                  <region-select
+                    v-model="editedItem.city"
+                    :country="editedItem.country"
+                    :region="city"
+                  />
                 </v-flex>
+                <!-- <v-flex xs12 sm6 md4>
+                  <v-select :items="country" label="Country" v-model="editedItem.country" outline></v-select>
+                </v-flex>-->
                 <v-flex xs12 sm12 md12>
                   <v-textarea v-model="editedItem.address" label="Institution Address"></v-textarea>
                 </v-flex>
@@ -80,6 +90,28 @@
                   >-->
                   <!-- <input type="file" @change="inputUpdate"> -->
                 </v-flex>
+                <v-flex xs12 sm12 md12>
+                  <ul>
+                    <li v-for="(banner,i) in institutionBanner" :key="i">
+                      <span>{{banner.name}}</span> -
+                      <span>{{banner.size | formatSize}}</span>
+                      <img :src="fileurl(banner.name)" width="50" height="auto">
+                      <span @click="removeImage(banner.name)">Remove</span>
+                    </li>
+                  </ul>
+                  <file-upload
+                    class="btn btn-primary"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="true"
+                    :size="1024 * 1024 * 10"
+                    @input="inputUpdateBanner"
+                    ref="uploadBanner"
+                  >
+                    <i class="fa fa-plus"></i>
+                    Upload Banner
+                  </file-upload>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -92,13 +124,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="desserts" class="elevation-1">
+    <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td class="text-xs-right">{{ props.item.name }}</td>
+        <td class="text-xs-right">{{ props.item.city.name }}</td>
+        <td class="text-xs-right">{{ props.item.address }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteItem(props.item)">delete</v-icon>
@@ -112,13 +143,14 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
 const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
 export default {
   data: () => ({
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
-    city: ["India", "China"],
-    country: ["Japan", "Corea"],
+    city: "",
+    country: "",
     imageUrl: "",
     imageName: "",
     bannerUrl: "",
@@ -127,16 +159,13 @@ export default {
     multipleName: "",
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "Name",
         align: "left",
         sortable: false,
         value: "name"
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "City", value: "name" },
+      { text: "Address", value: "address" }
     ],
     desserts: [],
     editedIndex: -1,
@@ -155,9 +184,34 @@ export default {
       protein: 0
     }
   }),
-
+  apollo: {
+    institutionsResults: {
+      query: GET_INSTITUTIONS_INDEX,
+      variables() {
+        return {
+          text: this.searchInstitution,
+          page: {
+            from: this.$route.query.pageindex,
+            limit: this.institutionListLimit
+          }
+        };
+      },
+      update(data) {
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: data.search.university.page.from,
+          totalPages: data.search.university.pages.total,
+          currentPage: data.search.university.pages.current,
+          listLimit: this.institutionListLimit
+        });
+        return data.search.university.items;
+      },
+      error(error) {
+        console.log(error);
+      }
+    }
+  },
   computed: {
-    ...mapGetters(["institutionFiles"]),
+    ...mapGetters(["institutionFiles", "institutionBanner"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
@@ -189,83 +243,91 @@ export default {
       };
       this.$store.dispatch("upload", data);
     },
-    inputFilter(newFile, oldFile, prevent) {
-      if (newFile && !oldFile) {
-        // Before adding a file
-        // 添加文件前
-        // Filter system files or hide files
-        // 过滤系统文件 和隐藏文件
-        if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
-          return prevent();
-        }
-        // Filter php html js file
-        // 过滤 php html js 文件
-        if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
-          return prevent();
-        }
-        // Automatic compression
-        // 自动压缩
-      }
-      if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
-        // Create a blob field
-        // 创建 blob 字段
-        newFile.blob = "";
-        let URL = window.URL || window.webkitURL;
-        if (URL && URL.createObjectURL) {
-          newFile.blob = URL.createObjectURL(newFile.file);
-        }
-        // Thumbnails
-        // 缩略图
-        newFile.thumb = "";
-        if (newFile.blob && newFile.type.substr(0, 6) === "image/") {
-          newFile.thumb = newFile.blob;
-        }
-      }
+    inputUpdateBanner(value) {
+      let files = event.target.files;
+      let data = {
+        folder_name: "Institution",
+        file: files
+      };
+      this.$store.dispatch("uploadMultiple", data);
     },
-    // add, update, remove File Event
-    inputFile(newFile, oldFile) {
-      if (newFile && oldFile) {
-        // update
-        if (newFile.active && !oldFile.active) {
-          // beforeSend
-          // min size
-          if (
-            newFile.size >= 0 &&
-            this.minSize > 0 &&
-            newFile.size < this.minSize
-          ) {
-            this.$refs.upload.update(newFile, { error: "size" });
-          }
-        }
-        if (newFile.progress !== oldFile.progress) {
-          // progress
-        }
-        if (newFile.error && !oldFile.error) {
-          // error
-        }
-        if (newFile.success && !oldFile.success) {
-          // success
-        }
-      }
-      if (!newFile && oldFile) {
-        // remove
-        if (oldFile.success && oldFile.response.id) {
-          // $.ajax({
-          //   type: 'DELETE',
-          //   url: '/upload/delete?id=' + oldFile.response.id,
-          // })
-        }
-      }
-      // Automatically activate upload
-      if (
-        Boolean(newFile) !== Boolean(oldFile) ||
-        oldFile.error !== newFile.error
-      ) {
-        if (this.uploadAuto && !this.$refs.upload.active) {
-          this.$refs.upload.active = true;
-        }
-      }
-    },
+    // inputFilter(newFile, oldFile, prevent) {
+    //   if (newFile && !oldFile) {
+    //     // Before adding a file
+    //     // 添加文件前
+    //     // Filter system files or hide files
+    //     // 过滤系统文件 和隐藏文件
+    //     if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
+    //       return prevent();
+    //     }
+    //     // Filter php html js file
+    //     // 过滤 php html js 文件
+    //     if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
+    //       return prevent();
+    //     }
+    //     // Automatic compression
+    //     // 自动压缩
+    //   }
+    //   if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+    //     // Create a blob field
+    //     // 创建 blob 字段
+    //     newFile.blob = "";
+    //     let URL = window.URL || window.webkitURL;
+    //     if (URL && URL.createObjectURL) {
+    //       newFile.blob = URL.createObjectURL(newFile.file);
+    //     }
+    //     // Thumbnails
+    //     // 缩略图
+    //     newFile.thumb = "";
+    //     if (newFile.blob && newFile.type.substr(0, 6) === "image/") {
+    //       newFile.thumb = newFile.blob;
+    //     }
+    //   }
+    // },
+    // // add, update, remove File Event
+    // inputFile(newFile, oldFile) {
+    //   if (newFile && oldFile) {
+    //     // update
+    //     if (newFile.active && !oldFile.active) {
+    //       // beforeSend
+    //       // min size
+    //       if (
+    //         newFile.size >= 0 &&
+    //         this.minSize > 0 &&
+    //         newFile.size < this.minSize
+    //       ) {
+    //         this.$refs.upload.update(newFile, { error: "size" });
+    //       }
+    //     }
+    //     if (newFile.progress !== oldFile.progress) {
+    //       // progress
+    //     }
+    //     if (newFile.error && !oldFile.error) {
+    //       // error
+    //     }
+    //     if (newFile.success && !oldFile.success) {
+    //       // success
+    //     }
+    //   }
+    //   if (!newFile && oldFile) {
+    //     // remove
+    //     if (oldFile.success && oldFile.response.id) {
+    //       // $.ajax({
+    //       //   type: 'DELETE',
+    //       //   url: '/upload/delete?id=' + oldFile.response.id,
+    //       // })
+    //     }
+    //   }
+    //   // Automatically activate upload
+    //   if (
+    //     Boolean(newFile) !== Boolean(oldFile) ||
+    //     oldFile.error !== newFile.error
+    //   ) {
+    //     if (this.uploadAuto && !this.$refs.upload.active) {
+    //       this.$refs.upload.active = true;
+    //     }
+    //   }
+    // },
     initialize() {
       this.desserts = [
         {

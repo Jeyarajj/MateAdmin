@@ -34,6 +34,30 @@ export const FileAction = {
       });
     }
   },
+
+  uploadMultiple: function(context, payload) {
+    if (payload) {
+      // need to send the foleder name in payload
+      // TODO must get the logged in email for folder structure
+      // var folder = payload.folder_name
+
+      for (let i = 0; i < payload.file.length; i++) {
+        var objKey = payload.folder_name + '/' + payload.file[i].name;
+        var params = {
+          Key: objKey,
+          ContentType: payload.file[i].type,
+          Body: payload.file[i]
+        };
+        bucket.putObject(params, function(err, data) {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+      context.commit('updateBanner', payload.file);
+    }
+  },
+
   delete: function(context, payload) {
     // payload is file name
     var params = {

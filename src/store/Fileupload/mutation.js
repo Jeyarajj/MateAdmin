@@ -8,5 +8,8 @@ export const FileMutation = {
   },
   updateFiles: function(state, files) {
     state.institutionFiles = files;
+  },
+  updateBanner: function(state, files) {
+    state.institutionBanner = files;
   }
 };
