@@ -9,7 +9,7 @@
       ></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+        <v-btn slot="activator" color="primary" dark class="mb-2">Add Banner</v-btn>
         <v-card>
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
@@ -18,33 +18,13 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
-					<img :src="imageUrl" height="150" v-if="imageUrl"/>
-					<v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
-					<input
-						type="file"
-						style="display: none"
-						ref="image"
-						accept="image/*"
-						@change="onFilePicked"
-					>
-				</v-flex>
-                
+              <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+              <img :src="imageUrl" height="200" v-if="imageUrl"/>
+              <!-- <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field> -->
+              <v-btn label="Select Image" @click='pickFile' v-model='imageName'  flat icon color="primary">
+               <v-icon size="50">add_photo_alternate</v-icon>
+              </v-btn>
+              <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked"></v-flex>                
               </v-layout>
             </v-container>
           </v-card-text>
@@ -64,11 +44,11 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td>
+          <v-avatar :tile="tile" size="54px">
+         <img src="https://datascience.foundation/backend/web/uploads/analyticsblock/warwick-university.png" alt="University">
+        </v-avatar>
+        </td>
         <td class="justify-center layout px-0">
           <v-icon
             small
@@ -95,32 +75,21 @@
 <script>
   export default {
     data: () => ({
-        imageName: '',
+    imageName: '',
 		imageUrl: '',
 		imageFile: '',
       dialog: false,
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'Image',
           align: 'left',
           sortable: false,
           value: 'name'
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
       desserts: [],
       editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
-      },
       defaultItem: {
         name: '',
         calories: 0,
@@ -132,7 +101,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Add New Banner' : 'Edit Banner'
       }
     },
 
