@@ -10,6 +10,7 @@ export const GET_USERS = gql`
         last
         middle
       }
+      dob
       email
       username
       phone
