@@ -50,63 +50,50 @@
                 <v-flex xs12 sm12 md12>
                   <v-textarea v-model="editedItem.address" label="Institution Address"></v-textarea>
                 </v-flex>
+
                 <v-flex xs12 sm12 md12>
                   <v-textarea v-model="editedItem.description" label="Description min 200 words "></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <ul>
-                    <li v-if="institutionFiles.name">
-                      <span>{{institutionFiles.name}}</span> -
-                      <span>{{institutionFiles.size | formatSize}}</span>
-                      <img :src="fileurl(institutionFiles.name)" width="50" height="auto">
-                      <span @click="removeImage(institutionFiles.name)">Remove</span>
+                    <li v-if="institutionLogo.exists">
+                      <img :src="institutionLogo.fileUrl" width="50" height="auto">
+                      <span @click="removeImage(institutionLogo)">Remove</span>
                     </li>
                   </ul>
                   <file-upload
+                    input-id="file1"
                     class="btn btn-primary"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    @input="inputUpdate"
+                    @input="onInstitutionLogo"
                     ref="upload"
                   >
                     <i class="fa fa-plus"></i>
                     Upload Logo
                   </file-upload>
-                  <!-- <img :src="imageUrl" height="150" v-if="imageUrl">
-                  <v-text-field
-                    label="Upload Image"
-                    @click="pickFile"
-                    v-model="imageName"
-                    prepend-icon="attach_file"
-                  ></v-text-field>
-                  <input
-                    type="file"
-                    style="display: none"
-                    ref="image"
-                    accept="image/*"
-                    @change="onFilePicked"
-                  >-->
-                  <!-- <input type="file" @change="inputUpdate"> -->
                 </v-flex>
                 <v-flex xs12 sm12 md12>
+                  <br>
+                  <br>
                   <ul>
-                    <li v-for="(banner,i) in institutionBanner" :key="i">
-                      <span>{{banner.name}}</span> -
-                      <span>{{banner.size | formatSize}}</span>
-                      <img :src="fileurl(banner.name)" width="50" height="auto">
-                      <span @click="removeImage(banner.name)">Remove</span>
+                    <li v-for="(image,i) in institutionBanners" :key="i">
+                      <span>{{image.fileData.name}}</span> -
+                      <img :src="image.fileUrl" width="50" height="auto">
+                      <span @click="removeBannerImage(i)">Remove</span>
                     </li>
                   </ul>
                   <file-upload
                     class="btn btn-primary"
+                    input-id="file2"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="true"
                     :size="1024 * 1024 * 10"
-                    @input="inputUpdateBanner"
-                    ref="uploadBanner"
+                    @input="onInstitutionBanner"
+                    ref="uploadBanners"
                   >
                     <i class="fa fa-plus"></i>
                     Upload Banner
@@ -143,10 +130,13 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { imageType } from "../../../dto/imageType";
 import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
 const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
 export default {
   data: () => ({
+    institutionLogo: imageType,
+    institutionBanners: [],
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
     city: "",
@@ -226,12 +216,26 @@ export default {
   created() {
     this.initialize();
   },
-
   methods: {
-    removeImage(name) {
-      console.log(name);
-      let fileName = "Institution/" + name;
-      this.$store.dispatch("delete", fileName);
+    onInstitutionLogo(value) {
+      let file = event.target.files[0];
+      let path = "Institution";
+      this.institutionLogo = new imageType(file, path, this.$store);
+    },
+    removeImage(imageDTO) {
+      imageDTO.delete(this.$store);
+    },
+    onInstitutionBanner(value) {
+      for (let index = 0; index < event.target.files.length; index++) {
+        const element = event.target.files[index];
+        let file = element;
+        let path = "Institution/Banner";
+        this.institutionBanners.push(new imageType(file, path, this.$store));
+      }
+    },
+    removeBannerImage(index) {
+      this.institutionBanners[index].delete(this.$store);
+      this.institutionBanners.splice(index, 1);
     },
     fileurl(name) {
       return baseUrl + encodeURI(name);

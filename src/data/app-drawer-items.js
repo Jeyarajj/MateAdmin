@@ -47,10 +47,11 @@ export default [
   },
 
   {
-    title: 'Counsellor',
-    group: 'counsellor',
+    title: 'Counselors',
+    group: 'counselors',
     icon: 'help',
     items: [
+      { title: 'Counselors', name: 'CounselorsList' },
       {
         title: 'Students Applications Process',
         name: 'StudentApplicationsprocess'
@@ -86,6 +87,6 @@ export default [
     title: 'Scholarships',
     group: 'scholarships',
     icon: 'help',
-    items: [{ title: 'Scholarships', name: 'ScholarshipsPage' }]
+    items: [{ title: 'Scholarships', name: 'ScholarshipsList' }]
   }
 ];
