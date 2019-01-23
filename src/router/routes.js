@@ -16,11 +16,12 @@ import HomePage from '@/views/pages/Settings/HomePage';
 import Notify from '@/views/pages/Settings/Notify';
 import ProfileSettings from '@/views/pages/Settings/ProfileSettings';
 import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
-import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
-import scholarship from '@/views/pages/Scholarship/scholarship';
-import CourseList from '@/views/pages/Courses/courses';
-import Counseller from '@/views/pages/Counseller/counseller';
 
+import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
+import CourseList from '@/views/pages/Courses/courses';
+
+import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
+import CounselorsList from '@/views/pages/Counselors/CounselorsList';
 export const routes = [
   {
     path: '/',
@@ -77,6 +78,24 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/InstitutionsList'
+  },{
+    path: '/Scholarships/ScholarshipsList',
+    components: {
+      default: ScholarshipsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'scholarships/ScholarshipsList'
+  },{
+    path: '/Counselors/CounselorsList',
+    components: {
+      default: CounselorsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'counselors/CounselorsList'
   },
   {
     path: '/Institution/CourseList',

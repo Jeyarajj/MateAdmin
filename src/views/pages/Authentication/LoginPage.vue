@@ -41,11 +41,6 @@
                         :error-messages="fieldErrors('form.password')"
                         @blur="$v.form.password.$touch()"
                       ></v-text-field>
-                      <div class="width-150x margin-horiz-center">
-                        <v-checkbox color="primary" v-model="form.remeberme" required>
-                          <div slot="label" @click.stop="() => {}">Remember me</div>
-                        </v-checkbox>
-                      </div>
                     </v-flex>
 
                     <v-flex xs12>

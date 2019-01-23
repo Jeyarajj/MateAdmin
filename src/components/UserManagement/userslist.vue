@@ -129,7 +129,7 @@
 
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" text-xs-center>John Doe</h3>
+              <h3 class="headline mb-0" text-xs-center>{{this.showdata.username}}</h3>
 
               <v-list justify-center sm12>
                 <v-list-tile>
@@ -162,7 +162,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>1st Jan 1990</v-list-tile-title>
+                    <v-list-tile-title>{{this.showdata.birthdate}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -258,52 +258,38 @@
                       >
                         <v-text-field
                           slot="activator"
-                          v-model="updatedata.updates.birthdate"
+                          v-model="updatedata.updates.dob"
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
                           prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
-                          v-model="updatedata.updates.birthdate"
+                          v-model="updatedata.updates.dob"
                           no-title
                           @input="datepicker = false"
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
                     <v-flex xs12>
-                      <!-- <v-select
+                      <v-select
                         :items="cities"
                         item-text="name"
-                        item-value="_id"
-                        label="City"
-                        v-model="city"
-                        outline
-                      ></v-select>-->
-                      <v-text-field
-                        color="primary"
-                        prepend-icon="location_city"
+                        item-value="name"
                         label="City"
                         v-model="updatedata.updates.address.city"
-                        required
-                      ></v-text-field>
+                        outline
+                      ></v-select>
                     </v-flex>
                     <v-flex xs12>
-                      <!--  <v-select
+                       <v-select
                         :items="countries"
                         item-text="name"
-                        item-value="_id"
-                        label="Country"
-                        v-model="country"
-                        outline
-                      ></v-select>-->
-                      <v-text-field
-                        color="primary"
-                        prepend-icon="location_on"
+                        item-value="name"
                         label="Country"
                         v-model="updatedata.updates.address.country"
-                        required
-                      ></v-text-field>
+                        outline
+                      ></v-select>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -320,131 +306,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <v-dialog v-model="updateDialog" max-width="300">
-      <v-card>
-        <v-card-title class="headline">Profile Details</v-card-title>
-
-        <v-card>
-          <v-flex xs12 text-xs-center layout align-center justify-center>
-            <v-avatar size="150">
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="User">
-            </v-avatar>
-          </v-flex>
-
-          <v-card-title primary-title>
-            <div>
-              <v-list justify-center sm12>
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-text-field v-model="updatedata.updates.name.first" label="Name"></v-text-field>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-              <v-divider inset></v-divider>
-
-              <v-list justify-center sm12>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon>phone</v-icon>
-                  </v-list-tile-action>
-
-                  <v-list-tile-content>
-                    <v-text-field v-model="updatedata.updates.phone" label="Phone"></v-text-field>
-                  </v-list-tile-content>
-                </v-list-tile>
-
-                <v-divider inset></v-divider>
-
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon>mail</v-icon>
-                  </v-list-tile-action>
-
-                  <v-list-tile-content>
-                    <v-text-field v-model="updatedata.updates.email" label="Email" :readonly="true"></v-text-field>
-                  </v-list-tile-content>
-                </v-list-tile>
-
-                <v-divider inset></v-divider>
-
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-menu
-                      ref="menu"
-                      :close-on-content-click="false"
-                      v-model="menu"
-                      :nudge-right="40"
-                      :return-value.sync="date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        v-model="date"
-                        label="Picker in menu"
-                        prepend-icon="event"
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker v-model="date" no-title scrollable>
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-                      </v-date-picker>
-                    </v-menu>
-    <v-date-picker v-model="updatedata.updates.dob"></v-date-picker>-->
-    <!-- </v-list-tile-content>
-                </v-list-tile>
-
-                <v-divider inset></v-divider>
-
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon>location_city</v-icon>
-                  </v-list-tile-action>
-
-                  <v-list-tile-content>
-                    <v-text-field v-model="updatedata.updates.address.city" label="City"></v-text-field>
-                  </v-list-tile-content>
-                </v-list-tile>
-
-                <v-divider inset></v-divider>
-
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-icon>location_on</v-icon>
-                  </v-list-tile-action>
-
-    <v-list-tile-content>-->
-    <!-- <v-select
-                      :items="nationalities"
-                      item-text="country"
-                      item-value="nationalities"
-                      v-model="form.role_id"
-                      label="Country"
-    ></v-select>-->
-    <!-- <v-text-field v-model="updatedata.updates.address.country" label="Country"></v-text-field>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </div>
-          </v-card-title>
-        </v-card>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn color="act" class="white--text" @click="updateclick()">Save</v-btn>
-        </v-card-actions>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn color="primary" @click="updateDialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>-->
+ 
   </div>
 </template>
   
@@ -530,8 +392,10 @@ export default {
       authUser,
       updates: null,
       showdata: {
+        username: "",
         phone: "",
         email: "",
+        birthdate: "",
         city: "",
         country: ""
       },
@@ -555,7 +419,7 @@ export default {
           ],
           username: "",
           nationality: "",
-          birthdate: new Date().toISOString().substr(0, 10),
+          dob: "",
           phone: "",
           address: {
             street: "",
@@ -597,6 +461,12 @@ export default {
       this.isEditformMod = false;
       this.editIndex = null;
     },
+    formatDate (date) {
+        if (!date) return null
+
+        date = new Date(date);
+        return date.getDate()+'/' + (date.getMonth()+1) + '/'+date.getFullYear();
+      },
     editContact(contact) {
       this.form = contact;
       this.isEditformMod = true;
@@ -618,68 +488,37 @@ export default {
       this.profileDialog = true;
       this.showdata.phone = data.phone;
       this.showdata.email = data.email;
+      this.showdata.birthdate = this.formatDate(data.dob);
+      this.showdata.username = data.username;
       this.showdata.city = data.address.city;
-      this.showdata.coutry = data.address.country;
+      this.showdata.country = data.address.country;
     },
     Updatedata(path, pageType, data) {
-      if (pageType !== "index") {
-        this.updateDialog = true;
-        this.$router.push({
-          path: `/UsersManagement/UsersList`,
-          query: { id: pageType, uid: data.id }
-        });
-        this.updatedata.updates.email = data.email;
-        this.updatedata.updates.phone = data.phone;
-        this.updatedata.updates.birthdate = data.birthdate;
-        if (data.address == null) {
-          this.updatedata.updates.address.street = "";
-          this.updatedata.updates.address.city = "";
-          // this.city = {};
-          // this.country = {};
-        } else {
-          this.updatedata.updates.address.street = data.address.street;
-          this.updatedata.updates.address.city = data.address.city;
-          this.updatedata.updates.address.country = data.address.country;
-          // this.city = { _id: data.address.city };
-          // this.country = { _id: data.address.country };
-        }
+      this.updateDialog = true;
+      this.updatedata.userid = data.id;
+      this.updatedata.updates.email = data.email;
+      this.updatedata.updates.phone = data.phone;
+      if (data.dob === null) {
+        this.updatedata.updates.dob = "";
       } else {
-        this.$router.push({ path: "/dashboard" });
+        this.updatedata.updates.dob = data.dob;
+      }
+      if (data.address === null) {
+        this.updatedata.updates.address.street = "";
+        this.updatedata.updates.address.city = "";
+      } else {
+        this.updatedata.updates.address.street = data.address.street;
+        this.updatedata.updates.address.city = data.address.city;
+        this.updatedata.updates.address.country = data.address.country;
       }
     },
     updateclick() {
-      this.updatedata.userid = this.$route.query.uid;
+      //this.updatedata.userid = this.$route.query.uid;
+      var dateobj = new Date(this.updatedata.updates.dob);
+      this.updatedata.updates.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
     },
     updateUser(updatedata) {
-      this.updates = {
-        // custom_claims: {
-        //   role: updatedata.updates.custom_claims.role
-        // },
-        name: {
-          first: updatedata.updates.name.first,
-          last: updatedata.updates.name.last,
-          middle: updatedata.updates.name.middle
-        },
-        email: updatedata.updates.email,
-        birthdate: updatedata.updates.birthdate,
-        languages: [
-          {
-            name: updatedata.updates.languages.name
-          }
-        ],
-        _id: null,
-        id: updatedata.userid,
-        username: updatedata.updates.username,
-        nationality: updatedata.updates.nationality,
-        phone: updatedata.updates.phone,
-        address: {
-          street: updatedata.updates.address.street,
-          zip: updatedata.updates.address.zip,
-          city: updatedata.updates.address.city,
-          country: updatedata.updates.address.country
-        }
-      };
       this.$apollo
         .mutate({
           mutation: UPDATEUSER,
@@ -692,8 +531,9 @@ export default {
                 if (
                   this.allusers[i]._id === data.data.user.profile.update._id
                 ) {
-                  this.updates._id = data.data.user.profile.update._id;
-                  this.allusers[i] = this.updates;
+                  updatedata.updates._id = data.data.user.profile.update._id;
+                  this.allusers.splice(i, 1);
+                  this.allusers[i] = updatedata.updates;
                   break;
                 } else {
                   continue;
@@ -784,7 +624,7 @@ export default {
       "cities",
       "countries"
     ])
-  }
+  },
   // watch: {
   //   contactDialog(from, to) {
   //     if (to) {
