@@ -17,6 +17,10 @@ import Notify from '@/views/pages/Settings/Notify';
 import ProfileSettings from '@/views/pages/Settings/ProfileSettings';
 import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
 import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
+import scholarship from '@/views/pages/Scholarship/scholarship';
+import CourseList from '@/views/pages/Courses/courses';
+import Counseller from '@/views/pages/Counseller/counseller';
+
 export const routes = [
   {
     path: '/',
@@ -73,6 +77,37 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/InstitutionsList'
+  },
+  {
+    path: '/Institution/CourseList',
+    components: {
+      default: CourseList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'institutions/CourseList'
+  },
+
+  {
+    path: 'counsellor/counsellorlist',
+    components: {
+      default: Counseller,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'counsellor/counsellorlist'
+  },
+  {
+    path: '/scholarships/ScholarshipsPage',
+    components: {
+      default: scholarship,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'scholarships/ScholarshipsPage'
   },
 
   {

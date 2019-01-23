@@ -27,6 +27,7 @@ export default [
     items: [
       { name: 'InstitutionsOverview', title: 'Overview' },
       { name: 'InstitutionsList', title: 'Manage Institutions' },
+      { name: 'CourseList', title: 'Manage Courses' },
       { name: 'ManageCourses', title: 'Manage Courses' },
       { name: 'Institutionsbulkimport', title: 'Bulk Import' }
     ]
@@ -51,6 +52,7 @@ export default [
     group: 'counsellor',
     icon: 'help',
     items: [
+      { title: 'Counsellor List', name: 'counsellorlist' },
       {
         title: 'Students Applications Process',
         name: 'StudentApplicationsprocess'
