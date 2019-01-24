@@ -78,7 +78,8 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/InstitutionsList'
-  },{
+  },
+  {
     path: '/Scholarships/ScholarshipsList',
     components: {
       default: ScholarshipsList,
@@ -87,7 +88,8 @@ export const routes = [
       footer: AppFooter
     },
     name: 'scholarships/ScholarshipsList'
-  },{
+  },
+  {
     path: '/Counselors/CounselorsList',
     components: {
       default: CounselorsList,
@@ -106,27 +108,6 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/CourseList'
-  },
-
-  {
-    path: 'counsellor/counsellorlist',
-    components: {
-      default: Counseller,
-      sidebar: AppSidebar,
-      header: AppToolbar,
-      footer: AppFooter
-    },
-    name: 'counsellor/counsellorlist'
-  },
-  {
-    path: '/scholarships/ScholarshipsPage',
-    components: {
-      default: scholarship,
-      sidebar: AppSidebar,
-      header: AppToolbar,
-      footer: AppFooter
-    },
-    name: 'scholarships/ScholarshipsPage'
   },
 
   {

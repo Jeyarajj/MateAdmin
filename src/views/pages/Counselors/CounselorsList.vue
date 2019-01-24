@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>My CRUD</v-toolbar-title>
+      <v-toolbar-title>Counselor</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
@@ -19,20 +19,24 @@
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
-                  <v-text-field prepend-icon="email" v-model="editedItem.mail" label="Email *"></v-text-field>
+                  <v-text-field prepend-icon="email" v-model="editedItem.email" label="Email *"></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
                   <v-text-field v-model="editedItem.phone" label="Phone"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <country-select v-model="editedItem.country" :country="country" topCountry="US"/>
+                  <country-select
+                    v-model="editedItem.country"
+                    :country="editedItem.country"
+                    topCountry="US"
+                  />
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <region-select
                     v-model="editedItem.city"
                     :country="editedItem.country"
-                    :region="city"
+                    :region="editedItem.city"
                   />
                 </v-flex>
                 <v-flex xs12 sm12 md12>
@@ -40,6 +44,9 @@
                     <li v-if="counselorPicture.exists">
                       <img :src="counselorPicture.fileUrl" width="50" height="auto">
                       <span @click="removeImage(counselorPicture)">Remove</span>
+                    </li>
+                    <li v-else>
+                      <img :src="editedItem.image" width="50" height="auto">
                     </li>
                   </ul>
                   <file-upload
@@ -71,16 +78,16 @@
     <v-data-table :headers="headers" :items="counselorsList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.mail }}</td>
-        <td class="text-xs-right">{{props.item.phone}}</td>
-        <td class="text-xs-right">{{ props.item.country }}</td>
+        <td class="justify-center">{{ props.item.email }}</td>
+        <td class="justify-center">{{props.item.phone}}</td>
+        <td class="justify-center">{{ props.item.country }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
   </div>
@@ -88,7 +95,8 @@
 <script>
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
+import { UPDATE_COUNSELOR, GET_COUNSELOR } from "@/gql-constants/counselor";
+
 export default {
   data: () => ({
     counselorPicture: imageType,
@@ -99,19 +107,24 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Mail", value: "mail" },
-      { text: "Country", value: "Country" },
-      { text: "Phone", value: "Phone" }
+      { text: "Mail", value: "email" },
+      { text: "Phone", value: "Phone" },
+      { text: "Country", value: "Country" }
     ],
     dialog: false,
+
+    country: "",
+    city: "",
+    counselordata: "",
     editedIndex: -1,
     editedItem: {
+      _id: "",
       name: "",
-      mail: "",
+      email: "",
       country: "",
       city: "",
       phone: "",
-      picture: ""
+      image: ""
     },
     defaultItem: {
       name: "",
@@ -119,34 +132,28 @@ export default {
       country: "",
       city: "",
       phone: "",
-      picture: ""
+      image: ""
     }
   }),
   apollo: {
-    // counselorsList: {
-    //   query: GET_INSTITUTIONS_INDEX,
-    //   variables() {
-    //     return {
-    //       text: this.searchInstitution,
-    //       page: {
-    //         from: this.$route.query.pageindex,
-    //         limit: this.institutionListLimit
-    //       }
-    //     };
-    //   },
-    //   update(data) {
-    //     this.$store.commit("SET_PAGES_DATA", {
-    //       currentIndex: data.search.university.page.from,
-    //       totalPages: data.search.university.pages.total,
-    //       currentPage: data.search.university.pages.current,
-    //       listLimit: this.institutionListLimit
-    //     });
-    //     return data.search.university.items;
-    //   },
-    //   error(error) {
-    //     console.log(error);
-    //   }
-    // }
+    counselorsList: {
+      query: GET_COUNSELOR,
+      update(data) {
+        // this.$store.commit("SET_PAGES_DATA", {
+        //   currentIndex: data.search.university.page.from,
+        //   totalPages: data.search.university.pages.total,
+        //   currentPage: data.search.university.pages.current,
+        //   listLimit: this.institutionListLimit
+        // });
+        // console.log(data);
+        // if (data) return data.search.university.items;
+        console.log(data.getCounselor);
+        return data.getCounselor;
+      },
+      error(error) {
+        console.log(error);
+      }
+    }
   },
   computed: {
     ...mapGetters([]),
@@ -161,34 +168,21 @@ export default {
     }
   },
 
-  created() {
-    this.initialize();
-  },
   methods: {
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Counselors";
       this.counselorPicture = new imageType(file, path, this.$store);
+      this.editedItem.image = this.counselorPicture.fileUrl;
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);
-    },
-    initialize() {
-      this.counselorsList = [
-        {
-          name: "counselorName",
-          mail: "mail@gmail.com",
-          phone: "000000000",
-          country: "India",
-          city: "Chennai",
-          picture: "urltotheImage"
-        }
-      ];
     },
 
     editItem(item) {
       this.editedIndex = this.counselorsList.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      console.log(this.editedItem);
       this.dialog = true;
     },
 
@@ -209,9 +203,24 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.counselorsList[this.editedIndex], this.editedItem);
-      } else {
-        this.counselorsList.push(this.editedItem);
       }
+      console.log(this.editedItem);
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_COUNSELOR,
+          variables: this.editedItem
+        })
+        .then(data => {
+          this.editedItem._id = data.data.createcounselor._id;
+          if (this.editedIndex == -1) {
+            // Only on create condition
+            this.counselorsList.push(this.editedItem);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
       this.close();
     }
   }
