@@ -18,6 +18,8 @@ import ProfileSettings from '@/views/pages/Settings/ProfileSettings';
 import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
 
 import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
+import CourseList from '@/views/pages/Courses/courses';
+
 import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';
 export const routes = [
@@ -76,7 +78,8 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/InstitutionsList'
-  },{
+  },
+  {
     path: '/Scholarships/ScholarshipsList',
     components: {
       default: ScholarshipsList,
@@ -85,7 +88,8 @@ export const routes = [
       footer: AppFooter
     },
     name: 'scholarships/ScholarshipsList'
-  },{
+  },
+  {
     path: '/Counselors/CounselorsList',
     components: {
       default: CounselorsList,
@@ -95,6 +99,17 @@ export const routes = [
     },
     name: 'counselors/CounselorsList'
   },
+  {
+    path: '/Institution/CourseList',
+    components: {
+      default: CourseList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'institutions/CourseList'
+  },
+
   {
     path: '/Settings/HomePage',
     components: {

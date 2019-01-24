@@ -147,6 +147,7 @@ export default {
     bannerName: "",
     multipleUrl: "",
     multipleName: "",
+    searchInstitution: "",
     headers: [
       {
         text: "Name",
