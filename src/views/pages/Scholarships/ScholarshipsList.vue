@@ -32,7 +32,7 @@
                     label
                     outline
                   ></v-select>
-                     <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
+                  <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
@@ -45,9 +45,13 @@
 
                 <v-flex xs12 sm12 md12>
                   <ul>
+                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <li v-if="scholarshipPicture.exists">
                       <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
                       <span @click="removeImage(scholarshipPicture)">Remove</span>
+                    </li>
+                    <li v-else>
+                      <img :src="editedItem.picture" width="50" height="auto">
                     </li>
                   </ul>
                   <file-upload
@@ -79,16 +83,16 @@
     <v-data-table :headers="headers" :items="scholarships" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
-        <td class="text-xs-right">{{ props.item.mail }}</td>
-        <td class="text-xs-right">{{ props.item.amount.currency }}{{ props.item.amount.value }}</td>
-        <td class="text-xs-right">{{ props.item.description }}</td>
+        <td class="justify-center">{{ props.item.email }}</td>
+        <!-- <td class="text-xs-right">{{ props.item.amount.currency }}{{ props.item.amount.value }}</td> -->
+        <td class="justify-center">{{ props.item.description }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
   </div>
@@ -96,69 +100,83 @@
 <script>
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
+import {
+  GET_SCHOLARSHIPS,
+  CREATE_SCHOLARSHIP
+} from "../../../gql-constants/scholarships";
 export default {
   data: () => ({
     scholarshipPicture: imageType,
-     headers: [
+    headers: [
       {
         text: "Name",
         align: "left",
         sortable: false,
         value: "name"
       },
-      { text: "Mail", value: "mail" },
-      { text: "Amount", value: "amount" }
-      ,
+      { text: "Mail", value: "email" },
+      // { text: "Amount", value: "amount" },
       { text: "Description", value: "description" }
     ],
     dialog: false,
     editedIndex: -1,
+
     editedItem: {
+      _id: null,
       first_name: "",
       last_name: "",
-      mail: "",
+      website: "",
+      description: "",
+      picture: "",
       amount: {
-        currency: "",
+        currency: "USD",
         value: 0
       },
-      description: "",
-      website: "",
-      picture: ""
+      email: "",
+      university_id: "5a6ad428ffb81219d4932cfa",
+      created_by: "5a6ad428ffb81219d4932cfa",
+      updated_by: "5a6ad428ffb81219d4932cfa",
+      status: true
     },
     defaultItem: {
+      _id: null,
       first_name: "",
       last_name: "",
-      mail: "",
+      website: "",
+      description: "",
+      picture: "",
       amount: {
-        currency: "",
+        currency: "USD",
         value: 0
       },
-      description: "",
-      website: "",
-      picture: ""
+      email: "",
+      university_id: "5a6ad428ffb81219d4932cfa",
+      created_by: "5a6ad428ffb81219d4932cfa",
+      updated_by: "5a6ad428ffb81219d4932cfa",
+      status: true
     }
   }),
   apollo: {
     scholarships: {
-      query: GET_INSTITUTIONS_INDEX,
+      query: GET_SCHOLARSHIPS,
       variables() {
         return {
-          text: this.searchInstitution,
+          text: "",
           page: {
-            from: this.$route.query.pageindex,
-            limit: this.institutionListLimit
+            from: 0,
+            limit: 5
           }
         };
       },
       update(data) {
-        this.$store.commit("SET_PAGES_DATA", {
-          currentIndex: data.search.university.page.from,
-          totalPages: data.search.university.pages.total,
-          currentPage: data.search.university.pages.current,
-          listLimit: this.institutionListLimit
-        });
-        return data.search.university.items;
+        // this.$store.commit("SET_PAGES_DATA", {
+        //   currentIndex: data.search.university.page.from,
+        //   totalPages: data.search.university.pages.total,
+        //   currentPage: data.search.university.pages.current,
+        //   listLimit: this.institutionListLimit
+        // });
+        console.log(data);
+        return data.search.scholarship.items;
       },
       error(error) {
         console.log(error);
@@ -166,7 +184,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["availableCurrencies"]),
+    ...mapGetters(["availableCurrencies", "userBasicInfoProfile"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
@@ -178,32 +196,35 @@ export default {
     }
   },
 
-  created() {
-    this.initialize();
-  },
   methods: {
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Scholarships";
-      this.scholarshipPicture = new imageType(file, path, this.$store);
+      if (this.editedItem.picture)
+        this.scholarshipPicture = new imageType(
+          null,
+          path,
+          this.$store,
+          this.editedItem.picture
+        );
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);
     },
     initialize() {
       this.scholarships = [
-        {
-          first_name: "FirstName",
-          last_name: "SecondName",
-          mail: "mail@gmail.com",
-          amount: {
-            currency: "CURRENCY",
-            value: 200
-          },
-          description: "ScholarhipDescription",
-          website: "www.scholarship.com",
-          picture: "urltotheImage"
-        }
+        // {
+        //   first_name: "FirstName",
+        //   last_name: "SecondName",
+        //   mail: "mail@gmail.com",
+        //   amount: {
+        //     currency: "CURRENCY",
+        //     value: 200
+        //   },
+        //   description: "ScholarhipDescription",
+        //   website: "www.scholarship.com",
+        //   picture: "urltotheImage"
+        // }
       ];
     },
 
@@ -231,9 +252,22 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.scholarships[this.editedIndex], this.editedItem);
-      } else {
-        this.scholarships.push(this.editedItem);
       }
+      this.$apollo
+        .mutate({
+          mutation: CREATE_SCHOLARSHIP,
+          variables: this.editedItem
+        })
+        .then(data => {
+          this.editedItem._id = data.data.createScholarship._id;
+          if (this.editedIndex == -1) {
+            // Only on create condition
+            this.scholarships.push(this.editedItem);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       this.close();
     }
   }

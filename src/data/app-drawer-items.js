@@ -28,7 +28,8 @@ export default [
       { name: 'InstitutionsOverview', title: 'Overview' },
       { name: 'InstitutionsList', title: 'Manage Institutions' },
       { name: 'CourseList', title: 'Manage Courses' },
-      { name: 'ManageCourses', title: 'Manage Courses' },
+      { name: 'ScholarshipList', title: 'Manage Scholarship' },
+
       { name: 'Institutionsbulkimport', title: 'Bulk Import' }
     ]
   },

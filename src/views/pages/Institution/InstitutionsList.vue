@@ -15,18 +15,10 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.institution_name" 
-                  :error-messages="fieldErrors('editedItem.institution_name')"
-                  @input="$v.editedItem.institution_name.$touch()"
-                  @blur="$v.editedItem.institution_name.$touch()"
-                  label="Institution Name"></v-text-field>
+                  <v-text-field v-model="editedItem.name" label="Institution Name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.institution_slug" 
-                  :error-messages="fieldErrors('editedItem.institution_slug')"
-                  @input="$v.editedItem.institution_slug.$touch()"
-                  @blur="$v.editedItem.institution_slug.$touch()"
-                  label="Institution Slug"></v-text-field>
+                  <v-text-field v-model="editedItem.slug" label="Institution Slug"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md12>
                   <v-text-field v-model="editedItem.website" 
@@ -77,52 +69,91 @@
                   @blur="$v.editedItem.description.$touch()"
                   label="Description min 200 words "></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <ul>
-                      <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <li v-if="institutionLogo.exists">
-                      <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                      <span @click="removeImage(institutionLogo)">Remove</span>
-                    </li>
-                  </ul>
-                  <file-upload
-                    input-id="file1"
-                    class="btn btn-primary"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="onInstitutionLogo"
-                    ref="upload"
-                  >
-                    <i class="fa fa-plus"></i>
-                    Upload Logo
-                  </file-upload>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <br>
-                  <br>
-                  <ul>
-                    <li v-for="(image,i) in institutionBanners" :key="i">
-                       <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                      <img v-if="institutionLogo.exists" :src="image.fileUrl" width="50" height="auto">
-                      <span @click="removeBannerImage(i)">Remove</span>
-                    </li>
-                  </ul>
-                  <file-upload
-                    class="btn btn-primary"
-                    input-id="file2"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="true"
-                    :size="1024 * 1024 * 10"
-                    @input="onInstitutionBanner"
-                    ref="uploadBanners"
-                  >
-                    <i class="fa fa-plus"></i>
-                    Upload Banner
-                  </file-upload>
-                </v-flex>
+                <template v-if="editedIndex !== -1">
+                  <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                  <v-flex xs12 sm12 md12>
+                    <ul>
+                      <li v-if="institutionLogo.exists">
+                        <img :src="institutionLogo.fileUrl" width="50" height="auto">
+                        <span @click="removeImage(institutionLogo)">Remove</span>
+                      </li>
+                      <li v-else>
+                        <img :src="editedItem.logourl" height="50" width="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      input-id="file1"
+                      class="btn btn-primary"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="false"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionLogo"
+                      ref="upload"
+                    >
+                      <i class="fa fa-plus"></i>
+                      Upload Logo
+                    </file-upload>
+                  </v-flex>
+                  <v-flex xs12 sm12 md12>
+                    <br>
+                    <br>
+                    <ul>
+                      <div v-if="institutionBanners.length > 0">
+                        <li v-for="(image,i) in institutionBanners" :key="i">
+                          <span>{{image.fileData.name}}</span> -
+                          <img :src="image.fileUrl" width="50" height="auto">
+                          <span @click="removeBannerImage(i)">Remove</span>
+                        </li>
+                      </div>
+                      <li v-else v-for="(image,i) in editedItem.bannerurl" :key="i">
+                        <img :src="image" width="50" height="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      class="btn btn-primary"
+                      input-id="file2"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="true"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionBanner"
+                      ref="uploadBanners"
+                    >
+                      <i class="fa fa-plus"></i>
+                      Upload Banner
+                    </file-upload>
+                  </v-flex>
+                  <v-flex xs12 sm12 md12>
+                    <br>
+                    <br>
+                    <ul>
+                      <div v-if="institutionPhotos.length > 0">
+                        <li v-for="(image,i) in institutionPhotos" :key="i">
+                          <span>{{image.fileData.name}}</span> -
+                          <img :src="image.fileUrl" width="50" height="auto">
+                          <span @click="removeBannerImage(i)">Remove</span>
+                        </li>
+                      </div>
+                      <li v-else v-for="(image,i) in editedItem.photos" :key="i">
+                        <img :src="image" width="50" height="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      class="btn btn-primary"
+                      input-id="file3"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="true"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionPhotos"
+                      ref="uploadPhotos"
+                    >
+                      <i class="fa fa-plus"></i>
+                      Upload Photos
+                    </file-upload>
+                  </v-flex>
+                </template>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -138,16 +169,16 @@
     <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.city.name }}</td>
-        <td class="text-xs-right">{{ props.item.address }}</td>
+        <td class="justify-center">{{ props.item.name }}</td>
+        <td class="justify-center">{{ props.item.city.name }}</td>
+        <td class="justify-center">{{ props.item.address }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
   </div>
@@ -159,7 +190,10 @@ import validationMixin from '@/mixins/validationMixin'
 
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
+import {
+  GET_INSTITUTIONS_INDEX,
+  UPDATEUNIVERSITY
+} from "../../../gql-constants/university";
 const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
 export default {
    mixins: [validationMixin],
@@ -198,6 +232,7 @@ export default {
   data: () => ({
     institutionLogo: imageType,
     institutionBanners: [],
+    institutionPhotos: [],
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
     city: "",
@@ -222,18 +257,32 @@ export default {
     desserts: [],
     editedIndex: -1,
     editedItem: {
+      _id: "",
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      slug: "",
+      website: "",
+      institution_type: "",
+      country: "",
+      city: "",
+      address: "",
+      description: "",
+      logourl: "",
+      bannerurl: [],
+      photos: [],
+      status: "enable"
     },
     defaultItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      slug: "",
+      website: "",
+      institution_type: "",
+      country: "",
+      city: "",
+      address: "",
+      description: "",
+      logourl: "",
+      bannerurl: [],
+      photos: []
     }
   }),
   apollo: {
@@ -243,20 +292,20 @@ export default {
         return {
           text: this.searchInstitution,
           page: {
-            from: this.$route.query.pageindex,
-            limit: this.institutionListLimit
+            from: 0,
+            limit: 5
           }
         };
       },
-      // update(data) {
-      //   this.$store.commit("SET_PAGES_DATA", {
-      //     currentIndex: data.search.university.page.from,
-      //     totalPages: data.search.university.pages.total,
-      //     currentPage: data.search.university.pages.current,
-      //     listLimit: this.institutionListLimit
-      //   });
-      //   return data.search.university.items;
-      // },
+      update(data) {
+        // this.$store.commit("SET_PAGES_DATA", {
+        //   currentIndex: data.search.university.page.from,
+        //   totalPages: data.search.university.pages.total,
+        //   currentPage: data.search.university.pages.current,
+        //   listLimit: this.institutionListLimit
+        // });
+        return data.search.university.items;
+      },
       error(error) {
         console.log(error);
       }
@@ -275,25 +324,41 @@ export default {
     }
   },
 
-  created() {
-    this.initialize();
-  },
   methods: {
     onInstitutionLogo(value) {
       let file = event.target.files[0];
-      let path = "Institution";
+      let path = "Institution/" + this.editedItem._id + "/Logo";
       this.institutionLogo = new imageType(file, path, this.$store);
+      this.editedItem.logourl = this.institutionLogo.fileurl;
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);
     },
     onInstitutionBanner(value) {
+      let bannerurl = [];
       for (let index = 0; index < event.target.files.length; index++) {
         const element = event.target.files[index];
         let file = element;
-        let path = "Institution/Banner";
-        this.institutionBanners.push(new imageType(file, path, this.$store));
+        let path = "Institution/" + this.editedItem._id + "/Banner";
+        let image = new imageType(file, path, this.$store);
+        console.log(image.fileUrl);
+
+        bannerurl.push(image.fileUrl);
+        this.institutionBanners.push(image);
       }
+      this.editedItem.bannerurl = bannerurl;
+    },
+    onInstitutionPhotos(value) {
+      let photos = [];
+      for (let index = 0; index < event.target.files.length; index++) {
+        const element = event.target.files[index];
+        let file = element;
+        let path = "Institution/" + this.editedItem._id + "/Photos";
+        let image = new imageType(file, path, this.$store);
+        photos.push(image.fileUrl);
+        this.institutionPhotos.push(image);
+      }
+      this.editedItem.photos = photos;
     },
     removeBannerImage(index) {
       this.institutionBanners[index].delete(this.$store);
@@ -317,96 +382,17 @@ export default {
       };
       this.$store.dispatch("uploadMultiple", data);
     },
-    // inputFilter(newFile, oldFile, prevent) {
-    //   if (newFile && !oldFile) {
-    //     // Before adding a file
-    //     // 添加文件前
-    //     // Filter system files or hide files
-    //     // 过滤系统文件 和隐藏文件
-    //     if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
-    //       return prevent();
-    //     }
-    //     // Filter php html js file
-    //     // 过滤 php html js 文件
-    //     if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
-    //       return prevent();
-    //     }
-    //     // Automatic compression
-    //     // 自动压缩
-    //   }
-    //   if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
-    //     // Create a blob field
-    //     // 创建 blob 字段
-    //     newFile.blob = "";
-    //     let URL = window.URL || window.webkitURL;
-    //     if (URL && URL.createObjectURL) {
-    //       newFile.blob = URL.createObjectURL(newFile.file);
-    //     }
-    //     // Thumbnails
-    //     // 缩略图
-    //     newFile.thumb = "";
-    //     if (newFile.blob && newFile.type.substr(0, 6) === "image/") {
-    //       newFile.thumb = newFile.blob;
-    //     }
-    //   }
-    // },
-    // // add, update, remove File Event
-    // inputFile(newFile, oldFile) {
-    //   if (newFile && oldFile) {
-    //     // update
-    //     if (newFile.active && !oldFile.active) {
-    //       // beforeSend
-    //       // min size
-    //       if (
-    //         newFile.size >= 0 &&
-    //         this.minSize > 0 &&
-    //         newFile.size < this.minSize
-    //       ) {
-    //         this.$refs.upload.update(newFile, { error: "size" });
-    //       }
-    //     }
-    //     if (newFile.progress !== oldFile.progress) {
-    //       // progress
-    //     }
-    //     if (newFile.error && !oldFile.error) {
-    //       // error
-    //     }
-    //     if (newFile.success && !oldFile.success) {
-    //       // success
-    //     }
-    //   }
-    //   if (!newFile && oldFile) {
-    //     // remove
-    //     if (oldFile.success && oldFile.response.id) {
-    //       // $.ajax({
-    //       //   type: 'DELETE',
-    //       //   url: '/upload/delete?id=' + oldFile.response.id,
-    //       // })
-    //     }
-    //   }
-    //   // Automatically activate upload
-    //   if (
-    //     Boolean(newFile) !== Boolean(oldFile) ||
-    //     oldFile.error !== newFile.error
-    //   ) {
-    //     if (this.uploadAuto && !this.$refs.upload.active) {
-    //       this.$refs.upload.active = true;
-    //     }
-    //   }
-    // },
-    initialize() {
-    },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.institutionsResults.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
+      const index = this.institutionsResults.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
+        this.institutionsResults.splice(index, 1);
     },
 
     close() {
@@ -419,10 +405,26 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
+        Object.assign(
+          this.institutionsResults[this.editedIndex],
+          this.editedItem
+        );
       }
+      this.$apollo
+        .mutate({
+          mutation: UPDATEUNIVERSITY,
+          variables: this.editedItem
+        })
+        .then(data => {
+          this.editedItem._id = data.data.UpdateUniversity._id;
+          if (this.editedIndex == -1) {
+            // Only on create condition
+            this.institutionsResults.push(this.editedItem);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       this.close();
     }
   }
