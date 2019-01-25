@@ -56,6 +56,7 @@
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <ul>
+                      <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <li v-if="institutionLogo.exists">
                       <img :src="institutionLogo.fileUrl" width="50" height="auto">
                       <span @click="removeImage(institutionLogo)">Remove</span>
@@ -80,8 +81,8 @@
                   <br>
                   <ul>
                     <li v-for="(image,i) in institutionBanners" :key="i">
-                      <span>{{image.fileData.name}}</span> -
-                      <img :src="image.fileUrl" width="50" height="auto">
+                       <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                      <img v-if="institutionLogo.exists" :src="image.fileUrl" width="50" height="auto">
                       <span @click="removeBannerImage(i)">Remove</span>
                     </li>
                   </ul>
@@ -187,15 +188,15 @@ export default {
           }
         };
       },
-      update(data) {
-        this.$store.commit("SET_PAGES_DATA", {
-          currentIndex: data.search.university.page.from,
-          totalPages: data.search.university.pages.total,
-          currentPage: data.search.university.pages.current,
-          listLimit: this.institutionListLimit
-        });
-        return data.search.university.items;
-      },
+      // update(data) {
+      //   this.$store.commit("SET_PAGES_DATA", {
+      //     currentIndex: data.search.university.page.from,
+      //     totalPages: data.search.university.pages.total,
+      //     currentPage: data.search.university.pages.current,
+      //     listLimit: this.institutionListLimit
+      //   });
+      //   return data.search.university.items;
+      // },
       error(error) {
         console.log(error);
       }
