@@ -79,8 +79,8 @@
             </template>
             <template slot="no-data">
               <v-card-title>
-                  <span class="headline">{{nodata}}</span>
-                </v-card-title>
+                <span class="headline">{{nodata}}</span>
+              </v-card-title>
             </template>
           </v-data-table>
         </v-card>
@@ -159,8 +159,8 @@
             </template>
             <template slot="no-data">
               <v-card-title>
-                  <span class="headline">{{nodata}}</span>
-                </v-card-title>
+                <span class="headline">{{nodata}}</span>
+              </v-card-title>
             </template>
           </v-data-table>
         </v-card>
@@ -186,7 +186,6 @@ export default {
     nodata: "No Data Available",
     HomepageLogo: imageType,
     tile: false,
-    logodata: [],
     dialog: false,
     bannerdialog: false,
     banners: [],
@@ -198,7 +197,7 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Actions", align: "center", value: "name", sortable: false }
     ],
     lheaders: [
       {
@@ -207,21 +206,14 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Actions", align: "center", value: "name", sortable: false }
     ],
     homesettings: {
       banners: [],
       logo: []
     },
     editedIndex: -1,
-    logoIndex: -1,
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
-    }
+    logoIndex: -1
   }),
 
   computed: {
@@ -258,7 +250,8 @@ export default {
             this.homesettings.banners.push(data.homeSettingquery.banner[index]);
           }
         }
-        this.homesettings.logo.push(data.homeSettingquery.logo);
+        if (this.homesettings.logo.length == 0)
+          this.homesettings.logo.push(data.homeSettingquery.logo);
       },
       error(error) {
         console.log(error);
@@ -266,14 +259,7 @@ export default {
     }
   },
   methods: {
-    initialize() {
-      this.logodata = [
-        {
-          logourl: "",
-          logoname: ""
-        }
-      ];
-    },
+    initialize() {},
     pickFile() {
       this.$refs.bimage.click();
     },
@@ -282,8 +268,10 @@ export default {
     },
     openlogoDialog() {
       this.logoDialog = true;
+      this.imageUrl = "";
     },
     openbannerDialog() {
+      this.bannerUrl = "";
       this.bannerdialog = true;
     },
     onBannerPicked(e) {
@@ -333,7 +321,7 @@ export default {
     },
     editItem(item) {
       this.editedIndex = this.homesettings.banners.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.bannerUrl = this.homesettings.banners[this.editedIndex];
       this.bannerdialog = true;
     },
 
@@ -345,7 +333,7 @@ export default {
 
     leditItem(item) {
       this.logoIndex = this.homesettings.logo.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.imageUrl = this.homesettings.logo[0];
       this.logoDialog = true;
     },
 
@@ -362,7 +350,6 @@ export default {
       this.dialog = false;
       this.bannerdialog = false;
       setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
     },

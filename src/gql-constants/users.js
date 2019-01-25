@@ -14,6 +14,7 @@ export const GET_USERS = gql`
       email
       username
       phone
+      photo
       nationality
       languages {
         name
