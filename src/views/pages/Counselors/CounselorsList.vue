@@ -5,7 +5,7 @@
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Counsellor</v-btn>
         <v-card>
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
@@ -15,18 +15,32 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.name" label="First Name"></v-text-field>
+                  <v-text-field prepend-icon="person" v-model="editedItem.name"
+                  :error-messages="fieldErrors('editedItem.name')"
+                  @input="$v.editedItem.name.$touch()"
+                  @blur="$v.editedItem.name.$touch()"
+                  label="First Name"></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
-                  <v-text-field prepend-icon="email" v-model="editedItem.email" label="Email *"></v-text-field>
+                  <v-text-field prepend-icon="email" v-model="editedItem.email" 
+                  :error-messages="fieldErrors('editedItem.email')"
+                  @input="$v.editedItem.email.$touch()"
+                  @blur="$v.editedItem.email.$touch()"
+                  label="Email *"
+                  required></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.phone" label="Phone"></v-text-field>
+                  <v-text-field prepend-icon="phone" v-model="editedItem.phone" 
+                  :error-messages="fieldErrors('editedItem.phone')"
+                  @input="$v.editedItem.phone.$touch()"
+                  @blur="$v.editedItem.phone.$touch()"
+                  label="Phone"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <country-select
+                    class="countryselectborder"
                     v-model="editedItem.country"
                     :country="editedItem.country"
                     topCountry="US"
@@ -34,6 +48,7 @@
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <region-select
+                    class="regionselectborder"
                     v-model="editedItem.city"
                     :country="editedItem.country"
                     :region="editedItem.city"
@@ -97,7 +112,40 @@ import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
 import { UPDATE_COUNSELOR, GET_COUNSELOR } from "@/gql-constants/counselor";
 
+import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+import { validNumber } from '@/utils/validators'
+import validationMixin from '@/mixins/validationMixin'
+
 export default {
+  mixins: [validationMixin],
+  validations: {
+    editedItem: {
+      name: { required },
+      email: { email },
+      phone: { 
+          required,
+          validNumber,
+          maxLength: maxLength(15),
+          minLength: minLength(7) }
+    }
+  },
+  validationMessages: {
+    editedItem: {
+      name: {
+        required: 'Name is required'
+      },
+      email: {
+        email: 'Email required',
+        required: 'Email Required'
+      },
+      phone: {
+        required: 'Phone number required',
+        maxLength: 'Max 14 digits',
+        minLength: 'Min 7 digits',
+        validNumber: 'Phone number must be a valid number'
+      }
+    }
+  },
   data: () => ({
     counselorPicture: imageType,
     headers: [
@@ -158,7 +206,7 @@ export default {
   computed: {
     ...mapGetters([]),
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Add New Counsellor" : "Edit Counsellor";
     }
   },
 

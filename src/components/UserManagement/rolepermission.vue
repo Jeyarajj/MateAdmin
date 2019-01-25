@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>My CRUD</v-toolbar-title>
+      <v-toolbar-title>User Roles</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Role</v-btn>
         <v-card>
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
@@ -14,22 +14,30 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.role_name" label="Role name"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field v-model="editedItem.role_name" box
+                  :error-messages="fieldErrors('editedItem.role_name')"
+                  @input="$v.editedItem.role_name.$touch()"
+                  @blur="$v.editedItem.role_name.$touch()"
+                  label="Role name"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md8>
-                  <v-textarea v-model="editedItem.role_description" label="Role Description"></v-textarea>
+                <v-flex xs12 sm12 md12>
+                  <v-textarea v-model="editedItem.role_description" auto-grow box 
+                  :error-messages="fieldErrors('editedItem.role_description')"
+                  @input="$v.editedItem.role_description.$touch()"
+                  @blur="$v.editedItem.role_description.$touch()"
+                  rows="2" label="Role Description"></v-textarea>
                 </v-flex>
               </v-layout>
 
               <v-layout wrap>
-                <v-flex>
+                <v-flex>              
                   <table>
                     <template>
                       <tr>
                         <th>Module Name</th>
                         <th>Create</th>
-                        <th>update</th>
+                        <th>Update</th>
                         <th>Delete</th>
                         <th>List</th>
                         <th>Publish</th>
@@ -39,7 +47,7 @@
                       <tr v-for="(mod,inde) in modules_" :key="inde">
                         <td>{{inde.toUpperCase()}}</td>
                         <td v-for="(perm,index) in permission" :key="index">
-                          <v-checkbox v-model="modules_[inde]" :value="perm"></v-checkbox>
+                          <v-checkbox v-model="modules_[inde]" :value="perm" class="Rolepermission-14"></v-checkbox>
                         </td>
                       </tr>
                     </template>
@@ -76,7 +84,29 @@
 <script>
 import { GET_ROLES, CREATEROLE } from "@/gql-constants/users";
 import { mapGetters } from "vuex";
+
+import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+import { validNumber } from '@/utils/validators'
+import validationMixin from '@/mixins/validationMixin'
+
 export default {
+  mixins: [validationMixin],
+  validations: {
+    editedItem: {
+      role_name: { required },
+      role_description: { required }
+    }
+  },
+  validationMessages: {
+    editedItem: {
+      role_name: {
+        required: 'Role Name is required'
+      },
+      role_description: {
+        required: 'Role Description is required'
+      }
+    }
+  },
   data: () => ({
     dialog: false,
     headers: [
@@ -111,7 +141,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Role" : "Edit Role";
     },
 
     ...mapGetters(["userBasicInfoProfile"])
@@ -245,7 +275,7 @@ export default {
           variables: this.roledata
         })
         .then(data => {
-          console.log("role Updated Successfullt");
+          console.log("Role Updated Successfully");
         })
         .catch(err => {
           console.log(err);
