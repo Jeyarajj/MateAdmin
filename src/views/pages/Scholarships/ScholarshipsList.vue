@@ -32,7 +32,7 @@
                     label
                     outline
                   ></v-select>
-                     <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
+                  <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
@@ -45,6 +45,7 @@
 
                 <v-flex xs12 sm12 md12>
                   <ul>
+                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <li v-if="scholarshipPicture.exists">
                       <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
                       <span @click="removeImage(scholarshipPicture)">Remove</span>
@@ -100,7 +101,7 @@ import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
 export default {
   data: () => ({
     scholarshipPicture: imageType,
-     headers: [
+    headers: [
       {
         text: "Name",
         align: "left",
@@ -108,8 +109,7 @@ export default {
         value: "name"
       },
       { text: "Mail", value: "mail" },
-      { text: "Amount", value: "amount" }
-      ,
+      { text: "Amount", value: "amount" },
       { text: "Description", value: "description" }
     ],
     dialog: false,
@@ -185,7 +185,13 @@ export default {
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Scholarships";
-      this.scholarshipPicture = new imageType(file, path, this.$store);
+      if (this.editedItem.picture)
+        this.scholarshipPicture = new imageType(
+          null,
+          path,
+          this.$store,
+          this.editedItem.picture
+        );
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);

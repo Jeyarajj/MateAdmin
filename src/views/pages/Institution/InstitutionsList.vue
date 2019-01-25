@@ -82,7 +82,7 @@
                   <ul>
                     <li v-for="(image,i) in institutionBanners" :key="i">
                        <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                      <img v-if="institutionLogo.exists" :src="image.fileUrl" width="50" height="auto">
+                      <img v-if="image.exists" :src="image.fileUrl" width="50" height="auto">
                       <span @click="removeBannerImage(i)">Remove</span>
                     </li>
                   </ul>
