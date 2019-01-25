@@ -12,27 +12,30 @@ var bucket = new AWS.S3({
   }
 });
 export const FileAction = {
-  upload: function(context, payload) {
-    if (payload) {
-      // need to send the foleder name in payload
-      // TODO must get the logged in email for folder structure
-      // var folder = payload.folder_name
-
-      var objKey = payload.folder_name + '/' + payload.file.name;
-      var params = {
-        Key: objKey,
-        ContentType: payload.file.type,
-        Body: payload.file
-      };
-
-      bucket.putObject(params, function(err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          context.commit('updateFiles', payload.file);
-        }
-      });
-    }
+  upload: function(context, payload) {    
+    return new Promise(function(resolve,reject) {
+      if (payload) {
+        // need to send the foleder name in payload
+        // TODO must get the logged in email for folder structure
+        // var folder = payload.folder_name
+  
+        var objKey = payload.folder_name + '/' + payload.file.name;
+        var params = {
+          Key: objKey,
+          ContentType: payload.file.type,
+          Body: payload.file
+        };
+  
+        bucket.putObject(params, function(err, data) {
+          if (err) {
+            resolve(false)
+          } else {
+            // context.commit('updateFiles', payload.file);
+          resolve(true)
+          }
+        });
+      }    
+    })    
   },
 
   uploadMultiple: function(context, payload) {

@@ -45,6 +45,7 @@
 
                 <v-flex xs12 sm12 md12>
                   <ul>
+                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <li v-if="scholarshipPicture.exists">
                       <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
                       <span @click="removeImage(scholarshipPicture)">Remove</span>
@@ -199,8 +200,13 @@ export default {
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Scholarships";
-      this.scholarshipPicture = new imageType(file, path, this.$store);
-      this.editedItem.picture = this.scholarshipPicture.fileUrl;
+      if (this.editedItem.picture)
+        this.scholarshipPicture = new imageType(
+          null,
+          path,
+          this.$store,
+          this.editedItem.picture
+        );
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);

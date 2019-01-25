@@ -55,6 +55,7 @@
                   <v-textarea v-model="editedItem.description" label="Description min 200 words "></v-textarea>
                 </v-flex>
                 <template v-if="editedIndex !== -1">
+                  <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                   <v-flex xs12 sm12 md12>
                     <ul>
                       <li v-if="institutionLogo.exists">

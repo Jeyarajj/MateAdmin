@@ -41,12 +41,10 @@
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <ul>
+                    <v-icon v-if="counselorPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <li v-if="counselorPicture.exists">
                       <img :src="counselorPicture.fileUrl" width="50" height="auto">
                       <span @click="removeImage(counselorPicture)">Remove</span>
-                    </li>
-                    <li v-else>
-                      <img :src="editedItem.image" width="50" height="auto">
                     </li>
                   </ul>
                   <file-upload
@@ -182,7 +180,14 @@ export default {
     editItem(item) {
       this.editedIndex = this.counselorsList.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      console.log(this.editedItem);
+      let path = "Counselors";
+      if (this.editedItem.image)
+        this.counselorPicture = new imageType(
+          null,
+          path,
+          this.$store,
+          this.editedItem.image
+        );
       this.dialog = true;
     },
 
