@@ -55,6 +55,11 @@ export const userMutations = {
   setBasicInfoUserProfile: function(state, payload) {
     state.userBasicInfoProfile = payload.data.getBasicInfo;
   },
+  setcurrentUserinfo: function(state,payload)
+  {
+    //payload.data.profile.uid = state.userBasicInfoProfile.id
+    state.currentUserdata = payload.data.profile
+  },
   setRememberMe: function(state, payload) {
     state.rememberMe = payload;
   },
@@ -63,5 +68,6 @@ export const userMutations = {
   },
   countries: function(state, payload) {
     state.countries = payload.data.locations;
-  }
+  },
+
 };

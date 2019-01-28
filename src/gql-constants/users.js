@@ -33,15 +33,12 @@ export const GET_USERS = gql`
 `;
 
 export const GET_PUBLIC_PROFILE_Q = gql`
-  query publicProfile($userId: ObjectID!) {
-    profile(_id: $userId) {
+  query publicProfile($Id: ObjectID!) {
+    profile(_id: $Id) {
       _id
       photo
       email
-      name {
-        first
-        last
-      }
+
       languages {
         name
       }

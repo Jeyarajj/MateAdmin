@@ -87,6 +87,7 @@ export const userActions = {
         });
         context.dispatch('checkpermission', user.uid);
         context.dispatch('basicProfileinfo', user.uid);
+        context.dispatch('currentUserinfo', user.uid);
       } else {
         context.commit('removeUserCredentials');
       }
@@ -204,10 +205,47 @@ export const userActions = {
           uid: payload
         }
       })
-      .then(result => context.commit('setBasicInfoUserProfile', result))
+      .then(result => context.commit('setBasicInfoUserProfile', result)  )
       .catch(err => {
         console.log(err);
       });
+  },
+  currentUserinfo: function(context,payload){
+    const currentUserInfo = gql`
+    query($Id: ObjectID!) {
+      profile(_id: $Id) {
+      _id
+      photo
+      email
+      dob
+      phone
+      name{
+        first
+      }
+      username
+      id
+      languages {
+        name
+      }
+      nationality
+      address {
+        city
+        country
+      }
+    }
+    }
+  `;
+  apolloClient
+    .query({
+      query: currentUserInfo,
+      variables: {
+        Id: "5aecdfdcfa798d5454a85595"//TODO : get userBasicInfoProfile._id
+      }
+    })
+    .then(result => context.commit('setcurrentUserinfo', result))
+    .catch(err => {
+      console.log(err);
+    });
   },
   checkIfUserLogin: function(context) {
     let expirationDate = new Date(localStorage.getItem('expirationDate'));

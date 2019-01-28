@@ -123,7 +123,7 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center>
             <v-avatar size="150">
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="User">
+              <img :src="this.showdata.photo" alt="User">
             </v-avatar>
           </v-flex>
 
@@ -208,7 +208,11 @@
         <v-card-title class="headline">Edit Profile</v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
-            <AvatarUpload/>
+            <AvatarUpload
+              :avatarurl="updatedata.updates.photo"
+              :userid="this.UserID"
+              @clicked="avatarclick"
+            />
           </v-flex>
 
           <v-card-title primary-title>
@@ -230,6 +234,7 @@
                         color="primary"
                         prepend-icon="email"
                         label="Email"
+                        readonly
                         v-model="updatedata.updates.email"
                         required
                       ></v-text-field>
@@ -282,7 +287,7 @@
                       ></v-select>
                     </v-flex>
                     <v-flex xs12>
-                       <v-select
+                      <v-select
                         :items="countries"
                         item-text="name"
                         item-value="name"
@@ -306,7 +311,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
- 
   </div>
 </template>
   
@@ -394,6 +398,7 @@ export default {
       showdata: {
         username: "",
         phone: "",
+        photo: "",
         email: "",
         birthdate: "",
         city: "",
@@ -421,6 +426,7 @@ export default {
           nationality: "",
           dob: "",
           phone: "",
+          photo: "",
           address: {
             street: "",
             zip: "",
@@ -438,7 +444,8 @@ export default {
       updateDialog: false,
       isEditformMod: false,
       editIndex: null,
-      datepicker: false
+      datepicker: false,
+      UserID: ""
     };
   },
   methods: {
@@ -461,12 +468,14 @@ export default {
       this.isEditformMod = false;
       this.editIndex = null;
     },
-    formatDate (date) {
-        if (!date) return null
+    formatDate(date) {
+      if (!date) return null;
 
-        date = new Date(date);
-        return date.getDate()+'/' + (date.getMonth()+1) + '/'+date.getFullYear();
-      },
+      date = new Date(date);
+      return (
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+      );
+    },
     editContact(contact) {
       this.form = contact;
       this.isEditformMod = true;
@@ -487,6 +496,9 @@ export default {
     editUser(data) {
       this.profileDialog = true;
       this.showdata.phone = data.phone;
+      this.showdata.photo = data.photo
+        ? data.photo
+        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
       this.showdata.email = data.email;
       this.showdata.birthdate = this.formatDate(data.dob);
       this.showdata.username = data.username;
@@ -496,8 +508,17 @@ export default {
     Updatedata(path, pageType, data) {
       this.updateDialog = true;
       this.updatedata.userid = data.id;
+      this.UserID = data._id;
+      if (data.name === null) {
+        this.updatedata.updates.name.first = data.name.first;
+      } else {
+        this.updatedata.updates.name.first = "";
+      }
       this.updatedata.updates.email = data.email;
       this.updatedata.updates.phone = data.phone;
+      this.updatedata.updates.photo = data.photo
+        ? data.photo
+        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
       if (data.dob === null) {
         this.updatedata.updates.dob = "";
       } else {
@@ -511,6 +532,9 @@ export default {
         this.updatedata.updates.address.city = data.address.city;
         this.updatedata.updates.address.country = data.address.country;
       }
+    },
+    avatarclick(value) {
+      this.updatedata.updates.photo = value;
     },
     updateclick() {
       //this.updatedata.userid = this.$route.query.uid;
@@ -624,7 +648,7 @@ export default {
       "cities",
       "countries"
     ])
-  },
+  }
   // watch: {
   //   contactDialog(from, to) {
   //     if (to) {
