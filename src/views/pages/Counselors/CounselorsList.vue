@@ -70,8 +70,7 @@
                     :multiple="false"
                     :size="1024 * 1024 * 10"
                     @input="onPicture"
-                    ref="upload"
-                  >
+                    ref="upload">
                     <i class="fa fa-plus"></i>
                     Upload Picture
                   </file-upload>
