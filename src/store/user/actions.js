@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { LOCATION_CITY, LOCATION_COUNTRY } from '../../gql-constants/locations';
 
 import { apolloClient } from '../../apollo-controller/index';
+import { parse } from 'path';
 export const userActions = {
   login: function(context, payload) {
     if (payload === 'facebook') {
@@ -49,8 +50,9 @@ export const userActions = {
         firebase
           .auth()
           .signInWithEmailAndPassword(payload.email, payload.password)
-          .then(() => {
+          .then(user => {
             context.dispatch('checkUserAuthChanged');
+
             context.commit('setErrorAuthNotification', null);
           })
           .catch(error => {
@@ -84,9 +86,9 @@ export const userActions = {
             name: user.email,
             userProviderData: user.providerData
           });
+          context.dispatch('checkpermission', user.uid);
+          context.dispatch('basicProfileinfo', user.uid);
         });
-        context.dispatch('checkpermission', user.uid);
-        context.dispatch('basicProfileinfo', user.uid);
       } else {
         context.commit('removeUserCredentials');
       }
@@ -204,7 +206,52 @@ export const userActions = {
           uid: payload
         }
       })
-      .then(result => context.commit('setBasicInfoUserProfile', result))
+      .then(result => {
+        context.commit('setBasicInfoUserProfile', result);
+        context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  currentUserinfo: function(context, payload) {
+    const currentUserInfo = gql`
+      query($Id: ObjectID!) {
+        profile(_id: $Id) {
+          _id
+          photo
+          email
+          dob
+          phone
+          name {
+            first
+          }
+          username
+          id
+          languages {
+            name
+          }
+          nationality
+          address {
+            city
+            country
+          }
+        }
+      }
+    `;
+    apolloClient
+      .query({
+        query: currentUserInfo,
+        variables: {
+          Id: payload //TODO : get userBasicInfoProfile._id
+        }
+      })
+      .then(result => {
+        console.log(payload);
+        console.log(result);
+        console.log('sundar');
+        context.commit('setcurrentUserinfo', result);
+      })
       .catch(err => {
         console.log(err);
       });
