@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { LOCATION_CITY, LOCATION_COUNTRY } from '../../gql-constants/locations';
 
 import { apolloClient } from '../../apollo-controller/index';
+import { parse } from 'path';
 export const userActions = {
   login: function(context, payload) {
     if (payload === 'facebook') {
@@ -51,8 +52,7 @@ export const userActions = {
           .signInWithEmailAndPassword(payload.email, payload.password)
           .then(user => {
             context.dispatch('checkUserAuthChanged');
-            context.dispatch('checkpermission', user.user.uid);
-            context.dispatch('basicProfileinfo', user.user.uid);
+
             context.commit('setErrorAuthNotification', null);
           })
           .catch(error => {
@@ -86,6 +86,8 @@ export const userActions = {
             name: user.email,
             userProviderData: user.providerData
           });
+          context.dispatch('checkpermission', user.uid);
+          context.dispatch('basicProfileinfo', user.uid);
         });
       } else {
         context.commit('removeUserCredentials');
@@ -244,7 +246,12 @@ export const userActions = {
           Id: payload //TODO : get userBasicInfoProfile._id
         }
       })
-      .then(result => context.commit('setcurrentUserinfo', result))
+      .then(result => {
+        console.log(payload);
+        console.log(result);
+        console.log('sundar');
+        context.commit('setcurrentUserinfo', result);
+      })
       .catch(err => {
         console.log(err);
       });

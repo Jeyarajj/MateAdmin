@@ -82,7 +82,7 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
-              :avatarurl="this.updatedata.updates.photo"
+              :avatarurl="updatedata.updates.photo"
               :userid="this.UserID"
               @clicked="avatarclick"
             />
@@ -107,7 +107,7 @@
                         color="primary"
                         prepend-icon="email"
                         label="Email"
-                         readonly
+                        readonly
                         v-model="updatedata.updates.email"
                         required
                       ></v-text-field>
@@ -202,7 +202,9 @@ export default {
       datepicker: false,
       UserID: "",
       username: this.currentUserdata ? this.currentUserdata.username : "",
-      userphoto:this.currentUserdata ? this.currentUserdata.photo : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5",
+      userphoto: this.currentUserdata
+        ? this.currentUserdata.photo
+        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5",
       updatedata: {
         token: "",
         userid: "",
@@ -266,18 +268,21 @@ export default {
       const data = this.currentUserdata;
       this.updateDialog = true;
       this.updatedata.userid = data ? data.id : "";
-      this.UserID = this.userBasicInfoProfile._id
+      this.UserID = this.userBasicInfoProfile._id;
       this.updatedata.updates.username = data ? data.username : "";
-      this.updatedata.updates.email = data ? data.email:"";
-      this.updatedata.updates.phone = data? data.phone:"";
+      this.updatedata.updates.email = data ? data.email : "";
+      this.updatedata.updates.phone = data ? data.phone : "";
       this.updatedata.updates.photo = data
         ? data.photo
         : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
       if (data) {
-        
         this.updatedata.updates.dob = data.dob;
-        this.updatedata.updates.address.city = data.address.city;
-        this.updatedata.updates.address.country = data.address.country;
+        this.updatedata.updates.address.city = data.address
+          ? data.address.city
+          : "";
+        this.updatedata.updates.address.country = data.address
+          ? data.address.country
+          : "";
       } else {
         this.updatedata.updates.dob = "";
         this.updatedata.updates.address.city = "";
@@ -288,8 +293,8 @@ export default {
       this.updatedata.updates.photo = value;
     },
     updateclick() {
-      console.log(this.updatedata)
       //this.updatedata.userid = this.$route.query.uid;
+      console.log(this.updatedata.updates);
       var dateobj = new Date(this.updatedata.updates.dob);
       this.updatedata.updates.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
