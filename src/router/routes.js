@@ -79,16 +79,7 @@ export const routes = [
     },
     name: 'institutions/InstitutionsList'
   },
-  {
-    path: '/Scholarships/ScholarshipsList',
-    components: {
-      default: ScholarshipsList,
-      sidebar: AppSidebar,
-      header: AppToolbar,
-      footer: AppFooter
-    },
-    name: 'scholarships/ScholarshipsList'
-  },
+
   {
     path: '/Counselors/CounselorsList',
     components: {
@@ -108,6 +99,16 @@ export const routes = [
       footer: AppFooter
     },
     name: 'institutions/CourseList'
+  },
+  {
+    path: '/Institution/ScholarshipList',
+    components: {
+      default: ScholarshipsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'institutions/ScholarshipList'
   },
 
   {
