@@ -33,18 +33,18 @@
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-        <img :src="this.currentUserdata.photo">
+        <img :src="this.userphoto">
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
             <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-            <img :src="this.currentUserdata.photo">
+            <img :src="userphoto">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-text="this.currentUserdata.username"></v-list-tile-title>
-            <v-list-tile-sub-title>{{this.currentUserdata.username}}</v-list-tile-sub-title>
+            <v-list-tile-title v-text="this.username"></v-list-tile-title>
+            <v-list-tile-sub-title>{{this.username}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -82,7 +82,7 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
-              :avatarurl="updatedata.updates.photo"
+              :avatarurl="this.updatedata.updates.photo"
               :userid="this.UserID"
               @clicked="avatarclick"
             />
@@ -201,6 +201,8 @@ export default {
       updateDialog: false,
       datepicker: false,
       UserID: "",
+      username: this.currentUserdata ? this.currentUserdata.username : "",
+      userphoto:this.currentUserdata ? this.currentUserdata.photo : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5",
       updatedata: {
         token: "",
         userid: "",
@@ -263,25 +265,23 @@ export default {
     editProfile() {
       const data = this.currentUserdata;
       this.updateDialog = true;
-      this.updatedata.userid = data.id;
+      this.updatedata.userid = data ? data.id : "";
       this.UserID = this.userBasicInfoProfile._id
-      this.updatedata.updates.username = data.username;
-      this.updatedata.updates.email = data.email;
-      this.updatedata.updates.phone = data.phone;
-      this.updatedata.updates.photo = data.photo
+      this.updatedata.updates.username = data ? data.username : "";
+      this.updatedata.updates.email = data ? data.email:"";
+      this.updatedata.updates.phone = data? data.phone:"";
+      this.updatedata.updates.photo = data
         ? data.photo
         : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
-      if (data.dob === null) {
-        this.updatedata.updates.dob = "";
-      } else {
+      if (data) {
+        
         this.updatedata.updates.dob = data.dob;
-      }
-      if (data.address === null) {
-        this.updatedata.updates.address.city = "";
-        this.updatedata.updates.address.country = "";
-      } else {
         this.updatedata.updates.address.city = data.address.city;
         this.updatedata.updates.address.country = data.address.country;
+      } else {
+        this.updatedata.updates.dob = "";
+        this.updatedata.updates.address.city = "";
+        this.updatedata.updates.address.country = "";
       }
     },
     avatarclick(value) {

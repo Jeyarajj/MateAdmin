@@ -205,10 +205,8 @@ export const userActions = {
         }
       })
       .then(result => {
-        console.log(result);
-        context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
-
         context.commit('setBasicInfoUserProfile', result);
+        context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
       })
       .catch(err => {
         console.log(err);
