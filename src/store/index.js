@@ -11,6 +11,7 @@ import { nationalities } from './locale/nationalities';
 import { currencies } from './locale/currencies';
 import navigation from './modules/navigation';
 import swatch from './modules/swatch';
+import pagination from './shared-components/pagination';
 
 Vue.use(Vuex);
 
@@ -21,7 +22,8 @@ export const store = new Vuex.Store({
     navigation,
     nationalities,
     currencies,
-    swatch
+    swatch,
+    pagination
   },
   actions: {
     initFirebase: function() {
