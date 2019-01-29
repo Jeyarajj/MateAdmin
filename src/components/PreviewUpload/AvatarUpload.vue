@@ -177,12 +177,10 @@ export default {
 
       let file = new File([arr], oldFile.name, { type: oldFile.type });
 
-      //upload aws s3
-      let path = "Avatar/" + this.userid;
-      this.avatarPicture = new imageType(file, path, this.$store);
+      //emit from child to parent
       this.imageurl = this.avatarPicture.fileUrl;
        this.$emit('clicked', this.imageurl)
-      //upload aws s3
+
 
       this.$refs.upload.update(oldFile.id, {
         file,
@@ -207,6 +205,10 @@ export default {
     },
 
     inputFilter(newFile, oldFile, prevent) {
+      //upload aws s3
+      let path = "Avatar/" + this.userid;
+      this.avatarPicture = new imageType(newFile.file, path, this.$store);
+      //upload aws s3
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
           this.alert("Your choice is not a picture");

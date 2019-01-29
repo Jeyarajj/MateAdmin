@@ -14,7 +14,7 @@
       </v-card-title>
       <v-data-table :headers="headers" :items="allusers" :search="search">
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.username }}</td>
+          <td>{{ props.item.username }}</td> 
           <td>{{ props.item.email }}</td>
           <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
           <td>{{ props.item.phone }}</td>
@@ -225,7 +225,7 @@
                         color="primary"
                         prepend-icon="person"
                         label="First name"
-                        v-model="updatedata.updates.name.first"
+                        v-model="updatedata.updates.username"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -411,11 +411,11 @@ export default {
           customClaims: {
             role: ""
           },
-          name: {
-            first: "",
-            last: "",
-            middle: ""
-          },
+          // name: {
+          //   first: "",
+          //   last: "",
+          //   middle: ""
+          // },
           email: "",
           languages: [
             {
@@ -509,11 +509,12 @@ export default {
       this.updateDialog = true;
       this.updatedata.userid = data.id;
       this.UserID = data._id;
-      if (data.name === null) {
-        this.updatedata.updates.name.first = data.name.first;
-      } else {
-        this.updatedata.updates.name.first = "";
-      }
+      // if (data.name === null) {
+      //   this.updatedata.updates.name.first = data.name.first;
+      // } else {
+      //   this.updatedata.updates.name.first = "";
+      // }
+      this.updatedata.updates.username = data.username;
       this.updatedata.updates.email = data.email;
       this.updatedata.updates.phone = data.phone;
       this.updatedata.updates.photo = data.photo

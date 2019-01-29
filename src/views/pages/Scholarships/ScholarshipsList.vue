@@ -80,7 +80,7 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="scholarships" class="elevation-1">
+    <v-data-table :headers="headers" :items="scholarships" :hide-actions=true class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>

@@ -33,18 +33,22 @@
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-        <img :src="this.userphoto">
+        <img :src="this.currentUserdata.photo
+        ? this.currentUserdata.photo
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'" :key="this.currentUserdata.photo">
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
             <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-            <img :src="userphoto">
+            <img :src="this.currentUserdata.photo
+        ? this.currentUserdata.photo
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-text="this.username"></v-list-tile-title>
-            <v-list-tile-sub-title>{{this.username}}</v-list-tile-sub-title>
+            <v-list-tile-title v-text="this.currentUserdata.username ? this.currentUserdata.username : ''"></v-list-tile-title>
+            <v-list-tile-sub-title>{{this.currentUserdata.username ? this.currentUserdata.username : ''}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -201,10 +205,6 @@ export default {
       updateDialog: false,
       datepicker: false,
       UserID: "",
-      username: this.currentUserdata ? this.currentUserdata.username : "",
-      userphoto: this.currentUserdata
-        ? this.currentUserdata.photo
-        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5",
       updatedata: {
         token: "",
         userid: "",
