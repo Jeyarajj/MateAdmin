@@ -1,54 +1,34 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title>
-        <v-tooltip right>
-          <v-btn slot="activator" color="primary" dark fab @click.native="showdialog()">
-            <v-icon dark>person_add</v-icon>
-          </v-btn>
-          <span>ADD USER</span>
-        </v-tooltip>
 
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-      </v-card-title>
-      <v-data-table :headers="headers" :items="allusers" :search="search">
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.username }}</td>
-          <td>{{ props.item.email }}</td>
-          <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
-          <td>{{ props.item.phone }}</td>
-          <td class="text-xs-right">
-            <v-flex xs12 sm3>
-              <v-btn @click="editUser(props.item)" flat icon color="primary">
-                <v-icon>remove_red_eye</v-icon>
-              </v-btn>
-            </v-flex>
-          </td>
-          <td class="text-xs-right">
-            <v-flex xs12 sm3>
-              <v-btn
-                @click="Updatedata('/users', props.item._id,props.item)"
-                flat
-                icon
-                color="primary"
-              >
-                <v-icon>edit</v-icon>
-              </v-btn>
-            </v-flex>
-          </td>
-        </template>
-        <v-alert
-          slot="no-results"
-          :value="true"
-          color="error"
-          icon="warning"
-        >Your search for "{{ search }}" found no results.</v-alert>
-      </v-data-table>
-    </v-card>
-
-    <!-- Create Contact Modal -->
+        <!-- Create Contact Modal -->
     <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
+      <v-btn slot="activator" color="primary" dark class="mb-2">
+        <v-icon left dark>add_circle</v-icon> Add New User</v-btn>
       <v-card class="create-dialog-card">
         <v-card-title>
           <v-layout>
@@ -57,7 +37,7 @@
             </v-flex>
             <v-flex row xs6 text-xs-right>
               <v-btn flat icon class="fx-close-model-btn" @click.native="closedialog()">
-                <v-icon color="white">close</v-icon>
+                <v-icon color="primary">close</v-icon>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -114,6 +94,110 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+      </v-toolbar>
+    </v-container>
+
+    <v-card>
+      <v-data-table :headers="headers" :items="allusers" :search="search">
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item._id }}</td>
+          <td>{{ props.item.email }}</td>
+          <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
+          <td>{{ props.item.phone }}</td>
+          <td class="text-xs-right">
+            <v-flex xs12 sm3>
+              <v-btn @click="editUser(props.item)" flat icon color="primary">
+                <v-icon>remove_red_eye</v-icon>
+              </v-btn>
+            </v-flex>
+          </td>
+          <td class="text-xs-right">
+            <v-flex xs12 sm3>
+              <v-btn
+                @click="Updatedata('/users', props.item._id,props.item)"
+                flat
+                icon
+                color="primary"
+              >
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </v-flex>
+          </td>
+        </template>
+        <v-alert
+          slot="no-results"
+          :value="true"
+          color="error"
+          icon="warning"
+        >Your search for "{{ search }}" found no results.</v-alert>
+      </v-data-table>
+    </v-card>
+
+    <!-- Create Contact Modal -->
+    <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
+      <v-card class="create-dialog-card">
+        <v-card-title>
+          <v-layout>
+            <v-flex row xs6>
+              <span class="white--text">New User</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="closedialog()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-alert :value="showerror" type="error">{{errormessage}}</v-alert>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field
+                  @input="$v.defaultUser.users.email.$touch()"
+                  @blur="$v.defaultUser.users.email.$touch()"
+                  prepend-icon="email"
+                  v-model="defaultUser.users.email"
+                  label="Email *"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-select
+                  @input="$v.defaultUser.users._role.$touch()"
+                  @blur="$v.defaultUser.users._role.$touch()"
+                  :items="allroles"
+                  item-text="role_name"
+                  item-value="_id"
+                  prepend-icon="people"
+                  v-model="defaultUser.users._role"
+                  label="Role *"
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="white--text" color="menuhover" @click.native="resetContactForm()">Close</v-btn>
+          <v-btn
+            class="white--text"
+            color="act"
+            @click.native="updateContact()"
+            :disabled="$v.defaultUser.$invalid"
+            v-if="isEditformMod"
+          >Edit</v-btn>
+          <v-btn
+            :disabled="$v.$invalid"
+            block
+            :class="$v.$invalid ? '' : 'white--text'"
+            color="act"
+            @click.native="createNewUser()"
+            v-else
+          >Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- Profile view -->
     <v-dialog v-model="profileDialog" max-width="300">
@@ -129,7 +213,7 @@
 
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" text-xs-center>{{this.showdata.username}}</h3>
+              <h3 class="headline mb-0" text-xs-center>{{defaultUser.username}}</h3>
 
               <v-list justify-center sm12>
                 <v-list-tile>
@@ -138,7 +222,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.phone}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.phone}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -150,7 +234,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.email}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.email}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -162,7 +246,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.birthdate}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.birthdate}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -174,7 +258,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.country}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.country}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -186,7 +270,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.city}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.city}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -221,7 +305,7 @@
                         color="primary"
                         prepend-icon="person"
                         label="First name"
-                        v-model="updatedata.updates.name.first"
+                        v-model="defaultUser.dataset.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -230,7 +314,7 @@
                         color="primary"
                         prepend-icon="email"
                         label="Email"
-                        v-model="updatedata.updates.email"
+                        v-model="defaultUser.dataset.email"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -239,7 +323,7 @@
                         color="primary"
                         prepend-icon="phone"
                         label="Phone No."
-                        v-model="updatedata.updates.phone"
+                        v-model="defaultUser.dataset.phone"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -258,39 +342,39 @@
                       >
                         <v-text-field
                           slot="activator"
-                          v-model="updatedata.updates.dob"
+                          v-model="defaultUser.dataset.dob"
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
                           prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
-                          v-model="updatedata.updates.dob"
+                          v-model="defaultUser.dataset.dob"
                           no-title
                           @input="datepicker = false"
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <v-flex xs12>
+                    <!-- <v-flex xs12>
                       <v-select
                         :items="cities"
                         item-text="name"
                         item-value="name"
                         label="City"
-                        v-model="updatedata.updates.address.city"
+                        v-model="defaultUser.address.city"
                         outline
                       ></v-select>
-                    </v-flex>
-                    <v-flex xs12>
+                    </v-flex>-->
+                    <!-- <v-flex xs12>
                        <v-select
                         :items="countries"
                         item-text="name"
                         item-value="name"
                         label="Country"
-                        v-model="updatedata.updates.address.country"
+                        v-model="defaultUser.address.country"
                         outline
                       ></v-select>
-                    </v-flex>
+                    </v-flex>-->
                   </v-layout>
                 </v-container>
               </v-form>
@@ -306,20 +390,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
- 
   </div>
 </template>
   
 <script>
 import { rgba as Gradients } from "@/data/gradients";
 import { filter, findIndex } from "lodash";
-
-import {
-  GET_USERS,
-  GET_ROLES,
-  CREATEUSER,
-  UPDATEUSER
-} from "@/gql-constants/users";
+import { Users } from "../../dto/users";
+import { Role } from "../../dto/roles";
 import {
   required,
   maxLength,
@@ -329,7 +407,7 @@ import {
 import { mapGetters } from "vuex";
 import { validNumber } from "@/utils/validators";
 import validationMixin from "@/mixins/validationMixin";
-import { defaultUserPic, users, authUser } from "@/data/dummyData";
+// import { defaultUserPic, users, authUser } from "@/data/dummyData";
 
 import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
 
@@ -340,24 +418,44 @@ export default {
     AvatarUpload
   },
   validations: {
-    form: {
-      email: { required, email },
-      role_id: { required }
+    defaultUser: {
+      users: {
+        email: { required, email },
+        _role: { required }
+      }
     }
   },
   validationMessages: {
-    form: {
-      email: {
-        required: "Email is required",
-        email: "Email must be valid"
-      },
-      role_id: {
-        required: "Role is required"
+    defaultUser: {
+      users: {
+        email: {
+          required: "Email is required",
+          email: "Email must be valid"
+        },
+        _role: {
+          required: "Role is required"
+        }
       }
     }
   },
   data() {
     return {
+    title: 'Manage Users',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Users Management',
+      disabled: true
+    },
+    {
+      text: 'Manage Users',
+      disabled: true
+    }
+    ],
       search: "",
       errormessage: "",
       showerror: false,
@@ -374,65 +472,17 @@ export default {
         { text: "Phone", value: "phone" },
         { text: "Actions", value: "actions" }
       ],
-
-      title: "Contacts",
       date: null,
       dateFormatted: null,
       gradient: Gradients[9],
       backgroundImg: "/static/doc-images/vbanner.jpg",
-      form: {
-        email: "",
-        password: "",
-        role_id: ""
-      },
       allusers: [],
-      drawerinternal: true,
-      activeMenu: "all",
-      userslimit: 10,
-      authUser,
-      updates: null,
-      showdata: {
-        username: "",
-        phone: "",
-        email: "",
-        birthdate: "",
-        city: "",
-        country: ""
-      },
-      updatedata: {
-        token: "",
-        userid: "",
-        updates: {
-          customClaims: {
-            role: ""
-          },
-          name: {
-            first: "",
-            last: "",
-            middle: ""
-          },
-          email: "",
-          languages: [
-            {
-              name: ""
-            }
-          ],
-          username: "",
-          nationality: "",
-          dob: "",
-          phone: "",
-          address: {
-            street: "",
-            zip: "",
-            city: "",
-            country: ""
-          }
-        }
-      },
+      allroles: [],
       confirmBox: {
         deleteContact: false,
         item: null
       },
+      defaultUser: Users,
       contactDialog: false,
       profileDialog: false,
       updateDialog: false,
@@ -442,121 +492,41 @@ export default {
     };
   },
   methods: {
-    resetContactForm() {
-      this.form = {
-        username: "",
-        phone: "",
-        email: "",
-        country: "",
-        avatar: "/static/default/user.svg",
-        city: "",
-        birthdate: "",
-        formatedBirthday: "",
-        notes: null,
-        is_favourite: false,
-        is_frequent: false,
-        selected: false
-      };
-      this.contactDialog = false;
-      this.isEditformMod = false;
-      this.editIndex = null;
+    formatDate(date) {
+      if (!date) return null;
+      date = new Date(date);
+      return (
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+      );
     },
-    formatDate (date) {
-        if (!date) return null
-
-        date = new Date(date);
-        return date.getDate()+'/' + (date.getMonth()+1) + '/'+date.getFullYear();
-      },
     editContact(contact) {
       this.form = contact;
       this.isEditformMod = true;
       this.contactDialog = true;
-      this.editIndex = findIndex(
-        this.contacts,
-        contact => contact === this.form
-      );
     },
     createNewUser() {
       //random password genarate
       var randomstring = Math.random()
         .toString(36)
         .slice(-8);
-      this.form.password = randomstring;
-      this.createusers(this.form);
+      this.defaultUser.users.password = randomstring;
+      this.createusers();
     },
     editUser(data) {
       this.profileDialog = true;
-      this.showdata.phone = data.phone;
-      this.showdata.email = data.email;
-      this.showdata.birthdate = this.formatDate(data.dob);
-      this.showdata.username = data.username;
-      this.showdata.city = data.address.city;
-      this.showdata.country = data.address.country;
     },
     Updatedata(path, pageType, data) {
       this.updateDialog = true;
-      this.updatedata.userid = data.id;
-      this.updatedata.updates.email = data.email;
-      this.updatedata.updates.phone = data.phone;
-      if (data.dob === null) {
-        this.updatedata.updates.dob = "";
-      } else {
-        this.updatedata.updates.dob = data.dob;
-      }
-      if (data.address === null) {
-        this.updatedata.updates.address.street = "";
-        this.updatedata.updates.address.city = "";
-      } else {
-        this.updatedata.updates.address.street = data.address.street;
-        this.updatedata.updates.address.city = data.address.city;
-        this.updatedata.updates.address.country = data.address.country;
-      }
     },
     updateclick() {
-      //this.updatedata.userid = this.$route.query.uid;
-      var dateobj = new Date(this.updatedata.updates.dob);
-      this.updatedata.updates.dob = dateobj.toISOString();
-      this.updateUser(this.updatedata);
+      this.createusers()
     },
-    updateUser(updatedata) {
-      this.$apollo
-        .mutate({
-          mutation: UPDATEUSER,
-          variables: updatedata
-        })
-        .then(
-          data => {
-            for (let i = 0; i < this.allusers.length; i++) {
-              if (data.data.user.profile.update._id) {
-                if (
-                  this.allusers[i]._id === data.data.user.profile.update._id
-                ) {
-                  updatedata.updates._id = data.data.user.profile.update._id;
-                  this.allusers.splice(i, 1);
-                  this.allusers[i] = updatedata.updates;
-                  break;
-                } else {
-                  continue;
-                }
-              }
-            }
-            this.updateDialog = false;
-          },
-          error => {
-            console.log(error);
-            this.errormessage = error.graphQLErrors[0].message;
-          }
-        );
-    },
+    updateUser(updatedata) {},
     showdialog() {
       this.showerror = false;
       this.contactDialog = true;
     },
     closedialog() {
-      this.form = {
-        username: "",
-        role_id: ""
-      };
       this.showerror = false;
       this.contactDialog = false;
     },
@@ -565,57 +535,39 @@ export default {
       this.contacts[index] = this.form;
       this.resetContactForm();
     },
-    createusers(userdata) {
-      this.$apollo
-        .mutate({
-          mutation: CREATEUSER,
-          variables: userdata
-        })
-        .then(
-          data => {
-            this.allusers.push({
-              _id: data.data.createUser._id,
-              email: data.data.createUser.email
-            });
-            this.contactDialog = false;
-          },
-          error => {
-            this.showerror = true;
-            this.errormessage = error.graphQLErrors[0].message;
-          }
-        );
-    }
-  },
-  apollo: {
-    GetUsers: {
-      query: GET_USERS,
-      variables() {
-        return {
-          search: this.search,
-          limit: this.userslimit
-        };
-      },
-      update(data) {
-        this.allusers = data.public_profiles;
-      },
-      error(error) {
-        console.log(error);
+    async createusers() {
+      this.defaultUser._id = "5c5850688eea700efe9420d5"
+      const result = await this.defaultUser.createUser();
+      if (result) {
+        if (result.data.hasOwnProperty("createAdminUser")) {
+          this.defaultUser._id = result.data.createAdminUser._id;
+          this.allusers.push(this.defaultUser);
+        }
+      } else console.log("Created failed check logs");
+      this.contactDialog = false;
+    },
+    async getUsers() {
+      const allusers = await Users.getUsers();
+      console.log(allusers);
+
+      this.allusers = allusers.data.getUsers;
+      return allusers;
+    },
+    async getRoles() {
+      const roles = await Role.getRoles();
+      if (roles) {
+        roles.data.getRoles.forEach(element => {
+          this.allroles.push(new Role(element));
+        });
+        console.log(this.allroles);
+        console.log(roles);
       }
     },
-    GetRoles: {
-      query: GET_ROLES,
-      variables() {
-        return {
-          Id: this.userBasicInfoProfile._id
-        };
-      },
-      update(data) {
-        return data.getAllRoles;
-      },
-      error(error) {
-        console.log(error);
-      }
-    }
+  },
+  created() {
+    this.defaultUser = new Users();
+    this.getUsers();
+    this.getRoles();
   },
   computed: {
     ...mapGetters([
@@ -624,13 +576,6 @@ export default {
       "cities",
       "countries"
     ])
-  },
-  // watch: {
-  //   contactDialog(from, to) {
-  //     if (to) {
-  //       this.resetContactForm();
-  //     }
-  //   }
-  // }
+  }
 };
 </script>

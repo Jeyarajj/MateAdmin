@@ -1,37 +1,67 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Courses</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Course</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+             <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.name" label="Course name"></v-text-field>
+                  <v-text-field v-model="editedItem.name" label="Course name" box></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="editedItem.degree" label="Degree" box></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
                   <v-select
                     :items="course_level"
                     v-model="editedItem.course_level"
-                    label="Course Level"
+                    label="Course Level" box
                   ></v-select>
+                </v-flex>                
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.course_fee" label="Course Fee" box></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.degree" label="Degree"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.course_fee" label="Course Fee"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.course_duration" label="Course Duration"></v-text-field>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.course_duration" label="Course Duration" box></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
                   <v-menu
@@ -51,7 +81,7 @@
                       v-model="editedItem.startdate"
                       label="Start Date"
                       prepend-icon="event"
-                      readonly
+                      readonly box
                     ></v-text-field>
                     <v-date-picker v-model="editedItem.startdate" no-title scrollable>
                       <v-spacer></v-spacer>
@@ -78,7 +108,7 @@
                       v-model="editedItem.enddate"
                       label="End Date"
                       prepend-icon="event"
-                      readonly
+                      readonly box
                     ></v-text-field>
                     <v-date-picker v-model="editedItem.enddate" no-title scrollable>
                       <v-spacer></v-spacer>
@@ -87,34 +117,34 @@
                     </v-date-picker>
                   </v-menu>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-select :items="mode" v-model="editedItem.mode" label="Mode"></v-select>
+                <v-flex xs12 sm6 md4>
+                  <v-select :items="mode" v-model="editedItem.mode" label="Mode" box></v-select>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
+                <v-flex xs12 sm6 md4>
                   <v-select
                     :items="course_mode"
                     v-model="editedItem.course_mode"
-                    label="Course Mode"
+                    label="Course Mode" box
                   ></v-select>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
+                <v-flex xs12 sm6 md4>
                   <v-select
                     :items="institutionsResults"
                     item-text="name"
                     item-value="_id"
                     v-model="editedItem.university_id"
-                    label="University"
+                    label="University" box
                   ></v-select>
                   <!-- <v-text-field v-model="editedItem.university_id" label="University"></v-text-field> -->
                 </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.website" label="WebSite URL"></v-text-field>
+                <v-flex xs12 sm6 md12>
+                  <v-text-field v-model="editedItem.website" label="WebSite URL" box></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="editedItem.description" label="Description"></v-textarea>
+                  <v-textarea v-model="editedItem.description" label="Description" box></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
-                  <v-select :items="status" v-model="editedItem.status" label="Course Status"></v-select>
+                  <v-select :items="status" v-model="editedItem.status" label="Course Status" box></v-select>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -127,7 +157,10 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+
+        </v-toolbar>
+    </v-container>
+
     <v-data-table :headers="headers" :items="courseResults" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.name }}</td>
@@ -156,6 +189,22 @@ import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
 
 export default {
   data: () => ({
+    title: 'Manage Courses',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Institutions',
+      disabled: true
+    },
+    {
+      text: 'Manage Courses',
+      disabled: true
+    }
+    ],
     dialog: false,
     course_level: ["Under Graduate", "Post Graduate"],
     mode: ["Full Time", "Part Time"],

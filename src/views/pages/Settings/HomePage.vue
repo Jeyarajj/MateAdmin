@@ -1,10 +1,38 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        </v-toolbar>
+    </v-container>
+
+    <!-- <v-toolbar flat color="white">
       <v-toolbar-title>Home Settings</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
-    </v-toolbar>
+    </v-toolbar> -->
 
     <v-layout class="Cardpadding-25">
       <v-flex xs12 sm12>
@@ -170,14 +198,52 @@
       <v-spacer></v-spacer>
       <v-btn color="success" @click="save()">Save</v-btn>
     </v-card-actions>
+    <v-flex>
+  <UserTypes/>
+  </v-flex>
+  <v-flex>
+  <InstitutionTypes/>
+  </v-flex>
+  <v-flex>
+  <ScholorshipTypes/>
+  </v-flex>
+  <v-flex>
+  <DegreeTypes/>
+  </v-flex>
   </div>
 </template>
 
 <script>
 import { imageType } from "../../../dto/imageType";
 import { HOMESETTING, GET_HOMESETTINGS } from "@/gql-constants/settings";
+import UserTypes from "@/views/pages/Settings/UserTypes.vue";
+import InstitutionTypes from "@/views/pages/Settings/InstitutionTypes.vue";
+import ScholorshipTypes from  "@/views/pages/Settings/ScholorshipTypes.vue";
+import DegreeTypes from "@/views/pages/Settings/DegreeTypes.vue";
 export default {
+  components: {
+    UserTypes,
+    InstitutionTypes,
+    ScholorshipTypes,
+    DegreeTypes
+  },
   data: () => ({
+    title: 'Homepage Settings',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Settings',
+      disabled: true
+    },
+    {
+      text: 'Homepage Settings',
+      disabled: true
+    }
+    ],
     imageName: "",
     logoName: "",
     imageUrl: "",

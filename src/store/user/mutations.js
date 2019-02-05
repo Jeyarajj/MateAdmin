@@ -52,8 +52,15 @@ export const userMutations = {
     // Vue.use(defineAbilitiesFor(rolePermission));
     state.roleid = data._id;
   },
+  metaTags: function(state, payload) {
+    state.metatags = payload.data.getMetaTags;
+  },
   setBasicInfoUserProfile: function(state, payload) {
     state.userBasicInfoProfile = payload.data.getBasicInfo;
+  },
+  setcurrentUserinfo: function(state, payload) {
+    //payload.data.profile.uid = state.userBasicInfoProfile.id
+    state.currentUserdata = payload.data.profile;
   },
   setRememberMe: function(state, payload) {
     state.rememberMe = payload;

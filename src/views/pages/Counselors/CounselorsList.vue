@@ -1,14 +1,45 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Counselor</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Counsellor</v-btn>
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon> Add New Counsellor</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           </v-card-title>
 
           <v-card-text>
@@ -19,26 +50,26 @@
                   :error-messages="fieldErrors('editedItem.name')"
                   @input="$v.editedItem.name.$touch()"
                   @blur="$v.editedItem.name.$touch()"
-                  label="First Name"></v-text-field>
+                  label="First Name" box></v-text-field>
                 </v-flex>
 
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md6>
                   <v-text-field prepend-icon="email" v-model="editedItem.email" 
                   :error-messages="fieldErrors('editedItem.email')"
                   @input="$v.editedItem.email.$touch()"
                   @blur="$v.editedItem.email.$touch()"
                   label="Email *"
-                  required></v-text-field>
+                  required box></v-text-field>
                 </v-flex>
 
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md6>
                   <v-text-field prepend-icon="phone" v-model="editedItem.phone" 
                   :error-messages="fieldErrors('editedItem.phone')"
                   @input="$v.editedItem.phone.$touch()"
                   @blur="$v.editedItem.phone.$touch()"
-                  label="Phone"></v-text-field>
+                  label="Phone" box></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md6>
                   <country-select
                     class="countryselectborder"
                     v-model="editedItem.country"
@@ -46,7 +77,7 @@
                     topCountry="US"
                   />
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md6>
                   <region-select
                     class="regionselectborder"
                     v-model="editedItem.city"
@@ -54,27 +85,38 @@
                     :region="editedItem.city"
                   />
                 </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <ul>
-                    <v-icon v-if="counselorPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <li v-if="counselorPicture.exists">
-                      <img :src="counselorPicture.fileUrl" width="50" height="auto">
-                      <span @click="removeImage(counselorPicture)">Remove</span>
-                    </li>
-                  </ul>
+                <v-flex xs12 sm12 md6>
+                  <!-- <v-progress-circular
+                  v-if="counselorPicture.uploadStatus"
+                  :size="30"
+                  color="primary"
+                  indeterminate>
+                  </v-progress-circular> -->
+                  <v-progress-linear
+                  v-if="counselorPicture.uploadStatus"
+                  indeterminate
+                  color="light-green darken-2"
+                  class="mb-0"
+                ></v-progress-linear>
+                    <span v-if="counselorPicture.exists">
+                       <v-img :src="counselorPicture.fileUrl" aspect-ratio="1.7"></v-img>
+                      <v-btn color="error" dark @click="removeImage(counselorPicture)" class="removebtn_counsellor">
+                        <v-icon dark left>remove_circle</v-icon>Remove
+                      </v-btn>
+                      <!-- <span @click="removeImage(counselorPicture)"> Remove</span> -->
+                    </span>
                   <file-upload
                     input-id="counselorPicture"
-                    class="btn btn-primary"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
                     @input="onPicture"
-                    ref="upload"
-                  >
-                    <i class="fa fa-plus"></i>
-                    Upload Picture
-                  </file-upload>
+                    ref="upload">
+                    <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                    </v-btn>
+                 </file-upload>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -87,7 +129,10 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+
+        </v-toolbar>
+    </v-container>
+
     <v-data-table :headers="headers" :items="counselorsList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
@@ -145,6 +190,22 @@ export default {
     }
   },
   data: () => ({
+    title: 'Manage Counsellors',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Counsellors',
+      disabled: true
+    },
+    {
+      text: 'Manage Counsellors',
+      disabled: true
+    }
+    ],
     counselorPicture: imageType,
     headers: [
       {

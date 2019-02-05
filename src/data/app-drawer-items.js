@@ -1,19 +1,10 @@
 export default [
-  { header: 'App' },
-  // {
-  //   title: 'Dashboard',
-  //   group: 'dashboard',
-  //   icon: 'dashboard',
-  //   items: [
-  //     { name: 'Dashboardv1', title: 'Dashboard V1', prependIcon: 'dashboard' }
-  //   ]
-  // },
   { icon: 'dashboard', title: 'Home', name: 'dashboard' },
 
   {
     title: 'Users Management',
     group: 'usersmanagement',
-    icon: 'error',
+    icon: 'account_circle',
     items: [
       { name: 'UserRoles', title: 'Manage User Roles' },
       { name: 'UsersList', title: 'Manage Users' }
@@ -23,25 +14,19 @@ export default [
   {
     title: 'Institutions',
     group: 'institutions',
-    icon: 'error',
+    icon: 'school',
     items: [
-      { name: 'InstitutionsOverview', title: 'Overview' },
       { name: 'InstitutionsList', title: 'Manage Institutions' },
-      { name: 'CourseList', title: 'Manage Courses' },
-      { name: 'ScholarshipList', title: 'Manage Scholarship' },
-
-      { name: 'Institutionsbulkimport', title: 'Bulk Import' }
+      { name: 'InstitutionsCourses', title: 'Manage Courses' },
+      { name: 'InstitutionsScholarships', title: 'Manage Scholarship' },
+      { name: 'InstitutionsBulkImport', title: 'Bulk Import' }
     ]
   },
 
-  // { header: 'Users Management' },
-  // { icon: 'chat', name: 'UsersList', title: 'Users List' },
-  // { icon: 'chat', name: 'UsersRoles', title: 'Users Roles' },
-
   {
-    title: 'Students',
-    group: 'students',
-    icon: 'help',
+    title: 'Scholarships',
+    group: 'scholarships',
+    icon: 'card_giftcard',
     items: [
       { title: 'Students List', name: 'StudentsList' },
       { title: 'Students Applications', name: 'StudentsApplicationsList' }
@@ -49,23 +34,46 @@ export default [
   },
 
   {
-    title: 'Counselors',
+    title: 'Counsellors',
     group: 'counselors',
+    icon: 'people',
+    items: [
+      { title: 'Manage Counsellors', name: 'CounselorsList' }
+    ]
+  },
+  {
+    title: 'Articles',
+    group: 'articles',
     icon: 'help',
     items: [
-      { title: 'Counselors', name: 'CounselorsList' },
-      {
-        title: 'Students Applications Process',
-        name: 'StudentApplicationsprocess'
-      },
-      { title: 'Students Request', name: 'StudentRequest' }
+      { title: 'Articles List', name: 'ArticlesList' },
+      { title: 'Article Page', name: 'ArticlePage' }
+    ]
+  },
+
+  {
+    title: 'Subscriptions',
+    group: 'subscriptions',
+    icon: 'subscriptions',
+    items: [
+      { title: 'Manage Ad Packages', name: 'ManageAdPackages' }
+    ]
+  },
+
+  {
+    title: 'Events',
+    group: 'events',
+    icon: 'event',
+    items: [
+      { title: 'Manage Fairs', name: 'ManageFairs' },
+      { title: 'Manage Webinars', name: 'ManageWebinars' }
     ]
   },
 
   {
     title: 'Content',
     group: 'content',
-    icon: 'help',
+    icon: 'ballot',
     items: [
       { title: 'Manage Web Content', name: 'ManageWebContent' },
       { title: 'Manage Articles', name: 'ManageArticles' },
@@ -74,21 +82,36 @@ export default [
   },
 
   {
-    title: 'Settings',
-    group: 'settings',
-    icon: 'help',
+    title: 'Billing',
+    group: 'billing',
+    icon: 'receipt',
     items: [
-      { title: 'Home Page', name: 'HomePage' },
-      { title: 'Notifications', name: 'Notify' },
-      { title: 'Profile', name: 'ProfileSettings' },
-      { title: 'Security & Privacy', name: 'SecurityPrivacy' }
+      { title: 'Invoice', name: 'Invoice' },
+      { title: 'View Payment Gateway', name: 'ViewPaymentGateway' }
     ]
   },
 
   {
-    title: 'Scholarships',
-    group: 'scholarships',
-    icon: 'help',
-    items: [{ title: 'Scholarships', name: 'ScholarshipsList' }]
+    title: 'Settings',
+    group: 'settings',
+    icon: 'settings',
+    items: [
+      { title: 'Home Page', name: 'HomePage' },
+      { title: 'Homepage Settings', name: 'HomepageSettings' },
+      { title: 'Notifications', name: 'Notify' },
+      { title: 'Profile', name: 'ProfileSettings' },
+      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Meta Tags', name: 'MetaTags' }
+    ]
+  },
+
+  {
+    title: 'Reports',
+    group: 'reports',
+    icon: 'info',
+    items: [
+      { title: 'Custom Reports Review', name: 'CustomReportsReview' },
+      { title: 'Bulk Download', name: 'ReportsBulkDownload' }
+    ]
   }
 ];

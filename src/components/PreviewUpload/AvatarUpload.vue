@@ -10,7 +10,7 @@
             :src="
               files.length
                 ? files[0].url
-                : 'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm'
+                : avatarurl
             "
             class="rounded-circle"
           >
@@ -44,8 +44,18 @@
         <img ref="editImage" :src="files[0].url">
       </div>
       <div class="text-center p-4">
-        <v-btn color="primary" type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</v-btn>
-        <v-btn color="success" type="submit" class="btn btn-primary" @click.prevent="editSave">Change</v-btn>
+        <v-btn
+          color="primary"
+          type="button"
+          class="btn btn-secondary"
+          @click.prevent="$refs.upload.clear"
+        >Cancel</v-btn>
+        <v-btn
+          color="success"
+          type="submit"
+          class="btn btn-primary"
+          @click.prevent="editSave"
+        >Change</v-btn>
       </div>
     </div>
   </div>
@@ -93,6 +103,7 @@
 <script>
 import Cropper from "cropperjs";
 import FileUpload from "vue-upload-component";
+import { imageType } from "../../dto/imageType";
 export default {
   components: {
     FileUpload
@@ -102,10 +113,20 @@ export default {
     return {
       files: [],
       edit: false,
-      cropper: false
+      cropper: false,
+      imageurl:"",
+      avatarPicture: imageType,
+      mutableavatarurl: this.imageurl
     };
   },
-
+  props: {
+    avatarurl: {
+      type: String
+    },
+    userid: {
+      type: String
+    }
+  },
   watch: {
     loader() {
       const l = this.loader;
@@ -156,6 +177,11 @@ export default {
 
       let file = new File([arr], oldFile.name, { type: oldFile.type });
 
+      //emit from child to parent
+      this.imageurl = this.avatarPicture.fileUrl;
+       this.$emit('clicked', this.imageurl)
+
+
       this.$refs.upload.update(oldFile.id, {
         file,
         type: file.type,
@@ -167,7 +193,6 @@ export default {
     alert(message) {
       alert(message);
     },
-
     inputFile(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         this.$nextTick(function() {
@@ -180,6 +205,10 @@ export default {
     },
 
     inputFilter(newFile, oldFile, prevent) {
+      //upload aws s3
+      let path = "Avatar/" + this.userid;
+      this.avatarPicture = new imageType(newFile.file, path, this.$store);
+      //upload aws s3
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
           this.alert("Your choice is not a picture");

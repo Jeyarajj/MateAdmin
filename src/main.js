@@ -14,7 +14,7 @@ Vue.use(VueApollo);
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import colors from 'vuetify/es5/util/colors';
-
+import InputTag from 'vue-input-tag';
 //import { createI18n } from './i18n/index'
 
 //import {truncate} from 'lodash'
@@ -22,7 +22,7 @@ import App from './App.vue';
 
 const VueUploadComponent = require('vue-upload-component');
 Vue.component('file-upload', VueUploadComponent);
-
+Vue.component('input-tag', InputTag);
 Vue.use(Vuetify, {
   theme: {
     primary: store.state.swatch.colorScheme.primary,
@@ -63,7 +63,7 @@ Vue.filter('formatSize', function(size) {
   }
   return size.toString() + ' B';
 });
-
+Vue.use(require('vue-moment'));
 new Vue({
   router,
   store,
@@ -71,6 +71,7 @@ new Vue({
   created() {
     this.$store.dispatch('initFirebase');
     this.$store.dispatch('checkIfUserLogin');
+    this.$store.dispatch('metatags');
     this.$store.dispatch('location');
   },
   render: h => h(App)
