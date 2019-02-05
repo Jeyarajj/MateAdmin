@@ -20,8 +20,8 @@ import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
 import InstitutionsCourses from '@/views/pages/Institution/InstitutionsCourses';
 //import CourseList from '@/views/pages/Courses/courses';
 
-import ArticlesPage from '@/views/pages/Articles/articles_list';
-import ArticlePage from '@/views/pages/Articles/article_page';
+import Articles_List from '@/views/pages/Articles/articles_list';
+import Article_Page from '@/views/pages/Articles/article_page';
 
 import InstitutionsBulkImport from '@/views/pages/Institution/institutionsBulkImport';
 import InstitutionsScholarships from '@/views/pages/Institution/InstitutionsScholarships';
@@ -93,24 +93,24 @@ export const routes = [
     name: 'usersmanagement/UserRoles'
   },
   {
-    path: '/Articles/ArticlesList',
+    path: '/articles/articles_List',
     components: {
-      default: ArticlesPage,
+      default: Articles_List,
       sidebar: AppSidebar,
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'articles/ArticlesList'
+    name: 'articles/Articles_List'
   },
   {
-    path: '/Articles/ArticlePage/:mode/:article_id?',
+    path: '/articles/article_Page/:mode/:article_id?',
     components: {
-      default: ArticlePage,
+      default: Article_Page,
       sidebar: AppSidebar,
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'articles/ArticlePage'
+    name: 'articles/Article_Page'
   },
 
   {

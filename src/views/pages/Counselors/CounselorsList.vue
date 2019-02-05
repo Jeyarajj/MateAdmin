@@ -86,12 +86,6 @@
                   />
                 </v-flex>
                 <v-flex xs12 sm12 md6>
-                  <!-- <v-progress-circular
-                  v-if="counselorPicture.uploadStatus"
-                  :size="30"
-                  color="primary"
-                  indeterminate>
-                  </v-progress-circular> -->
                   <v-progress-linear
                   v-if="counselorPicture.uploadStatus"
                   indeterminate

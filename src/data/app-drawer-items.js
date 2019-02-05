@@ -43,10 +43,10 @@ export default [
   {
     title: 'Articles',
     group: 'articles',
-    icon: 'help',
+    icon: 'rate_review',
     items: [
-      { title: 'Articles List', name: 'ArticlesList' },
-      { title: 'Article Page', name: 'ArticlePage' }
+      { title: 'Articles List', name: 'Articles_List' },
+      { title: 'Article Page', name: 'Article_Page' }
     ]
   },
 
@@ -75,7 +75,6 @@ export default [
     icon: 'ballot',
     items: [
       { title: 'Manage Web Content', name: 'ManageWebContent' },
-      { title: 'Manage Articles', name: 'ManageArticles' },
       { title: 'Manage Comments', name: 'ManageComments' }
     ]
   },
@@ -95,7 +94,6 @@ export default [
     group: 'settings',
     icon: 'settings',
     items: [
-      { title: 'Home Page', name: 'HomePage' },
       { title: 'Homepage Settings', name: 'HomepageSettings' },
       { title: 'Notifications', name: 'Notify' },
       { title: 'Profile', name: 'ProfileSettings' },

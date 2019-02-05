@@ -106,6 +106,40 @@
                   label="Description min 200 words" auto-grow rows="2" box></v-textarea>
                 </v-flex>
                 <template v-if="editedIndex !== -1">
+                
+                  <!-- <v-flex xs12 sm12 md6>
+                  <v-progress-linear
+                  v-if="institutionLogo.uploadStatus"
+                  indeterminate
+                  color="light-green darken-2"
+                  class="mb-0"
+                ></v-progress-linear>
+                    <span v-if="institutionLogo.exists">
+                       <v-img :src="institutionLogo.fileUrl" aspect-ratio="1.7"></v-img>
+                      <v-btn color="error" dark @click="removeImage(institutionLogo)" class="removebtn_counsellor">
+                        <v-icon dark left>remove_circle</v-icon>Remove
+                      </v-btn>
+                    </span>
+                    <span v-else>
+                      <v-img :src="editedItem.logourl" aspect-ratio="1.7"></v-img>
+                    </span>
+                  <file-upload
+                      input-id="file1"
+                      class="btn btn-primary"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="false"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionLogo"
+                      ref="upload"
+                    >
+                    <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
+                    </v-btn>
+                 </file-upload>
+                </v-flex> -->
+
+
                   <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                   <v-flex xs12 sm12 md12>
                     <ul>
@@ -127,8 +161,9 @@
                       @input="onInstitutionLogo"
                       ref="upload"
                     >
-                      <i class="fa fa-plus"></i>
-                      Upload Logo
+                    <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
+                    </v-btn>
                     </file-upload>
                   </v-flex>
                   <v-flex xs12 sm12 md12>
@@ -155,8 +190,9 @@
                       :size="1024 * 1024 * 10"
                       @input="onInstitutionBanner"
                       ref="uploadBanners">
-                      <i class="fa fa-plus"></i>
-                      Upload Banner
+                     <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Upload Banner
+                    </v-btn>
                     </file-upload>
                   </v-flex>
                   <v-flex xs12 sm12 md12>
@@ -184,8 +220,9 @@
                       @input="onInstitutionPhotos"
                       ref="uploadPhotos"
                     >
-                      <i class="fa fa-plus"></i>
-                      Upload Photos
+                      <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
+                    </v-btn>
                     </file-upload>
                   </v-flex>
                 </template>
