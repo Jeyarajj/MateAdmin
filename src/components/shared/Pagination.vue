@@ -5,7 +5,11 @@
         :class="{'current-page': checkIfCurrentPage(1)}"
         class="pagination__li"> 1 </li>
     <li v-for="(page, i) in pageLists"
+<<<<<<< HEAD
         v-if="totalPages > 1"
+=======
+        :v-if="totalPages > 1"
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
         :key="i"
         @click="goTo(page)"
         :class="{'current-page': checkIfCurrentPage(page)}"
@@ -28,7 +32,11 @@ export default {
   name: 'Pagination',
   data () {
     return {
+<<<<<<< HEAD
       pageLists: [2, 3, 4, 5, 6, 7, 8]
+=======
+      pageLists: [2, 3, 4]
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
     }
   },
   computed: {
@@ -75,7 +83,11 @@ export default {
         this.pageLists = _.orderBy(newPageLists)
         return
       } else if (navType === 'onFirstPage') {
+<<<<<<< HEAD
         this.pageLists = [2, 3, 4, 5, 6, 7, 8]
+=======
+        this.pageLists = [2, 3, 4]
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
         return
       }
 
@@ -101,7 +113,11 @@ export default {
           }
           this.pageLists = _.orderBy(newPageLists)
         } else {
+<<<<<<< HEAD
           this.pageLists = [2, 3, 4, 5, 6, 7, 8]
+=======
+          this.pageLists = [2, 3, 4]
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
         }
       } else {
         this.pageLists = []
@@ -152,21 +168,38 @@ export default {
 
 <style lang="scss">
   .pagination {
+<<<<<<< HEAD
     background-color: var(--dark-blue-grey);
     border-radius: 2px;
     li { display: inline-block; }
     .current-page {
       background-color: var(--soft-blue) !important;
+=======
+    background-color: grey;
+    border-radius: 2px;
+    li { display: inline-block; }
+    .current-page {
+      background-color: blue !important;
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
       color: white !important;
     }
     .pagination__ul {
       padding: 1rem;
+<<<<<<< HEAD
       text-align: center;
       .pagination__li {
         font-size: 1.5rem;
         color: var(--dark-blue-grey);
         margin: 0 1rem;
         padding: .5rem 1.3rem;
+=======
+      text-align: right;
+      .pagination__li {
+        font-size: 1rem;
+        color: grey;
+        margin: 0 1rem;
+        padding: .5rem 1rem;
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
         cursor: pointer;
         background-color: white;
         border-radius: 3px;
@@ -179,7 +212,11 @@ export default {
           margin-left: 2.5rem;
         }
         &:hover {
+<<<<<<< HEAD
           background-color: var(--soft-blue);
+=======
+          background-color: salmon;
+>>>>>>> 401a6b9a74c89df4b91d261354c9fd0256094aa3
           color: white;
         }
       }

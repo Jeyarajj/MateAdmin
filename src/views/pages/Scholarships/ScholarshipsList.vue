@@ -80,7 +80,7 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="scholarships" class="elevation-1">
+    <v-data-table :headers="headers" :items="scholarships" :hide-actions=true class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
@@ -95,16 +95,21 @@
         <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
+    <Pagination />
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
+import Pagination from '@/components/shared/Pagination'
 import {
   GET_SCHOLARSHIPS,
   CREATE_SCHOLARSHIP
 } from "../../../gql-constants/scholarships";
 export default {
+  components: {
+    Pagination
+  },
   data: () => ({
     scholarshipPicture: imageType,
     headers: [
@@ -118,6 +123,10 @@ export default {
       // { text: "Amount", value: "amount" },
       { text: "Description", value: "description" }
     ],
+    currentIndex: null,
+    totalPages: null,
+    currentPage: null,
+    scholarshipLimit: 10,
     dialog: false,
     editedIndex: -1,
 
@@ -163,18 +172,18 @@ export default {
         return {
           text: "",
           page: {
-            from: 0,
-            limit: 5
+            from: this.$route.query.pageindex,
+            limit: this.scholarshipLimit
           }
         };
       },
       update(data) {
-        // this.$store.commit("SET_PAGES_DATA", {
-        //   currentIndex: data.search.university.page.from,
-        //   totalPages: data.search.university.pages.total,
-        //   currentPage: data.search.university.pages.current,
-        //   listLimit: this.institutionListLimit
-        // });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: data.search.scholarship.page.from,
+          totalPages: data.search.scholarship.pages.total,
+          currentPage: data.search.scholarship.pages.current,
+          listLimit: this.scholarshipLimit
+        });
         console.log(data);
         return data.search.scholarship.items;
       },

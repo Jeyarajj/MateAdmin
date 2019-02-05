@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>Counselor</v-toolbar-title>
+      <v-toolbar-title>Counsellors</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
