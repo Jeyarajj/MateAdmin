@@ -226,6 +226,7 @@
                       box
                     ></v-select>
                   </v-flex>
+                </template>
                   <template v-if="editedIndex !== -1">
                     <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <v-flex xs12 sm12 md12>

@@ -26,7 +26,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import { GET_APPLICATIONS } from "@/gql-constants/students";
+import { QUERIES } from "@/gql-constants/students";
 export default {
   validations: {
   },
@@ -52,7 +52,7 @@ export default {
   }),
   apollo: {
     getApplications: {
-      query: GET_APPLICATIONS,
+      query: QUERIES.GET_APPLICATIONS,
       variables() {
         return {   
           limit: 10,
