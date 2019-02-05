@@ -8,86 +8,89 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
+          <v-breadcrumbs v-if="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
             <v-breadcrumbs-item
               v-for="item in breadcrumbs"
               :key="item.text"
               :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
+            >{{ item.text }}</v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-dialog v-model="dialog" persistent max-width="900px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">
-           <v-icon left dark>add_circle</v-icon>
-          Add New Institution</v-btn>
-        <v-card>
-          <v-card-title>
-            <v-layout>
-            <v-flex row xs6>
-              <span class="headline">{{ formTitle }}</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="close()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-          </v-card-title>
+          <v-btn slot="activator" color="primary" dark class="mb-2">
+            <v-icon left dark>add_circle</v-icon>Add New Institution
+          </v-btn>
+          <v-card>
+            <v-card-title>
+              <v-layout>
+                <v-flex row xs6>
+                  <span class="headline">{{ formTitle }}</span>
+                </v-flex>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+            </v-card-title>
 
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.name" label="Institution Name" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.slug" label="Institution Slug" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.website" 
-                  :error-messages="fieldErrors('editedItem.website')"
-                  @input="$v.editedItem.website.$touch()"
-                  @blur="$v.editedItem.website.$touch()"
-                  label="Website URL" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-select
-                    :items="institution_type"
-                    v-model="editedItem.institution_type"
-                    :error-messages="fieldErrors('editedItem.institution_type')"
-                    @input="$v.editedItem.institution_type.$touch()"
-                    @blur="$v.editedItem.institution_type.$touch()"
-                    label="Institution Type"
-                    box
-                  ></v-select>
-                </v-flex>
-                <!-- <v-flex xs12 sm6 md4>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md12>
+                    <v-text-field v-model="editedItem.name" label="Institution Name" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.slug" label="Institution Slug" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field
+                      v-model="editedItem.website"
+                      :error-messages="fieldErrors('editedItem.website')"
+                      @input="$v.editedItem.website.$touch()"
+                      @blur="$v.editedItem.website.$touch()"
+                      label="Website URL"
+                      box
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select
+                      :items="institution_type"
+                      v-model="editedItem.institution_type"
+                      :error-messages="fieldErrors('editedItem.institution_type')"
+                      @input="$v.editedItem.institution_type.$touch()"
+                      @blur="$v.editedItem.institution_type.$touch()"
+                      label="Institution Type"
+                      box
+                    ></v-select>
+                  </v-flex>
+                  <!-- <v-flex xs12 sm6 md4>
                   <v-select :items="city" label="City" v-model="editedItem.city" outline></v-select>
-                </v-flex>-->
-                <v-flex xs12 sm6 md6>
-                  <country-select class="countryselectborder" v-model="editedItem.country" :country="country" topCountry="US"
-                  :error-messages="fieldErrors('editedItem.country')"
-                    @input="$v.editedItem.country.$touch()"
-                    @blur="$v.editedItem.country.$touch()"/>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <region-select
-                    class="regionselectborder"
-                    v-model="editedItem.city"
-                    :country="editedItem.country"
-                    :region="city"
-                  />
-                </v-flex>
-                <!-- <v-flex xs12 sm6 md4>
+                  </v-flex>-->
+                  <v-flex xs12 sm6 md6>
+                    <country-select
+                      class="countryselectborder"
+                      v-model="editedItem.country"
+                      :country="country"
+                      topCountry="US"
+                      :error-messages="fieldErrors('editedItem.country')"
+                      @input="$v.editedItem.country.$touch()"
+                      @blur="$v.editedItem.country.$touch()"
+                    />
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <region-select
+                      class="regionselectborder"
+                      v-model="editedItem.city"
+                      :country="editedItem.country"
+                      :region="city"
+                    />
+                  </v-flex>
+                  <!-- <v-flex xs12 sm6 md4>
                   <v-select :items="country" label="Country" v-model="editedItem.country" outline></v-select>
                 </v-flex>-->
                 <v-flex xs12 sm12 md12>
@@ -107,39 +110,6 @@
                 </v-flex>
                 <template v-if="editedIndex !== -1">
                 
-                  <!-- <v-flex xs12 sm12 md6>
-                  <v-progress-linear
-                  v-if="institutionLogo.uploadStatus"
-                  indeterminate
-                  color="light-green darken-2"
-                  class="mb-0"
-                ></v-progress-linear>
-                    <span v-if="institutionLogo.exists">
-                       <v-img :src="institutionLogo.fileUrl" aspect-ratio="1.7"></v-img>
-                      <v-btn color="error" dark @click="removeImage(institutionLogo)" class="removebtn_counsellor">
-                        <v-icon dark left>remove_circle</v-icon>Remove
-                      </v-btn>
-                    </span>
-                    <span v-else>
-                      <v-img :src="editedItem.logourl" aspect-ratio="1.7"></v-img>
-                    </span>
-                  <file-upload
-                      input-id="file1"
-                      class="btn btn-primary"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      accept="image/png, image/gif, image/jpeg, image/webp"
-                      :multiple="false"
-                      :size="1024 * 1024 * 10"
-                      @input="onInstitutionLogo"
-                      ref="upload"
-                    >
-                    <v-btn color="primary" dark>
-                        <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
-                    </v-btn>
-                 </file-upload>
-                </v-flex> -->
-
-
                   <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                   <v-flex xs12 sm12 md12>
                     <ul>
@@ -165,7 +135,20 @@
                       <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
                     </v-btn>
                     </file-upload>
+                  </v-flex>-->
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      v-model="editedItem.address"
+                      :error-messages="fieldErrors('editedItem.address')"
+                      @input="$v.editedItem.address.$touch()"
+                      @blur="$v.editedItem.address.$touch()"
+                      label="Institution Address"
+                      auto-grow
+                      rows="2"
+                      box
+                    ></v-textarea>
                   </v-flex>
+
                   <v-flex xs12 sm12 md12>
                     <br>
                     <br>
@@ -224,21 +207,122 @@
                       <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
                     </v-btn>
                     </file-upload>
+                    <v-textarea
+                      v-model="editedItem.description"
+                      :error-messages="fieldErrors('editedItem.description')"
+                      @input="$v.editedItem.description.$touch()"
+                      @blur="$v.editedItem.description.$touch()"
+                      label="Description min 200 words"
+                      auto-grow
+                      rows="2"
+                      box
+                    ></v-textarea>
                   </v-flex>
-                </template>
-              </v-layout>
-            </v-container>
-          </v-card-text>
+                  <v-flex xs12 sm6 md6>
+                    <v-select
+                      :items="status"
+                      v-model="editedItem.status"
+                      label="Institution Status"
+                      box
+                    ></v-select>
+                  </v-flex>
+                  <template v-if="editedIndex !== -1">
+                    <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                    <v-flex xs12 sm12 md12>
+                      <ul>
+                        <li v-if="institutionLogo.exists">
+                          <img :src="institutionLogo.fileUrl" width="50" height="auto">
+                          <span @click="removeImage(institutionLogo)">Remove</span>
+                        </li>
+                        <li v-else>
+                          <img :src="editedItem.logourl" height="50" width="auto">
+                        </li>
+                      </ul>
+                      <file-upload
+                        input-id="file1"
+                        class="btn btn-primary"
+                        extensions="gif,jpg,jpeg,png,webp"
+                        accept="image/png, image/gif, image/jpeg, image/webp"
+                        :multiple="false"
+                        :size="1024 * 1024 * 10"
+                        @input="onInstitutionLogo"
+                        ref="upload"
+                      >
+                        <i class="fa fa-plus"></i>
+                        Upload Logo
+                      </file-upload>
+                    </v-flex>
+                    <v-flex xs12 sm12 md12>
+                      <br>
+                      <br>
+                      <ul>
+                        <div v-if="institutionBanners.length > 0">
+                          <li v-for="(image,i) in institutionBanners" :key="i">
+                            <span>{{image.fileData.name}}</span> -
+                            <img :src="image.fileUrl" width="50" height="auto">
+                            <span @click="removeBannerImage(i)">Remove</span>
+                          </li>
+                        </div>
+                        <li v-else v-for="(image,i) in editedItem.bannerurl" :key="i">
+                          <img :src="image" width="50" height="auto">
+                        </li>
+                      </ul>
+                      <file-upload
+                        class="btn btn-primary"
+                        input-id="file2"
+                        extensions="gif,jpg,jpeg,png,webp"
+                        accept="image/png, image/gif, image/jpeg, image/webp"
+                        :multiple="true"
+                        :size="1024 * 1024 * 10"
+                        @input="onInstitutionBanner"
+                        ref="uploadBanners"
+                      >
+                        <i class="fa fa-plus"></i>
+                        Upload Banner
+                      </file-upload>
+                    </v-flex>
+                    <v-flex xs12 sm12 md12>
+                      <br>
+                      <br>
+                      <ul>
+                        <div v-if="institutionPhotos.length > 0">
+                          <li v-for="(image,i) in institutionPhotos" :key="i">
+                            <span>{{image.fileData.name}}</span> -
+                            <img :src="image.fileUrl" width="50" height="auto">
+                            <span @click="removeBannerImage(i)">Remove</span>
+                          </li>
+                        </div>
+                        <li v-else v-for="(image,i) in editedItem.photos" :key="i">
+                          <img :src="image" width="50" height="auto">
+                        </li>
+                      </ul>
+                      <file-upload
+                        class="btn btn-primary"
+                        input-id="file3"
+                        extensions="gif,jpg,jpeg,png,webp"
+                        accept="image/png, image/gif, image/jpeg, image/webp"
+                        :multiple="true"
+                        :size="1024 * 1024 * 10"
+                        @input="onInstitutionPhotos"
+                        ref="uploadPhotos"
+                      >
+                        <i class="fa fa-plus"></i>
+                        Upload Photos
+                      </file-upload>
+                    </v-flex>
+                  </template>
+                </v-layout>
+              </v-container>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-        </v-toolbar>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
     </v-container>
 
     <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
@@ -246,9 +330,11 @@
         <td class="justify-center">{{ props.item.name }}</td>
         <td class="justify-center">{{ props.item.city }}</td>
         <td class="justify-center">{{ props.item.address }}</td>
+        <td class="justify-center">{{ props.item.status }}</td>
+
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
@@ -302,7 +388,7 @@ export default {
         required: "Select Type"
       },
       country: {
-        required: 'Select Country'
+        required: "Select Country"
       },
       address: {
         required: "Address required"
@@ -313,29 +399,30 @@ export default {
     }
   },
   data: () => ({
-    title: 'Manage Institutions',
-    icon: 'playlist_add_check',
+    title: "Manage Institutions",
+    icon: "playlist_add_check",
+    status: ["enable", "disable"],
+    country: "",
+    city: "",
     breadcrumbs: [
-    {
-      text: 'Home',
-      disabled: true
-    },
-    {
-      text: 'Institutions',
-      disabled: true
-    },
-    {
-      text: 'Manage Institutions',
-      disabled: true
-    }
+      {
+        text: "Home",
+        disabled: true
+      },
+      {
+        text: "Institutions",
+        disabled: true
+      },
+      {
+        text: "Manage Institutions",
+        disabled: true
+      }
     ],
     institutionLogo: imageType,
     institutionBanners: [],
     institutionPhotos: [],
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
-    city: "",
-    country: "",
     imageUrl: "",
     imageName: "",
     bannerUrl: "",
@@ -351,7 +438,8 @@ export default {
         value: "name"
       },
       { text: "City", value: "city" },
-      { text: "Address", value: "address" }
+      { text: "Address", value: "address" },
+      { text: "Status", value: "status" }
     ],
     desserts: [],
     editedIndex: -1,
@@ -380,7 +468,8 @@ export default {
       description: "",
       logourl: "",
       bannerurl: [],
-      photos: []
+      photos: [],
+      status: "enable"
     }
   }),
   apollo: {
@@ -396,6 +485,7 @@ export default {
         };
       },
       update(data) {
+        console.log(data.search.university.items);
         // this.$store.commit("SET_PAGES_DATA", {
         //   currentIndex: data.search.university.page.from,
         //   totalPages: data.search.university.pages.total,
@@ -492,9 +582,22 @@ export default {
     deleteItem(item) {
       const index = this.institutionsResults.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.institutionsResults.splice(index, 1);
+        this.deleteUniversity(item);
     },
-
+    deleteUniversity(item) {
+      item.status = "disable";
+      this.$apollo
+        .mutate({
+          mutation: UPDATEUNIVERSITY,
+          variables: item
+        })
+        .then(data => {
+          console.log("Status updated Successfully");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     close() {
       this.dialog = false;
       setTimeout(() => {

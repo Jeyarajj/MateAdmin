@@ -8,12 +8,14 @@ import {
 } from '../gql-constants/users'
 
 export class Users {
-    users = {
-        email: "",
-        _role: ""
-    }
+
+    email = ""
+    _role = ""
     _id = ""
-    dataset = {
+    data = {
+        password: ""
+    }
+    _profile = {
         email: "",
         name: {
             first: "",
@@ -27,6 +29,7 @@ export class Users {
         nationality: "",
         dob: "",
         phone: "",
+        photo: "",
         address: {
             street: "",
             zip: "",
@@ -52,28 +55,6 @@ export class Users {
                 }
             })
     }
-    updateStatus() {
-        console.log('ssss');
-        // var mutationQuery;
-        // if (!this.active) {
-        //     mutationQuery = QUERIES.BLOCK_STUDENT
-        // } else {
-        //     mutationQuery = QUERIES.UNBLOCK_STUDENT
-        // }
-        // apolloClient
-        //     .mutate({
-        //         mutation: mutationQuery,
-        //         variables: {
-        //             _id: this._id
-        //         }
-        //     })
-        //     .then(result => {
-        //         console.log(result)
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     });
-    }
     get status() {
         if (this.active) {
             return "Active"
@@ -81,34 +62,48 @@ export class Users {
             return "Blocked"
     }
 
-    toJSON() {
-        // return {
-        //     _id:this._id,
-        //     role_name:this.role_name,
-        //     role_description:this.role_description,
-        //     role_permission:role_permission
-        // }
+    toJSON(type) {
+
+        switch (type) {
+            case "update":
+                return {
+                    name: {
+                        first: this._profile.name.first
+                    },
+                    dob: this._profile.dob,
+                    phone: this._profile.phone,
+                    photo: this._profile.photo,
+                    address: {
+                        city: this._profile.address.city,
+                        country: this._profile.address.country
+                    },
+                }
+            case "create":
+                return {
+                    email: this.email,
+                    _role: this._role,
+                    password:this.data.password
+                }
+            case "default":
+                console.log('default')
+                break;
+        }
     }
     async createUser() {
         console.log('create user')
-        console.log(this.users);
-        if (this.users._role) {
+        if (!this._id) {
             return apolloClient
                 .mutate({
                     mutation: CREATEUSER,
-                    variables: this.users
+                    variables: this.toJSON('create')
                 })
         } else {
-            delete this.dataset['created_by'];
-            delete this.dataset['email'];
-            delete this.dataset['username'];
-            console.log(this.dataset)
             return apolloClient
                 .mutate({
                     mutation: UPDATE_USER,
                     variables: {
-                        _id: "5c5850688eea700efe9420d5",
-                        dataset : this.dataset
+                        _id: this._id,
+                        _profile: this.toJSON('update')
                     }
                 })
         }

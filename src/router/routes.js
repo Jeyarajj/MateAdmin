@@ -28,6 +28,9 @@ import InstitutionsScholarships from '@/views/pages/Institution/InstitutionsScho
 
 import ManageScholarships from '@/views/pages/Scholarships/ManageScholarships';
 
+//import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
+import StudentsList from '@/views/pages/Students/StudentsList';
+import StudentsApplicationsList from '@/views/pages/Students/StudentsApplicationsList';
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';
 
 import MetaTags from '@/views/Settings/MetaTags';
@@ -209,6 +212,26 @@ export const routes = [
       footer: AppFooter
     },
     name: 'events/ManageWebinars'
+  },
+  {
+    path: '/Students/StudentsList',
+    components: {
+      default: StudentsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'students/StudentsList'
+  },
+  {
+    path: '/Students/StudentsApplicationsList',
+    components: {
+      default: StudentsApplicationsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'students/StudentsApplicationsList'
   },
 
   {

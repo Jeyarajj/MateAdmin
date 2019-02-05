@@ -52,12 +52,12 @@ export const CREATE_SCHOLARSHIP = gql`
     $website: Url
     $description: Text
     $picture: Text
-    $amount: String
+    $amount: AmountIn
     $email: Text
-    $unviersity_id: ObjectID
+    $university_id: ObjectID
     $created_by: ObjectID
     $updated_by: ObjectID
-    $status: Boolean
+    $status: String
   ) {
     createScholarship(
       _id: $_id
@@ -68,7 +68,7 @@ export const CREATE_SCHOLARSHIP = gql`
       picture: $picture
       amount: $amount
       email: $email
-      university_id: $unviersity_id
+      university_id: $university_id
       created_by: $created_by
       updated_by: $updated_by
       status: $status

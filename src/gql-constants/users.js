@@ -57,9 +57,19 @@ export const GET_USERS_DATA = gql `
  skip:$skip
  ){
    _id
-  #  _profile{
-     
-  #  }
+   email
+    _profile{
+      name{
+        first
+      }
+      phone
+      photo
+      address{
+        city
+        country
+      }
+      dob
+    }
  }
   }
 `;
@@ -95,9 +105,9 @@ export const CREATEUSER = gql `
 export const UPDATE_USER = gql `
   mutation updateProfile(
     $_id: ObjectID!
-    $dataSet: AdminProfileInput
+    $_profile: AdminProfileInput
   ) {
-    updateProfile(_id: $_id, dataSet: $dataSet) {
+    updateProfile(_id: $_id, _profile: $_profile) {
       status
     }
   }

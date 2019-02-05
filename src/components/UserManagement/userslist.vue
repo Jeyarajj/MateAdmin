@@ -8,6 +8,7 @@
           <span v-else>{{ title | first2Char }}</span>
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        
         <v-toolbar-title class="toobar-extension" slot="extension">
           <v-breadcrumbs
             v-if="breadcrumbs"
@@ -25,7 +26,9 @@
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        
         <!-- Create Contact Modal -->
+        
     <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
       <v-btn slot="activator" color="primary" dark class="mb-2">
         <v-icon left dark>add_circle</v-icon> Add New User</v-btn>
@@ -36,8 +39,8 @@
               <span class="white--text">New User</span>
             </v-flex>
             <v-flex row xs6 text-xs-right>
-              <v-btn flat icon class="fx-close-model-btn" @click.native="closedialog()">
-                <v-icon color="primary">close</v-icon>
+              <v-btn flat icon color="primary" @click.native="closedialog()">
+                <v-icon>close</v-icon>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -48,24 +51,24 @@
             <v-layout wrap>
               <v-flex xs12>
                 <v-text-field
-                  :error-messages="fieldErrors('form.email')"
-                  @input="$v.form.email.$touch()"
-                  @blur="$v.form.email.$touch()"
+                :error-messages="fieldErrors('defaultUser.email')"
+                  @input="$v.defaultUser.email.$touch()"
+                  @blur="$v.defaultUser.email.$touch()"
                   prepend-icon="email"
-                  v-model="form.email"
+                  v-model="defaultUser.email"
                   label="Email *"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-select
-                  :error-messages="fieldErrors('form.role_id')"
-                  @input="$v.form.role_id.$touch()"
-                  @blur="$v.form.role_id.$touch()"
-                  :items="GetRoles"
+                :error-messages="fieldErrors('defaultUser._role')"
+                  @input="$v.defaultUser._role.$touch()"
+                  @blur="$v.defaultUser._role.$touch()"
+                  :items="allroles"
                   item-text="role_name"
                   item-value="_id"
                   prepend-icon="people"
-                  v-model="form.role_id"
+                  v-model="defaultUser._role"
                   label="Role *"
                 ></v-select>
               </v-flex>
@@ -75,12 +78,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="white--text" color="menuhover" @click.native="resetContactForm()">Close</v-btn>
+          <v-btn class="white--text" color="menuhover" @click.native="contactDialog=false">Close</v-btn>
           <v-btn
             class="white--text"
             color="act"
             @click.native="updateContact()"
-            :disabled="$v.form.$invalid"
+            :disabled="$v.defaultUser.$invalid"
             v-if="isEditformMod"
           >Edit</v-btn>
           <v-btn
@@ -93,7 +96,7 @@
           >Save</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> 
       </v-toolbar>
     </v-container>
 
@@ -103,7 +106,7 @@
           <td>{{ props.item._id }}</td>
           <td>{{ props.item.email }}</td>
           <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
-          <td>{{ props.item.phone }}</td>
+          <td>{{ props.item._profile.phone }}</td>
           <td class="text-xs-right">
             <v-flex xs12 sm3>
               <v-btn @click="editUser(props.item)" flat icon color="primary">
@@ -114,7 +117,7 @@
           <td class="text-xs-right">
             <v-flex xs12 sm3>
               <v-btn
-                @click="Updatedata('/users', props.item._id,props.item)"
+                @click="Updatedata(props.item)"
                 flat
                 icon
                 color="primary"
@@ -134,7 +137,7 @@
     </v-card>
 
     <!-- Create Contact Modal -->
-    <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
+    <!-- <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
       <v-card class="create-dialog-card">
         <v-card-title>
           <v-layout>
@@ -197,7 +200,7 @@
           >Save</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <!-- Profile view -->
     <v-dialog v-model="profileDialog" max-width="300">
@@ -207,13 +210,13 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center>
             <v-avatar size="150">
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="User">
+              <img :src="defaultUser._profile.photo" alt="User">
             </v-avatar>
           </v-flex>
 
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" text-xs-center>{{defaultUser.username}}</h3>
+              <h3 class="headline mb-0" text-xs-center>{{defaultUser._profile.name.first}}</h3>
 
               <v-list justify-center sm12>
                 <v-list-tile>
@@ -222,7 +225,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{defaultUser.phone}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser._profile.phone}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -246,7 +249,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{defaultUser.birthdate}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser._profile.dob}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -258,7 +261,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{defaultUser.country}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser._profile.address.country}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -270,7 +273,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{defaultUser.city}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser._profile.address.city}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -292,7 +295,11 @@
         <v-card-title class="headline">Edit Profile</v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
-            <AvatarUpload/>
+            <AvatarUpload 
+              :avatarurl="this.defaultUser._profile.photo"
+              :userid="this.defaultUser._id"
+              @clicked="avatarclick"
+            />
           </v-flex>
 
           <v-card-title primary-title>
@@ -305,7 +312,7 @@
                         color="primary"
                         prepend-icon="person"
                         label="First name"
-                        v-model="defaultUser.dataset.name.first"
+                        v-model="defaultUser._profile.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -314,7 +321,8 @@
                         color="primary"
                         prepend-icon="email"
                         label="Email"
-                        v-model="defaultUser.dataset.email"
+                        v-model="defaultUser.email"
+                        readonly
                         required
                       ></v-text-field>
                     </v-flex>
@@ -323,7 +331,7 @@
                         color="primary"
                         prepend-icon="phone"
                         label="Phone No."
-                        v-model="defaultUser.dataset.phone"
+                        v-model="defaultUser._profile.phone"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -342,39 +350,39 @@
                       >
                         <v-text-field
                           slot="activator"
-                          v-model="defaultUser.dataset.dob"
+                          v-model="defaultUser._profile.dob"
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
                           prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
-                          v-model="defaultUser.dataset.dob"
+                          v-model="defaultUser._profile.dob"
                           no-title
                           @input="datepicker = false"
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <!-- <v-flex xs12>
+                    <v-flex xs12>
                       <v-select
                         :items="cities"
                         item-text="name"
                         item-value="name"
                         label="City"
-                        v-model="defaultUser.address.city"
+                        v-model="defaultUser._profile.address.city"
                         outline
                       ></v-select>
-                    </v-flex>-->
-                    <!-- <v-flex xs12>
+                    </v-flex>
+                    <v-flex xs12>
                        <v-select
                         :items="countries"
                         item-text="name"
                         item-value="name"
                         label="Country"
-                        v-model="defaultUser.address.country"
+                        v-model="defaultUser._profile.address.country"
                         outline
                       ></v-select>
-                    </v-flex>-->
+                    </v-flex>
                   </v-layout>
                 </v-container>
               </v-form>
@@ -419,15 +427,12 @@ export default {
   },
   validations: {
     defaultUser: {
-      users: {
         email: { required, email },
         _role: { required }
-      }
     }
   },
   validationMessages: {
     defaultUser: {
-      users: {
         email: {
           required: "Email is required",
           email: "Email must be valid"
@@ -435,7 +440,6 @@ export default {
         _role: {
           required: "Role is required"
         }
-      }
     }
   },
   data() {
@@ -509,17 +513,24 @@ export default {
       var randomstring = Math.random()
         .toString(36)
         .slice(-8);
-      this.defaultUser.users.password = randomstring;
+      this.defaultUser.data.password = randomstring;
       this.createusers();
     },
     editUser(data) {
+      this.defaultUser = new Users(data)
+      console.log(this.defaultUser)
       this.profileDialog = true;
     },
-    Updatedata(path, pageType, data) {
+    Updatedata(data) {
+      this.defaultUser = new Users(data)
+      //this.defaultUser._id = id
       this.updateDialog = true;
     },
     updateclick() {
       this.createusers()
+    },
+    avatarclick(value) {
+      this.defaultUser._profile.photo = value;
     },
     updateUser(updatedata) {},
     showdialog() {
@@ -536,12 +547,13 @@ export default {
       this.resetContactForm();
     },
     async createusers() {
-      this.defaultUser._id = "5c5850688eea700efe9420d5"
       const result = await this.defaultUser.createUser();
       if (result) {
         if (result.data.hasOwnProperty("createAdminUser")) {
           this.defaultUser._id = result.data.createAdminUser._id;
           this.allusers.push(this.defaultUser);
+        }else if(result.data.hasOwnProperty("updateProfile")){
+          this.updateDialog = false;
         }
       } else console.log("Created failed check logs");
       this.contactDialog = false;
