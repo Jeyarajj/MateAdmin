@@ -47,6 +47,15 @@ export default [
       { title: 'Students Applications', name: 'StudentsApplications' }
     ]
   },
+  {
+    title: 'Articles',
+    group: 'articles',
+    icon: 'help',
+    items: [
+      { title: 'Articles List', name: 'ArticlesList' },
+      { title: 'Article Page', name: 'ArticlePage' }
+    ]
+  },
 
   {
     title: 'Counselors',
@@ -81,7 +90,8 @@ export default [
       { title: 'Home Page', name: 'HomePage' },
       { title: 'Notifications', name: 'Notify' },
       { title: 'Profile', name: 'ProfileSettings' },
-      { title: 'Security & Privacy', name: 'SecurityPrivacy' }
+      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Meta Tags', name: 'MetaTags' }
     ]
   },
 

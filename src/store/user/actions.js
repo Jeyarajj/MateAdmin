@@ -3,7 +3,7 @@ import * as firebase from 'firebase';
 import route from './../../router';
 import gql from 'graphql-tag';
 import { LOCATION_CITY, LOCATION_COUNTRY } from '../../gql-constants/locations';
-
+import { GET_METATAGS } from '../../gql-constants/settings';
 import { apolloClient } from '../../apollo-controller/index';
 import { parse } from 'path';
 export const userActions = {
@@ -74,6 +74,16 @@ export const userActions = {
 
     // clear the current user data from the store
     // context.dispatch('resetModulesAfterLogout')
+  },
+  metatags: function(context) {
+    apolloClient
+      .query({
+        query: GET_METATAGS
+      })
+      .then(result => context.commit('metaTags', result))
+      .catch(err => {
+        console.log(err);
+      });
   },
   checkUserAuthChanged: function(context) {
     // see if a user is currently signed in
@@ -247,9 +257,6 @@ export const userActions = {
         }
       })
       .then(result => {
-        console.log(payload);
-        console.log(result);
-        console.log('sundar');
         context.commit('setcurrentUserinfo', result);
       })
       .catch(err => {
