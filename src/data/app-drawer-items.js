@@ -17,8 +17,8 @@ export default [
     icon: 'school',
     items: [
       { name: 'InstitutionsList', title: 'Manage Institutions' },
-      { name: 'CourseList', title: 'Manage Courses' },
-      { name: 'ScholarshipList', title: 'Manage Scholarship' },
+      { name: 'InstitutionsCourses', title: 'Manage Courses' },
+      { name: 'InstitutionsScholarships', title: 'Manage Scholarship' },
       { name: 'InstitutionsBulkImport', title: 'Bulk Import' }
     ]
   },
@@ -27,7 +27,9 @@ export default [
     title: 'Scholarships',
     group: 'scholarships',
     icon: 'card_giftcard',
-    items: [{ title: 'Manage Scholarships', name: 'ManageScholarships' }]
+    items: [
+      { title: 'Manage Scholarships', name: 'ManageScholarships' }
+    ]
   },
 
   {
@@ -36,6 +38,15 @@ export default [
     icon: 'people',
     items: [
       { title: 'Manage Counsellors', name: 'CounselorsList' }
+    ]
+  },
+  {
+    title: 'Articles',
+    group: 'articles',
+    icon: 'help',
+    items: [
+      { title: 'Articles List', name: 'ArticlesList' },
+      { title: 'Article Page', name: 'ArticlePage' }
     ]
   },
 
@@ -84,10 +95,12 @@ export default [
     group: 'settings',
     icon: 'settings',
     items: [
-      { title: 'Profile Settings', name: 'ProfileSettings' },
-      { title: 'Notifications Settings', name: 'Notify' },
-      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Home Page', name: 'HomePage' },
       { title: 'Homepage Settings', name: 'HomepageSettings' }
+      { title: 'Notifications', name: 'Notify' },
+      { title: 'Profile', name: 'ProfileSettings' },
+      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Meta Tags', name: 'MetaTags' }
     ]
   },
 

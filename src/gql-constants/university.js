@@ -14,7 +14,15 @@ export const GET_INSTITUTIONS_INDEX = gql`
     _id
     name
     description
-    city 
+    city
+    country
+    slug
+    logourl
+    bannerurl
+    type
+    status
+    website
+    photos
   }
 `;
 

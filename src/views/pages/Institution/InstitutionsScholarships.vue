@@ -1,46 +1,79 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>My CRUD</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon> Add Scholarship</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="editedItem.first_name" label="First Name" box></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
-                </v-flex>
-
-                <v-flex xs12 sm6 md12>
-                  <v-text-field prepend-icon="email" v-model="editedItem.email" label="Email *"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="editedItem.last_name" label="Last Name" box></v-text-field>
                 </v-flex>
 
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field prepend-icon="email" v-model="editedItem.email" label="Email *" box></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm6 md2>
                   <v-select
                     :items="availableCurrencies"
                     v-model="editedItem.amount.currency"
-                    label
-                    outline
+                    label="Currency" box
                   ></v-select>
-                  <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.amount.value" label="Amount" box></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.website" label="Website URL"></v-text-field>
+                  <v-text-field v-model="editedItem.website" label="Website URL" box></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="editedItem.description" label="Description min 200 words "></v-textarea>
+                  <v-textarea v-model="editedItem.description" label="Description min 200 words" box></v-textarea>
                 </v-flex>
 
                 <v-flex xs12 sm12 md12>
@@ -79,7 +112,10 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+
+         </v-toolbar>
+    </v-container>
+
     <v-data-table :headers="headers" :items="scholarships" :hide-actions=true class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
@@ -111,6 +147,22 @@ export default {
     Pagination
   },
   data: () => ({
+    title: 'Manage Scholarships',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Institutions',
+      disabled: true
+    },
+    {
+      text: 'Manage Scholarships',
+      disabled: true
+    }
+    ],
     scholarshipPicture: imageType,
     headers: [
       {
@@ -195,7 +247,7 @@ export default {
   computed: {
     ...mapGetters(["availableCurrencies", "userBasicInfoProfile"]),
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Add Scholarship" : "Edit Item";
     }
   },
 
@@ -238,7 +290,6 @@ export default {
     },
 
     editItem(item) {
-      console.log(item);
       this.editedIndex = this.scholarships.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;

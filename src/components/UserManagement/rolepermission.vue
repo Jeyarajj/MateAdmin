@@ -8,7 +8,18 @@
         <v-btn slot="activator" @click="addNewRole()" color="primary" dark class="mb-2">Add New Role</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            
+            <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+
           </v-card-title>
 
           <v-card-text>
@@ -110,6 +121,22 @@ export default {
     }
   },
   data: () => ({
+    title: 'Users Roles',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+      {
+        text: 'Home',
+        disabled: true
+      },
+      {
+        text: 'Users Management',
+        disabled: true
+      },
+      {
+        text: 'Manage User Roles',
+        disabled: true
+      }
+    ],
     dialog: false,
     accessControls: ["create", "update", "delete", "view", "publish"],
     headers: [

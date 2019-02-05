@@ -14,11 +14,11 @@
     <v-toolbar-title v-text="title" class="ml-0 hidden-lg-and-up"></v-toolbar-title>
     <v-btn icon light class="hidden-md-and-down" @click.stop="toggleMiniVariantMode">
       <v-tooltip bottom v-if="navMiniVarient" color="sidebar">
-        <v-icon slot="activator">fas fa-arrow-circle-right</v-icon>
+        <v-icon slot="activator">arrow_forward</v-icon>
         <span>Expand</span>
       </v-tooltip>
       <v-tooltip bottom v-else color="sidebar">
-        <v-icon slot="activator">fas fa-arrow-circle-left</v-icon>
+        <v-icon slot="activator">arrow_back</v-icon>
         <span>Collapse</span>
       </v-tooltip>
     </v-btn>
