@@ -28,7 +28,8 @@ export default [
     group: 'scholarships',
     icon: 'card_giftcard',
     items: [
-      { title: 'Manage Scholarships', name: 'ManageScholarships' }
+      { title: 'Students List', name: 'StudentsList' },
+      { title: 'Students Applications', name: 'StudentsApplicationsList' }
     ]
   },
 

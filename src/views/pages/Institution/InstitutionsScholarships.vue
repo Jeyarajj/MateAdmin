@@ -8,136 +8,158 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
+          <v-breadcrumbs v-if="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
             <v-breadcrumbs-item
               v-for="item in breadcrumbs"
               :key="item.text"
               :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
+            >{{ item.text }}</v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-dialog v-model="dialog" persistent max-width="900px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">
-          <v-icon left dark>add_circle</v-icon> Add Scholarship</v-btn>
-        <v-card>
-          <v-card-title>
-            <v-layout>
-            <v-flex row xs6>
-              <span class="headline">{{ formTitle }}</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="close()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.first_name" label="First Name" box></v-text-field>
+          <v-btn slot="activator" color="primary" dark class="mb-2">
+            <v-icon left dark>add_circle</v-icon>Add Scholarship
+          </v-btn>
+          <v-card>
+            <v-card-title>
+              <v-layout>
+                <v-flex row xs6>
+                  <span class="headline">{{ formTitle }}</span>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.last_name" label="Last Name" box></v-text-field>
-                </v-flex>
-
-                <v-flex xs12 sm6 md6>
-                  <v-text-field prepend-icon="email" v-model="editedItem.email" label="Email *" box></v-text-field>
-                </v-flex>
-
-                <v-flex xs12 sm6 md2>
-                  <v-select
-                    :items="availableCurrencies"
-                    v-model="editedItem.amount.currency"
-                    label="Currency" box
-                  ></v-select>
-                </v-flex>
-
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.amount.value" label="Amount" box></v-text-field>
-                </v-flex>
-
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.website" label="Website URL" box></v-text-field>
-                </v-flex>
-
-                <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="editedItem.description" label="Description min 200 words" box></v-textarea>
-                </v-flex>
-
-                <v-flex xs12 sm12 md12>
-                  <ul>
-                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <li v-if="scholarshipPicture.exists">
-                      <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
-                      <span @click="removeImage(scholarshipPicture)">Remove</span>
-                    </li>
-                    <li v-else>
-                      <img :src="editedItem.picture" width="50" height="auto">
-                    </li>
-                  </ul>
-                  <file-upload
-                    input-id="scholarshipPicture"
-                    class="btn btn-primary"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="onPicture"
-                    ref="upload"
-                  >
-                    <i class="fa fa-plus"></i>
-                    Upload Picture
-                  </file-upload>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
                 </v-flex>
               </v-layout>
-            </v-container>
-          </v-card-text>
+            </v-card-title>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="editedItem.first_name" label="First Name" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="editedItem.last_name" label="Last Name" box></v-text-field>
+                  </v-flex>
 
-         </v-toolbar>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field
+                      prepend-icon="email"
+                      v-model="editedItem.email"
+                      label="Email *"
+                      box
+                    ></v-text-field>
+                  </v-flex>
+
+                  <v-flex xs12 sm6 md2>
+                    <v-select
+                      :items="availableCurrencies"
+                      v-model="editedItem.amount.currency"
+                      label="Currency"
+                      box
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.amount.value" label="Amount" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-select
+                      :items="institutionsResults"
+                      item-text="name"
+                      item-value="_id"
+                      v-model="editedItem.university_id"
+                      label="University"
+                      box
+                    ></v-select>
+                    <!-- <v-text-field v-model="editedItem.university_id" label="University"></v-text-field> -->
+                  </v-flex>
+                  <v-flex xs12 sm6 md12>
+                    <v-text-field v-model="editedItem.website" label="Website URL" box></v-text-field>
+                  </v-flex>
+
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      v-model="editedItem.description"
+                      label="Description min 200 words"
+                      box
+                    ></v-textarea>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-select :items="status" v-model="editedItem.status" label="Course Status" box></v-select>
+                  </v-flex>
+
+                  <v-flex xs12 sm12 md12>
+                    <ul>
+                      <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                      <li v-if="scholarshipPicture.exists">
+                        <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
+                        <span @click="removeImage(scholarshipPicture)">Remove</span>
+                      </li>
+                      <li v-else>
+                        <img :src="editedItem.picture" width="50" height="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      input-id="scholarshipPicture"
+                      class="btn btn-primary"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="false"
+                      :size="1024 * 1024 * 10"
+                      @input="onPicture"
+                      ref="upload"
+                    >
+                      <i class="fa fa-plus"></i>
+                      Upload Picture
+                    </file-upload>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
     </v-container>
 
-    <v-data-table :headers="headers" :items="scholarships" :hide-actions=true class="elevation-1">
+    <v-data-table :headers="headers" :items="scholarships" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
         <!-- <td class="text-xs-right">{{ props.item.amount.currency }}{{ props.item.amount.value }}</td> -->
         <td class="justify-center">{{ props.item.description }}</td>
+        <td class="justify-center">{{ props.item.status }}</td>
+
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
         <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
-    <Pagination />
+    <Pagination/>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import Pagination from '@/components/shared/Pagination'
+import Pagination from "@/components/shared/Pagination";
+import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
+
 import {
   GET_SCHOLARSHIPS,
   CREATE_SCHOLARSHIP
@@ -147,21 +169,22 @@ export default {
     Pagination
   },
   data: () => ({
-    title: 'Manage Scholarships',
-    icon: 'playlist_add_check',
+    title: "Manage Scholarships",
+    status: ["enable", "disable"],
+    icon: "playlist_add_check",
     breadcrumbs: [
-    {
-      text: 'Home',
-      disabled: true
-    },
-    {
-      text: 'Institutions',
-      disabled: true
-    },
-    {
-      text: 'Manage Scholarships',
-      disabled: true
-    }
+      {
+        text: "Home",
+        disabled: true
+      },
+      {
+        text: "Institutions",
+        disabled: true
+      },
+      {
+        text: "Manage Scholarships",
+        disabled: true
+      }
     ],
     scholarshipPicture: imageType,
     headers: [
@@ -173,7 +196,8 @@ export default {
       },
       { text: "Mail", value: "email" },
       // { text: "Amount", value: "amount" },
-      { text: "Description", value: "description" }
+      { text: "Description", value: "description" },
+      { text: "Status", value: "status" }
     ],
     currentIndex: null,
     totalPages: null,
@@ -194,10 +218,10 @@ export default {
         value: 0
       },
       email: "",
-      university_id: "5a6ad428ffb81219d4932cfa",
-      created_by: "5a6ad428ffb81219d4932cfa",
-      updated_by: "5a6ad428ffb81219d4932cfa",
-      status: true
+      university_id: "",
+      created_by: "",
+      updated_by: "",
+      status: "enable"
     },
     defaultItem: {
       _id: null,
@@ -211,10 +235,10 @@ export default {
         value: 0
       },
       email: "",
-      university_id: "5a6ad428ffb81219d4932cfa",
-      created_by: "5a6ad428ffb81219d4932cfa",
-      updated_by: "5a6ad428ffb81219d4932cfa",
-      status: true
+      university_id: "",
+      created_by: "",
+      updated_by: "",
+      status: "enable"
     }
   }),
   apollo: {
@@ -238,6 +262,24 @@ export default {
         });
         console.log(data);
         return data.search.scholarship.items;
+      },
+      error(error) {
+        console.log(error);
+      }
+    },
+    institutionsResults: {
+      query: GET_INSTITUTIONS_INDEX,
+      variables() {
+        return {
+          text: "",
+          page: {
+            from: false,
+            limit: false
+          }
+        };
+      },
+      update(data) {
+        return data.search.university.items;
       },
       error(error) {
         console.log(error);
@@ -298,7 +340,26 @@ export default {
     deleteItem(item) {
       const index = this.scholarships.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.scholarships.splice(index, 1);
+        this.deleteScholarship(item);
+    },
+
+    deleteScholarship(item) {
+      item.status = "disable";
+      item.amount = {
+        currency: item.amount.currency,
+        value: item.amount.value
+      };
+      this.$apollo
+        .mutate({
+          mutation: CREATE_SCHOLARSHIP,
+          variables: item
+        })
+        .then(data => {
+          console.log("Status Updated Successfully");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     close() {
@@ -313,6 +374,12 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.scholarships[this.editedIndex], this.editedItem);
       }
+      this.editedItem.created_by = this.userBasicInfoProfile._id;
+      this.editedItem.updated_by = this.userBasicInfoProfile._id;
+      this.editedItem.amount = {
+        currency: this.editedItem.amount.currency,
+        value: this.editedItem.amount.value
+      };
       this.$apollo
         .mutate({
           mutation: CREATE_SCHOLARSHIP,
