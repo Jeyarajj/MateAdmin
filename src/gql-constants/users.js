@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const GET_USERS = gql`
+export const GET_USERS = gql `
   query Profile($search: Text, $limit: Int) {
     public_profiles(search: $search, limit: $limit) {
       _id
@@ -32,7 +32,7 @@ export const GET_USERS = gql`
   }
 `;
 
-export const GET_PUBLIC_PROFILE_Q = gql`
+export const GET_PUBLIC_PROFILE_Q = gql `
   query publicProfile($Id: ObjectID!) {
     profile(_id: $Id) {
       _id
@@ -51,31 +51,59 @@ export const GET_PUBLIC_PROFILE_Q = gql`
   }
 `;
 
-export const GET_ROLES = gql`
-  query Roles($Id: ObjectID!) {
-    getAllRoles(user_id: $Id) {
+export const GET_USERS_DATA = gql `
+  query publicProfile($skip: Number, $limit: Number) {
+    getUsers(limit:$limit
+ skip:$skip
+ ){
+   _id
+  #  _profile{
+     
+  #  }
+ }
+  }
+`;
+
+export const GET_ROLES = gql `
+  query Roles($limit: Number,$skip:Number) {
+    getRoles(limit: $limit,skip:$skip) {
       _id
       role_name
+      role_description
       created_by
       role_permission {
+        module_name
+        has_access{
         create
         update
         delete
+        view
+        }
       }
     }
   }
 `;
 
-export const CREATEUSER = gql`
-  mutation createuser($email: String!, $password: String!, $role_id: ObjectID) {
-    createUser(email: $email, password: $password, role_id: $role_id) {
+export const CREATEUSER = gql `
+  mutation createAdminUser($email: String!, $password: String!, $_role: ObjectID) {
+    createAdminUser(email: $email, password: $password, _role: $_role) {
       _id
-      email
     }
   }
 `;
 
-export const UPDATEUSER = gql`
+export const UPDATE_USER = gql `
+  mutation updateProfile(
+    $_id: ObjectID!
+    $dataSet: AdminProfileInput
+  ) {
+    updateProfile(_id: $_id, dataSet: $dataSet) {
+      status
+    }
+  }
+`;
+
+export const UPDATEUSER = gql `
   mutation UserProfileUpdate(
     $token: ID
     $userid: String
@@ -90,23 +118,58 @@ export const UPDATEUSER = gql`
     }
   }
 `;
-export const CREATEROLE = gql`
+
+export const
+  CREATE_ROLE = gql `
   mutation rolecreation(
-    $role_id: ObjectID
     $role_name: String!
-    $role_description: String
+    $role_description: String!
     $created_by: ObjectID
-    $rolepermission: [Permission]
+    $role_permission: [AccessPermissionInput]
   ) {
-    roleCreation(
-      role_id: $role_id
+    createAdminUserRole(
       role_name: $role_name
       role_description: $role_description
       created_by: $created_by
-      rolepermission: $rolepermission
+      role_permission: $role_permission
     ) {
       _id
-      role_name
+    }
+  }
+ `;
+
+export const UPDATE_ROLE = gql `
+ mutation updateRole(
+  $_id: ObjectID!
+  $role_name:String!
+  $role_description: String!
+  $role_permission: [AccessPermissionInput]
+ ) {
+  updateAdminUserRole(
+    _id:$_id
+    role_name: $role_name
+    role_description: $role_description
+    role_permission: $role_permission
+  ) {
+    _id
+  }
+ }
+ `;
+
+export const CREATEROLE = gql `
+  mutation rolecreation(
+    $role_name: String!
+    $role_description: String!
+    $created_by: ObjectID
+    $rolepermission: [AccessPermissionInput]
+  ) {
+    createAdminUserRole(
+      role_name: $role_name
+      role_description: $role_description
+      created_by: $created_by
+      role_permission: $rolepermission
+    ) {
+      _id
     }
   }
 `;

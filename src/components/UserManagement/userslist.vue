@@ -14,7 +14,7 @@
       </v-card-title>
       <v-data-table :headers="headers" :items="allusers" :search="search">
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.username }}</td> 
+          <td>{{ props.item._id }}</td>
           <td>{{ props.item.email }}</td>
           <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
           <td>{{ props.item.phone }}</td>
@@ -68,24 +68,22 @@
             <v-layout wrap>
               <v-flex xs12>
                 <v-text-field
-                  :error-messages="fieldErrors('form.email')"
-                  @input="$v.form.email.$touch()"
-                  @blur="$v.form.email.$touch()"
+                  @input="$v.defaultUser.users.email.$touch()"
+                  @blur="$v.defaultUser.users.email.$touch()"
                   prepend-icon="email"
-                  v-model="form.email"
+                  v-model="defaultUser.users.email"
                   label="Email *"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-select
-                  :error-messages="fieldErrors('form.role_id')"
-                  @input="$v.form.role_id.$touch()"
-                  @blur="$v.form.role_id.$touch()"
-                  :items="GetRoles"
+                  @input="$v.defaultUser.users._role.$touch()"
+                  @blur="$v.defaultUser.users._role.$touch()"
+                  :items="allroles"
                   item-text="role_name"
                   item-value="_id"
                   prepend-icon="people"
-                  v-model="form.role_id"
+                  v-model="defaultUser.users._role"
                   label="Role *"
                 ></v-select>
               </v-flex>
@@ -100,7 +98,7 @@
             class="white--text"
             color="act"
             @click.native="updateContact()"
-            :disabled="$v.form.$invalid"
+            :disabled="$v.defaultUser.$invalid"
             v-if="isEditformMod"
           >Edit</v-btn>
           <v-btn
@@ -123,13 +121,13 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center>
             <v-avatar size="150">
-              <img :src="this.showdata.photo" alt="User">
+              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="User">
             </v-avatar>
           </v-flex>
 
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" text-xs-center>{{this.showdata.username}}</h3>
+              <h3 class="headline mb-0" text-xs-center>{{defaultUser.username}}</h3>
 
               <v-list justify-center sm12>
                 <v-list-tile>
@@ -138,7 +136,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.phone}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.phone}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -150,7 +148,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.email}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.email}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -162,7 +160,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.birthdate}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.birthdate}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -174,7 +172,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.country}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.country}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -186,7 +184,7 @@
                   </v-list-tile-action>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>{{this.showdata.city}}</v-list-tile-title>
+                    <v-list-tile-title>{{defaultUser.city}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -208,11 +206,7 @@
         <v-card-title class="headline">Edit Profile</v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
-            <AvatarUpload
-              :avatarurl="updatedata.updates.photo"
-              :userid="this.UserID"
-              @clicked="avatarclick"
-            />
+            <AvatarUpload/>
           </v-flex>
 
           <v-card-title primary-title>
@@ -225,7 +219,7 @@
                         color="primary"
                         prepend-icon="person"
                         label="First name"
-                        v-model="updatedata.updates.username"
+                        v-model="defaultUser.dataset.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -234,8 +228,7 @@
                         color="primary"
                         prepend-icon="email"
                         label="Email"
-                        readonly
-                        v-model="updatedata.updates.email"
+                        v-model="defaultUser.dataset.email"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -244,7 +237,7 @@
                         color="primary"
                         prepend-icon="phone"
                         label="Phone No."
-                        v-model="updatedata.updates.phone"
+                        v-model="defaultUser.dataset.phone"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -263,39 +256,39 @@
                       >
                         <v-text-field
                           slot="activator"
-                          v-model="updatedata.updates.dob"
+                          v-model="defaultUser.dataset.dob"
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
                           prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
-                          v-model="updatedata.updates.dob"
+                          v-model="defaultUser.dataset.dob"
                           no-title
                           @input="datepicker = false"
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <v-flex xs12>
+                    <!-- <v-flex xs12>
                       <v-select
                         :items="cities"
                         item-text="name"
                         item-value="name"
                         label="City"
-                        v-model="updatedata.updates.address.city"
+                        v-model="defaultUser.address.city"
                         outline
                       ></v-select>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-select
+                    </v-flex>-->
+                    <!-- <v-flex xs12>
+                       <v-select
                         :items="countries"
                         item-text="name"
                         item-value="name"
                         label="Country"
-                        v-model="updatedata.updates.address.country"
+                        v-model="defaultUser.address.country"
                         outline
                       ></v-select>
-                    </v-flex>
+                    </v-flex>-->
                   </v-layout>
                 </v-container>
               </v-form>
@@ -317,13 +310,8 @@
 <script>
 import { rgba as Gradients } from "@/data/gradients";
 import { filter, findIndex } from "lodash";
-
-import {
-  GET_USERS,
-  GET_ROLES,
-  CREATEUSER,
-  UPDATEUSER
-} from "@/gql-constants/users";
+import { Users } from "../../dto/users";
+import { Role } from "../../dto/roles";
 import {
   required,
   maxLength,
@@ -333,7 +321,7 @@ import {
 import { mapGetters } from "vuex";
 import { validNumber } from "@/utils/validators";
 import validationMixin from "@/mixins/validationMixin";
-import { defaultUserPic, users, authUser } from "@/data/dummyData";
+// import { defaultUserPic, users, authUser } from "@/data/dummyData";
 
 import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
 
@@ -344,19 +332,23 @@ export default {
     AvatarUpload
   },
   validations: {
-    form: {
-      email: { required, email },
-      role_id: { required }
+    defaultUser: {
+      users: {
+        email: { required, email },
+        _role: { required }
+      }
     }
   },
   validationMessages: {
-    form: {
-      email: {
-        required: "Email is required",
-        email: "Email must be valid"
-      },
-      role_id: {
-        required: "Role is required"
+    defaultUser: {
+      users: {
+        email: {
+          required: "Email is required",
+          email: "Email must be valid"
+        },
+        _role: {
+          required: "Role is required"
+        }
       }
     }
   },
@@ -380,97 +372,26 @@ export default {
       ],
 
       title: "Contacts",
-      date: null,
-      dateFormatted: null,
       gradient: Gradients[9],
       backgroundImg: "/static/doc-images/vbanner.jpg",
-      form: {
-        email: "",
-        password: "",
-        role_id: ""
-      },
       allusers: [],
-      drawerinternal: true,
-      activeMenu: "all",
-      userslimit: 10,
-      authUser,
-      updates: null,
-      showdata: {
-        username: "",
-        phone: "",
-        photo: "",
-        email: "",
-        birthdate: "",
-        city: "",
-        country: ""
-      },
-      updatedata: {
-        token: "",
-        userid: "",
-        updates: {
-          customClaims: {
-            role: ""
-          },
-          // name: {
-          //   first: "",
-          //   last: "",
-          //   middle: ""
-          // },
-          email: "",
-          languages: [
-            {
-              name: ""
-            }
-          ],
-          username: "",
-          nationality: "",
-          dob: "",
-          phone: "",
-          photo: "",
-          address: {
-            street: "",
-            zip: "",
-            city: "",
-            country: ""
-          }
-        }
-      },
+      allroles: [],
       confirmBox: {
         deleteContact: false,
         item: null
       },
+      defaultUser: Users,
       contactDialog: false,
       profileDialog: false,
       updateDialog: false,
       isEditformMod: false,
       editIndex: null,
-      datepicker: false,
-      UserID: ""
+      datepicker: false
     };
   },
   methods: {
-    resetContactForm() {
-      this.form = {
-        username: "",
-        phone: "",
-        email: "",
-        country: "",
-        avatar: "/static/default/user.svg",
-        city: "",
-        birthdate: "",
-        formatedBirthday: "",
-        notes: null,
-        is_favourite: false,
-        is_frequent: false,
-        selected: false
-      };
-      this.contactDialog = false;
-      this.isEditformMod = false;
-      this.editIndex = null;
-    },
     formatDate(date) {
       if (!date) return null;
-
       date = new Date(date);
       return (
         date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
@@ -480,108 +401,30 @@ export default {
       this.form = contact;
       this.isEditformMod = true;
       this.contactDialog = true;
-      this.editIndex = findIndex(
-        this.contacts,
-        contact => contact === this.form
-      );
     },
     createNewUser() {
       //random password genarate
       var randomstring = Math.random()
         .toString(36)
         .slice(-8);
-      this.form.password = randomstring;
-      this.createusers(this.form);
+      this.defaultUser.users.password = randomstring;
+      this.createusers();
     },
     editUser(data) {
       this.profileDialog = true;
-      this.showdata.phone = data.phone;
-      this.showdata.photo = data.photo
-        ? data.photo
-        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
-      this.showdata.email = data.email;
-      this.showdata.birthdate = this.formatDate(data.dob);
-      this.showdata.username = data.username;
-      this.showdata.city = data.address.city;
-      this.showdata.country = data.address.country;
     },
     Updatedata(path, pageType, data) {
       this.updateDialog = true;
-      this.updatedata.userid = data.id;
-      this.UserID = data._id;
-      // if (data.name === null) {
-      //   this.updatedata.updates.name.first = data.name.first;
-      // } else {
-      //   this.updatedata.updates.name.first = "";
-      // }
-      this.updatedata.updates.username = data.username;
-      this.updatedata.updates.email = data.email;
-      this.updatedata.updates.phone = data.phone;
-      this.updatedata.updates.photo = data.photo
-        ? data.photo
-        : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
-      if (data.dob === null) {
-        this.updatedata.updates.dob = "";
-      } else {
-        this.updatedata.updates.dob = data.dob;
-      }
-      if (data.address === null) {
-        this.updatedata.updates.address.street = "";
-        this.updatedata.updates.address.city = "";
-      } else {
-        this.updatedata.updates.address.street = data.address.street;
-        this.updatedata.updates.address.city = data.address.city;
-        this.updatedata.updates.address.country = data.address.country;
-      }
-    },
-    avatarclick(value) {
-      this.updatedata.updates.photo = value;
     },
     updateclick() {
-      //this.updatedata.userid = this.$route.query.uid;
-      var dateobj = new Date(this.updatedata.updates.dob);
-      this.updatedata.updates.dob = dateobj.toISOString();
-      this.updateUser(this.updatedata);
+      this.createusers()
     },
-    updateUser(updatedata) {
-      this.$apollo
-        .mutate({
-          mutation: UPDATEUSER,
-          variables: updatedata
-        })
-        .then(
-          data => {
-            for (let i = 0; i < this.allusers.length; i++) {
-              if (data.data.user.profile.update._id) {
-                if (
-                  this.allusers[i]._id === data.data.user.profile.update._id
-                ) {
-                  updatedata.updates._id = data.data.user.profile.update._id;
-                  this.allusers.splice(i, 1);
-                  this.allusers[i] = updatedata.updates;
-                  break;
-                } else {
-                  continue;
-                }
-              }
-            }
-            this.updateDialog = false;
-          },
-          error => {
-            console.log(error);
-            this.errormessage = error.graphQLErrors[0].message;
-          }
-        );
-    },
+    updateUser(updatedata) {},
     showdialog() {
       this.showerror = false;
       this.contactDialog = true;
     },
     closedialog() {
-      this.form = {
-        username: "",
-        role_id: ""
-      };
       this.showerror = false;
       this.contactDialog = false;
     },
@@ -590,57 +433,39 @@ export default {
       this.contacts[index] = this.form;
       this.resetContactForm();
     },
-    createusers(userdata) {
-      this.$apollo
-        .mutate({
-          mutation: CREATEUSER,
-          variables: userdata
-        })
-        .then(
-          data => {
-            this.allusers.push({
-              _id: data.data.createUser._id,
-              email: data.data.createUser.email
-            });
-            this.contactDialog = false;
-          },
-          error => {
-            this.showerror = true;
-            this.errormessage = error.graphQLErrors[0].message;
-          }
-        );
-    }
-  },
-  apollo: {
-    GetUsers: {
-      query: GET_USERS,
-      variables() {
-        return {
-          search: this.search,
-          limit: this.userslimit
-        };
-      },
-      update(data) {
-        this.allusers = data.public_profiles;
-      },
-      error(error) {
-        console.log(error);
+    async createusers() {
+      this.defaultUser._id = "5c5850688eea700efe9420d5"
+      const result = await this.defaultUser.createUser();
+      if (result) {
+        if (result.data.hasOwnProperty("createAdminUser")) {
+          this.defaultUser._id = result.data.createAdminUser._id;
+          this.allusers.push(this.defaultUser);
+        }
+      } else console.log("Created failed check logs");
+      this.contactDialog = false;
+    },
+    async getUsers() {
+      const allusers = await Users.getUsers();
+      console.log(allusers);
+
+      this.allusers = allusers.data.getUsers;
+      return allusers;
+    },
+    async getRoles() {
+      const roles = await Role.getRoles();
+      if (roles) {
+        roles.data.getRoles.forEach(element => {
+          this.allroles.push(new Role(element));
+        });
+        console.log(this.allroles);
+        console.log(roles);
       }
     },
-    GetRoles: {
-      query: GET_ROLES,
-      variables() {
-        return {
-          Id: this.userBasicInfoProfile._id
-        };
-      },
-      update(data) {
-        return data.getAllRoles;
-      },
-      error(error) {
-        console.log(error);
-      }
-    }
+  },
+  created() {
+    this.defaultUser = new Users();
+    this.getUsers();
+    this.getRoles();
   },
   computed: {
     ...mapGetters([
@@ -650,12 +475,5 @@ export default {
       "countries"
     ])
   }
-  // watch: {
-  //   contactDialog(from, to) {
-  //     if (to) {
-  //       this.resetContactForm();
-  //     }
-  //   }
-  // }
 };
 </script>

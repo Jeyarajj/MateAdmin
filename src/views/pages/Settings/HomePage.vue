@@ -170,13 +170,35 @@
       <v-spacer></v-spacer>
       <v-btn color="success" @click="save()">Save</v-btn>
     </v-card-actions>
+    <v-flex>
+  <UserTypes/>
+  </v-flex>
+  <v-flex>
+  <InstitutionTypes/>
+  </v-flex>
+  <v-flex>
+  <ScholorshipTypes/>
+  </v-flex>
+  <v-flex>
+  <DegreeTypes/>
+  </v-flex>
   </div>
 </template>
 
 <script>
 import { imageType } from "../../../dto/imageType";
 import { HOMESETTING, GET_HOMESETTINGS } from "@/gql-constants/settings";
+import UserTypes from "@/views/pages/Settings/UserTypes.vue";
+import InstitutionTypes from "@/views/pages/Settings/InstitutionTypes.vue";
+import ScholorshipTypes from  "@/views/pages/Settings/ScholorshipTypes.vue";
+import DegreeTypes from "@/views/pages/Settings/DegreeTypes.vue";
 export default {
+  components: {
+    UserTypes,
+    InstitutionTypes,
+    ScholorshipTypes,
+    DegreeTypes
+  },
   data: () => ({
     imageName: "",
     logoName: "",
