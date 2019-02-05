@@ -16,6 +16,7 @@ export const GET_INSTITUTIONS_INDEX = gql`
     description
     city
     country
+    address
     slug
     logourl
     bannerurl
@@ -33,14 +34,15 @@ export const UPDATEUNIVERSITY = gql`
     $description: Text
     $slug: Text
     $logourl: Text
+    $address: Text
     $bannerurl: [Text]
     $created_by: ObjectID
     $photos: [Text]
     $city: Text
     $country: Text
     $type: Text
-    $status: Text
     $website: Url
+    $status: String
   ) {
     UpdateUniversity(
       _id: $_id
@@ -48,6 +50,7 @@ export const UPDATEUNIVERSITY = gql`
       description: $description
       slug: $slug
       logourl: $logourl
+      address: $address
       bannerurl: $bannerurl
       created_by: $created_by
       photos: $photos

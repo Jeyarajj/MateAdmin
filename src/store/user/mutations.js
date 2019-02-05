@@ -59,6 +59,8 @@ export const userMutations = {
     state.userBasicInfoProfile = payload.data.getBasicInfo;
   },
   setcurrentUserinfo: function(state, payload) {
+    console.log('sundar');
+    console.log(payload);
     //payload.data.profile.uid = state.userBasicInfoProfile.id
     state.currentUserdata = payload.data.profile;
   },
