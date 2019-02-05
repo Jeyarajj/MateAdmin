@@ -28,7 +28,7 @@ import InstitutionsScholarships from '@/views/pages/Institution/InstitutionsScho
 
 import ManageScholarships from '@/views/pages/Scholarships/ManageScholarships';
 
-import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
+//import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
 import StudentsList from '@/views/pages/Students/StudentsList';
 import StudentsApplicationsList from '@/views/pages/Students/StudentsApplicationsList';
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';

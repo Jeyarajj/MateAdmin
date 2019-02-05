@@ -68,6 +68,7 @@ export const GET_USERS_DATA = gql `
         city
         country
       }
+      dob
     }
  }
   }

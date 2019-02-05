@@ -210,7 +210,7 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center>
             <v-avatar size="150">
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="User">
+              <img :src="defaultUser._profile.photo" alt="User">
             </v-avatar>
           </v-flex>
 
@@ -322,6 +322,7 @@
                         prepend-icon="email"
                         label="Email"
                         v-model="defaultUser.email"
+                        readonly
                         required
                       ></v-text-field>
                     </v-flex>
