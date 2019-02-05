@@ -96,7 +96,7 @@ export default [
     icon: 'settings',
     items: [
       { title: 'Home Page', name: 'HomePage' },
-      { title: 'Homepage Settings', name: 'HomepageSettings' }
+      { title: 'Homepage Settings', name: 'HomepageSettings' },
       { title: 'Notifications', name: 'Notify' },
       { title: 'Profile', name: 'ProfileSettings' },
       { title: 'Security & Privacy', name: 'SecurityPrivacy' },

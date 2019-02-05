@@ -18,7 +18,7 @@ import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
 
 import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
 import InstitutionsCourses from '@/views/pages/Institution/InstitutionsCourses';
-import CourseList from '@/views/pages/Courses/courses';
+//import CourseList from '@/views/pages/Courses/courses';
 
 import ArticlesPage from '@/views/pages/Articles/articles_list';
 import ArticlePage from '@/views/pages/Articles/article_page';
@@ -266,7 +266,6 @@ export const routes = [
     name: 'billing/ViewPaymentGateway'
   },
 
-
   {
     path: '/settings/homepagesettings',
     components: {
@@ -342,5 +341,4 @@ export const routes = [
     },
     name: 'reports/ReportsBulkDownload'
   }
-
 ];
