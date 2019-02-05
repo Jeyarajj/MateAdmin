@@ -1,14 +1,47 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>User Roles</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Role</v-btn>
+
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon> Add New Role</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            
+            <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+
           </v-card-title>
 
           <v-card-text>
@@ -31,8 +64,24 @@
               </v-layout>
 
               <v-layout wrap>
-                <v-flex>              
-                  <table>
+                <v-flex>
+
+              <v-data-table :headers="modulesheader">
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.username }}</td> 
+          <td>{{ props.item.email }}</td>
+          <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
+          <td>{{ props.item.phone }}</td>
+        </template>
+        <v-alert
+          slot="no-results"
+          :value="true"
+          color="error"
+          icon="warning"
+        >Your search for "{{ search }}" found no results.</v-alert>
+      </v-data-table>
+
+                  <!-- <table>
                     <template>
                       <tr>
                         <th>Module Name</th>
@@ -51,7 +100,7 @@
                         </td>
                       </tr>
                     </template>
-                  </table>
+                  </table> -->
                 </v-flex>
               </v-layout>
             </v-container>
@@ -64,7 +113,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+      </v-toolbar>
+    </v-container>
+    
     <v-data-table :headers="headers" :items="desserts" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.role_name }}</td>
@@ -108,11 +159,35 @@ export default {
     }
   },
   data: () => ({
+    title: 'Users Roles',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+      {
+        text: 'Home',
+        disabled: true
+      },
+      {
+        text: 'Users Management',
+        disabled: true
+      },
+      {
+        text: 'Manage User Roles',
+        disabled: true
+      }
+    ],
     dialog: false,
     headers: [
       { text: "Role Name", value: "role_name" },
       { text: "Created By", value: "created_by" },
       { text: "Actions", value: "name", sortable: false }
+    ],
+    modulesheader: [
+      { text: 'Module Name', sortable: false },
+      { text: 'Create', sortable: false },
+      { text: 'Update', sortable: false },
+      { text: 'Delete', sortable: false },
+      { text: 'List', sortable: false },
+      { text: 'Publish', sortable: false },
     ],
     permission: ["create", "update", "delete", "list", "publish"],
     modules_: {

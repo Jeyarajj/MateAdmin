@@ -146,7 +146,7 @@
     },
     mounted () {
       const ps = document.getElementById('app-drawer')
-      ps.addEventListener('mouseenter', this.miniEnterVariantHandler)
+      //ps.addEventListener('mouseenter', this.miniEnterVariantHandler)
       ps.addEventListener('mouseleave', this.miniLeaveVariantHandler)
     },
     beforeDestroy () {

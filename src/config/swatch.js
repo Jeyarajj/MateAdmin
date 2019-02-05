@@ -7,8 +7,10 @@
 export default {
   navDrawerAlphaImage: '/static/sidebar-imgs/sb-bg7.jpg',
   navDrawerScheme: 'md-sidebar-500',
-  navToolbarScheme: 'md-white-500',
-  navFooterScheme: 'md-black-500',
+  //navToolbarScheme: 'md-white-500',
+  navToolbarScheme: 'md-grey-900',
+  //navFooterScheme: 'md-black-500',
+  navFooterScheme: 'md-grey-300',
   alpha: false, // Transparent Background of the sidebar navigation
   variant: false
 }

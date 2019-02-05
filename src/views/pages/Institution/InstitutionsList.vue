@@ -1,31 +1,63 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Institutions</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Institution</v-btn>
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+           <v-icon left dark>add_circle</v-icon>
+          Add New Institution</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <v-layout>
+            <v-flex row xs6>
+              <span class="headline">{{ formTitle }}</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click.native="close()">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.name" label="Institution Name"></v-text-field>
+                  <v-text-field v-model="editedItem.name" label="Institution Name" box></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.slug" label="Institution Slug"></v-text-field>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.slug" label="Institution Slug" box></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.website" 
                   :error-messages="fieldErrors('editedItem.website')"
                   @input="$v.editedItem.website.$touch()"
                   @blur="$v.editedItem.website.$touch()"
-                  label="Website URL"></v-text-field>
+                  label="Website URL" box></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-select
@@ -35,17 +67,21 @@
                     @input="$v.editedItem.institution_type.$touch()"
                     @blur="$v.editedItem.institution_type.$touch()"
                     label="Institution Type"
-                    outline
+                    box
                   ></v-select>
                 </v-flex>
                 <!-- <v-flex xs12 sm6 md4>
                   <v-select :items="city" label="City" v-model="editedItem.city" outline></v-select>
                 </v-flex>-->
-                <v-flex xs12 sm6 md4>
-                  <country-select v-model="editedItem.country" :country="country" topCountry="US"/>
+                <v-flex xs12 sm6 md6>
+                  <country-select class="countryselectborder" v-model="editedItem.country" :country="country" topCountry="US"
+                  :error-messages="fieldErrors('editedItem.country')"
+                    @input="$v.editedItem.country.$touch()"
+                    @blur="$v.editedItem.country.$touch()"/>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md6>
                   <region-select
+                    class="regionselectborder"
                     v-model="editedItem.city"
                     :country="editedItem.country"
                     :region="city"
@@ -59,7 +95,7 @@
                   :error-messages="fieldErrors('editedItem.address')"
                   @input="$v.editedItem.address.$touch()"
                   @blur="$v.editedItem.address.$touch()"
-                  label="Institution Address"></v-textarea>
+                  label="Institution Address" auto-grow rows="2" box></v-textarea>
                 </v-flex>
 
                 <v-flex xs12 sm12 md12>
@@ -67,7 +103,7 @@
                   :error-messages="fieldErrors('editedItem.description')"
                   @input="$v.editedItem.description.$touch()"
                   @blur="$v.editedItem.description.$touch()"
-                  label="Description min 200 words "></v-textarea>
+                  label="Description min 200 words" auto-grow rows="2" box></v-textarea>
                 </v-flex>
                 <template v-if="editedIndex !== -1">
                   <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
@@ -118,8 +154,7 @@
                       :multiple="true"
                       :size="1024 * 1024 * 10"
                       @input="onInstitutionBanner"
-                      ref="uploadBanners"
-                    >
+                      ref="uploadBanners">
                       <i class="fa fa-plus"></i>
                       Upload Banner
                     </file-upload>
@@ -165,7 +200,10 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+
+        </v-toolbar>
+    </v-container>
+
     <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
@@ -204,6 +242,7 @@ export default {
       website: { required },
       institution_type: { required },
       address: { required },
+      country: { required },
       description: { required }
     }
   },
@@ -221,6 +260,9 @@ export default {
       institution_type: {
         required: 'Select Type'
       },
+      country: {
+        required: 'Select Country'
+      },
       address: {
         required: 'Address required'
       },
@@ -230,6 +272,22 @@ export default {
     }
   },
   data: () => ({
+    title: 'Manage Institutions',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Institutions',
+      disabled: true
+    },
+    {
+      text: 'Manage Institutions',
+      disabled: true
+    }
+    ],
     institutionLogo: imageType,
     institutionBanners: [],
     institutionPhotos: [],

@@ -1,17 +1,103 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title>
-        <v-tooltip right>
-          <v-btn slot="activator" color="primary" dark fab @click.native="showdialog()">
-            <v-icon dark>person_add</v-icon>
-          </v-btn>
-          <span>ADD USER</span>
-        </v-tooltip>
 
+    <v-container fluid grid-list-xl class="pb-0">
+      <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-      </v-card-title>
+        <!-- Create Contact Modal -->
+    <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
+      <v-btn slot="activator" color="primary" dark class="mb-2">
+        <v-icon left dark>add_circle</v-icon> Add New User</v-btn>
+      <v-card class="create-dialog-card">
+        <v-card-title>
+          <v-layout>
+            <v-flex row xs6>
+              <span class="white--text">New User</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon class="fx-close-model-btn" @click.native="closedialog()">
+                <v-icon color="primary">close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-alert :value="showerror" type="error">{{errormessage}}</v-alert>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field
+                  :error-messages="fieldErrors('form.email')"
+                  @input="$v.form.email.$touch()"
+                  @blur="$v.form.email.$touch()"
+                  prepend-icon="email"
+                  v-model="form.email"
+                  label="Email *"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-select
+                  :error-messages="fieldErrors('form.role_id')"
+                  @input="$v.form.role_id.$touch()"
+                  @blur="$v.form.role_id.$touch()"
+                  :items="GetRoles"
+                  item-text="role_name"
+                  item-value="_id"
+                  prepend-icon="people"
+                  v-model="form.role_id"
+                  label="Role *"
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="white--text" color="menuhover" @click.native="resetContactForm()">Close</v-btn>
+          <v-btn
+            class="white--text"
+            color="act"
+            @click.native="updateContact()"
+            :disabled="$v.form.$invalid"
+            v-if="isEditformMod"
+          >Edit</v-btn>
+          <v-btn
+            :disabled="$v.$invalid"
+            block
+            :class="$v.$invalid ? '' : 'white--text'"
+            color="act"
+            @click.native="createNewUser()"
+            v-else
+          >Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+      </v-toolbar>
+    </v-container>
+
+    <v-card>
       <v-data-table :headers="headers" :items="allusers" :search="search">
         <template slot="items" slot-scope="props">
           <td>{{ props.item.username }}</td> 
@@ -56,8 +142,8 @@
               <span class="white--text">New User</span>
             </v-flex>
             <v-flex row xs6 text-xs-right>
-              <v-btn flat icon class="fx-close-model-btn" @click.native="closedialog()">
-                <v-icon color="white">close</v-icon>
+              <v-btn flat icon color="primary" @click.native="closedialog()">
+                <v-icon>close</v-icon>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -362,6 +448,22 @@ export default {
   },
   data() {
     return {
+    title: 'Manage Users',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Users Management',
+      disabled: true
+    },
+    {
+      text: 'Manage Users',
+      disabled: true
+    }
+    ],
       search: "",
       errormessage: "",
       showerror: false,
@@ -378,8 +480,6 @@ export default {
         { text: "Phone", value: "phone" },
         { text: "Actions", value: "actions" }
       ],
-
-      title: "Contacts",
       date: null,
       dateFormatted: null,
       gradient: Gradients[9],

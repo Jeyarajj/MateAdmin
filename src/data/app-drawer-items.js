@@ -17,8 +17,8 @@ export default [
     icon: 'school',
     items: [
       { name: 'InstitutionsList', title: 'Manage Institutions' },
-      { name: 'CourseList', title: 'Manage Courses' },
-      { name: 'ScholarshipList', title: 'Manage Scholarship' },
+      { name: 'InstitutionsCourses', title: 'Manage Courses' },
+      { name: 'InstitutionsScholarships', title: 'Manage Scholarship' },
       { name: 'InstitutionsBulkImport', title: 'Bulk Import' }
     ]
   },
@@ -27,7 +27,9 @@ export default [
     title: 'Scholarships',
     group: 'scholarships',
     icon: 'card_giftcard',
-    items: [{ title: 'Manage Scholarships', name: 'ManageScholarships' }]
+    items: [
+      { title: 'Manage Scholarships', name: 'ManageScholarships' }
+    ]
   },
 
   {
