@@ -8,25 +8,30 @@
         <v-btn slot="activator" @click="addNewRole()" color="primary" dark class="mb-2">Add New Role</v-btn>
         <v-card>
           <v-card-title>
-            
             <v-layout>
-            <v-flex row xs6>
-              <span class="headline">{{ formTitle }}</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="close()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-
+              <v-flex row xs6>
+                <span class="headline">{{ formTitle }}</span>
+              </v-flex>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click.native="close()">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="defaultRole.role_name" box label="Role name"></v-text-field>
+                  <v-text-field
+                    v-model="defaultRole.role_name"
+                    box
+                    label="Role name"
+                    :error-messages="fieldErrors('defaultRole.role_name')"
+                    @input="$v.defaultRole.role_name.$touch()"
+                    @blur="$v.defaultRole.role_name.$touch()"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
                   <v-textarea
@@ -35,6 +40,9 @@
                     box
                     rows="2"
                     label="Role Description"
+                    :error-messages="fieldErrors('defaultRole.role_description')"
+                    @input="$v.defaultRole.role_description.$touch()"
+                    @blur="$v.defaultRole.role_description.$touch()"
                   ></v-textarea>
                 </v-flex>
               </v-layout>
@@ -66,7 +74,15 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="dialog=false">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="createRole()">Save</v-btn>
+            <v-btn
+              
+              flat
+              @click="createRole()"
+              :disabled="$v.$invalid"
+              block
+              :class="$v.$invalid ? '' : 'green'"
+              color="act"
+            >Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -105,13 +121,13 @@ import validationMixin from "@/mixins/validationMixin";
 export default {
   mixins: [validationMixin],
   validations: {
-    editedItem: {
+    defaultRole: {
       role_name: { required },
       role_description: { required }
     }
   },
   validationMessages: {
-    editedItem: {
+    defaultRole: {
       role_name: {
         required: "Role Name is required"
       },
@@ -121,19 +137,19 @@ export default {
     }
   },
   data: () => ({
-    title: 'Users Roles',
-    icon: 'playlist_add_check',
+    title: "Users Roles",
+    icon: "playlist_add_check",
     breadcrumbs: [
       {
-        text: 'Home',
+        text: "Home",
         disabled: true
       },
       {
-        text: 'Users Management',
+        text: "Users Management",
         disabled: true
       },
       {
-        text: 'Manage User Roles',
+        text: "Manage User Roles",
         disabled: true
       }
     ],
