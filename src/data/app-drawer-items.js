@@ -44,7 +44,7 @@ export default [
     icon: 'help',
     items: [
       { title: 'Students List', name: 'StudentsList' },
-      { title: 'Students Applications', name: 'StudentsApplications' }
+      { title: 'Students Applications', name: 'StudentsApplicationsList' }
     ]
   },
 
