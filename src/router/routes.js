@@ -18,6 +18,11 @@ import SecurityPrivacy from '@/views/pages/Settings/SecurityPrivacy';
 
 import InstitutionsList from '@/views/pages/Institution/InstitutionsList';
 import InstitutionsCourses from '@/views/pages/Institution/InstitutionsCourses';
+import CourseList from '@/views/pages/Courses/courses';
+
+import ArticlesPage from '@/views/pages/Articles/articles_list';
+import ArticlePage from '@/views/pages/Articles/article_page';
+
 import InstitutionsBulkImport from '@/views/pages/Institution/institutionsBulkImport';
 import InstitutionsScholarships from '@/views/pages/Institution/InstitutionsScholarships';
 
@@ -25,6 +30,7 @@ import ManageScholarships from '@/views/pages/Scholarships/ManageScholarships';
 
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';
 
+import MetaTags from '@/views/Settings/MetaTags';
 import ManageAdPackages from '@/views/pages/Subscriptions/ManageAdPackages';
 
 import ManageFairs from '@/views/pages/Events/ManageFairs';
@@ -85,6 +91,26 @@ export const routes = [
       footer: AppFooter
     },
     name: 'usersmanagement/UserRoles'
+  },
+  {
+    path: '/Articles/ArticlesList',
+    components: {
+      default: ArticlesPage,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'articles/ArticlesList'
+  },
+  {
+    path: '/Articles/ArticlePage/:mode/:article_id?',
+    components: {
+      default: ArticlePage,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'articles/ArticlePage'
   },
 
   {
@@ -261,6 +287,16 @@ export const routes = [
       footer: AppFooter
     },
     name: 'settings/Notify'
+  },
+  {
+    path: '/Settings/MetaTags',
+    components: {
+      default: MetaTags,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'settings/MetaTags'
   },
 
   {

@@ -206,9 +206,8 @@
 
     <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
         <td class="justify-center">{{ props.item.name }}</td>
-        <td class="justify-center">{{ props.item.city.name }}</td>
+        <td class="justify-center">{{ props.item.city }}</td>
         <td class="justify-center">{{ props.item.address }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
@@ -222,9 +221,14 @@
   </div>
 </template>
 <script>
-import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
-import { validNumber } from '@/utils/validators'
-import validationMixin from '@/mixins/validationMixin'
+import {
+  required,
+  maxLength,
+  minLength,
+  email
+} from "vuelidate/lib/validators";
+import { validNumber } from "@/utils/validators";
+import validationMixin from "@/mixins/validationMixin";
 
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
@@ -234,7 +238,7 @@ import {
 } from "../../../gql-constants/university";
 const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
 export default {
-   mixins: [validationMixin],
+  mixins: [validationMixin],
   validations: {
     editedItem: {
       institution_name: { required },
@@ -249,25 +253,25 @@ export default {
   validationMessages: {
     editedItem: {
       institution_name: {
-        required: 'Institution Name is required'
+        required: "Institution Name is required"
       },
       institution_slug: {
-        required: 'Slug required'
+        required: "Slug required"
       },
       website: {
-        required: 'Institution Website'
+        required: "Institution Website"
       },
       institution_type: {
-        required: 'Select Type'
+        required: "Select Type"
       },
       country: {
         required: 'Select Country'
       },
       address: {
-        required: 'Address required'
+        required: "Address required"
       },
       description: {
-        required: 'Enter Description'
+        required: "Enter Description"
       }
     }
   },
@@ -309,13 +313,12 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "City", value: "name" },
+      { text: "City", value: "city" },
       { text: "Address", value: "address" }
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      _id: "",
       name: "",
       slug: "",
       website: "",
@@ -372,7 +375,9 @@ export default {
   computed: {
     ...mapGetters(["institutionFiles", "institutionBanner"]),
     formTitle() {
-      return this.editedIndex === -1 ? "Add New Institution" : "Edit Institution";
+      return this.editedIndex === -1
+        ? "Add New Institution"
+        : "Edit Institution";
     }
   },
 
@@ -467,6 +472,7 @@ export default {
           this.institutionsResults[this.editedIndex],
           this.editedItem
         );
+        this.editedItem._id = this.institutionsResults[this.editedIndex]._id;
       }
       this.$apollo
         .mutate({

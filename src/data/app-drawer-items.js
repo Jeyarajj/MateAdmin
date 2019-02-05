@@ -40,6 +40,15 @@ export default [
       { title: 'Manage Counsellors', name: 'CounselorsList' }
     ]
   },
+  {
+    title: 'Articles',
+    group: 'articles',
+    icon: 'help',
+    items: [
+      { title: 'Articles List', name: 'ArticlesList' },
+      { title: 'Article Page', name: 'ArticlePage' }
+    ]
+  },
 
   {
     title: 'Subscriptions',
@@ -86,10 +95,12 @@ export default [
     group: 'settings',
     icon: 'settings',
     items: [
-      { title: 'Profile Settings', name: 'ProfileSettings' },
-      { title: 'Notifications Settings', name: 'Notify' },
-      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Home Page', name: 'HomePage' },
       { title: 'Homepage Settings', name: 'HomepageSettings' }
+      { title: 'Notifications', name: 'Notify' },
+      { title: 'Profile', name: 'ProfileSettings' },
+      { title: 'Security & Privacy', name: 'SecurityPrivacy' },
+      { title: 'Meta Tags', name: 'MetaTags' }
     ]
   },
 

@@ -290,7 +290,6 @@ export default {
     },
 
     editItem(item) {
-      console.log(item);
       this.editedIndex = this.scholarships.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
