@@ -88,6 +88,7 @@ export const GET_ROLES = gql `
         update
         delete
         view
+        publish
         }
       }
     }

@@ -40,8 +40,11 @@ export class Users {
     }
     constructor(user) {
         if (user) {
-            if (user._id)
+            if (user._id){
+                if(!user._profile)
+                delete user._profile
                 Object.assign(this, user)
+            }
         }
     }
 

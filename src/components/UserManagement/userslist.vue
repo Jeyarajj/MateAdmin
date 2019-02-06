@@ -106,7 +106,7 @@
           <td>{{ props.item._id }}</td>
           <td>{{ props.item.email }}</td>
           <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
-          <td>{{ props.item._profile.phone }}</td>
+          <td>{{ props.item._profile.phone}}</td>
           <td class="text-xs-right">
             <v-flex xs12 sm3>
               <v-btn @click="editUser(props.item)" flat icon color="primary">
@@ -559,11 +559,13 @@ export default {
       this.contactDialog = false;
     },
     async getUsers() {
-      const allusers = await Users.getUsers();
-      console.log(allusers);
-
-      this.allusers = allusers.data.getUsers;
-      return allusers;
+      const users = await Users.getUsers();
+      if (users) {
+        users.data.getUsers.forEach(element => {
+          this.allusers.push(new Users(element));
+        });
+      }
+      console.log(this.allusers);
     },
     async getRoles() {
       const roles = await Role.getRoles();

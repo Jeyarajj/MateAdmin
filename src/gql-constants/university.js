@@ -23,7 +23,6 @@ export const GET_INSTITUTIONS_INDEX = gql`
     type
     status
     website
-    photos
   }
 `;
 
