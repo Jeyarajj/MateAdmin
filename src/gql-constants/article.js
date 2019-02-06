@@ -23,7 +23,7 @@ export const CREATE_ARTICLE = gql`
       _id: $_id
       name: $name
       slug: $slug
-      cover_image: $slug
+      cover_image: $cover_image
       category: $category
       short_description: $short_description
       article_content: $article_content
