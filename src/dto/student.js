@@ -8,13 +8,24 @@ export class Student {
     _id = ""
     active = true;
     email = ""
+    profile={
+        name:"",
+        city:"",
+        country:""
+    }
+    preference={
+        profile:"",
+        email:""
+    }
     constructor(student) {
         if(student)
-        if (student._id)
+        if (student._id){
+            if(!student.profile)
+            delete student.profile
+            if(!student.preference)
+            delete student.preference
             Object.assign(this, student)
-    }
-    console(){
-        console.log('asdf')
+        }
     }
     updateStatus() {
         var mutationQuery;

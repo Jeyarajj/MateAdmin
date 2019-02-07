@@ -6,6 +6,9 @@ export const QUERIES = {
           _id 
           email
           active
+          profile {
+            name
+            }
           }
     }
   `,

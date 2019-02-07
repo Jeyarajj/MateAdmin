@@ -7,10 +7,10 @@
     </v-toolbar>
     <v-data-table :headers="headers" :items="studentsList" class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item._id }}</td>
+        <td>{{ props.item._id }}<br>{{ props.item.profile.name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
         <td class="justify-center layout px-0">
-           <v-switch
+        <v-switch
         :label="`: ${props.item.status}`"
         v-model="props.item.active"
         @change="props.item.updateStatus()"
