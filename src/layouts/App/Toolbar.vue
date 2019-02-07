@@ -33,21 +33,28 @@
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-        <img :src="this.currentUserdata.photo
+        <img
+          :src="this.currentUserdata.photo
         ? this.currentUserdata.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'" :key="this.currentUserdata.photo">
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
+          :key="this.currentUserdata.photo"
+        >
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
             <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-            <img :src="this.currentUserdata.photo
+            <img
+              :src="this.currentUserdata.photo
         ? this.currentUserdata.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'">
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
+            >
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-text="this.currentUserdata.username ? this.currentUserdata.username : ''"></v-list-tile-title>
+            <v-list-tile-title
+              v-text="this.currentUserdata.username ? this.currentUserdata.username : ''"
+            ></v-list-tile-title>
             <v-list-tile-sub-title>{{this.currentUserdata.username ? this.currentUserdata.username : ''}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -294,7 +301,6 @@ export default {
     },
     updateclick() {
       //this.updatedata.userid = this.$route.query.uid;
-      console.log(this.updatedata.updates);
       var dateobj = new Date(this.updatedata.updates.dob);
       this.updatedata.updates.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
@@ -307,6 +313,7 @@ export default {
         })
         .then(
           data => {
+            console.log(data);
             this.updateDialog = false;
           },
           error => {

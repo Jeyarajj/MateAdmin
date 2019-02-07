@@ -8,157 +8,155 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
+          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
-            <v-breadcrumbs-item
-              v-for="item in breadcrumbs"
-              :key="item.text"
-              :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-dialog v-model="dialog" persistent max-width="900px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Course</v-btn>
-        <v-card>
-          <v-card-title>
-             <v-layout>
-            <v-flex row xs6>
-              <span class="headline">{{ formTitle }}</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="close()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.name" label="Course name" box></v-text-field>
+          <v-btn slot="activator" color="primary" dark class="mb-2">Add New Course</v-btn>
+          <v-card>
+            <v-card-title>
+              <v-layout>
+                <v-flex row xs6>
+                  <span class="headline">{{ formTitle }}</span>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.degree" label="Degree" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-select
-                    :items="course_level"
-                    v-model="editedItem.course_level"
-                    label="Course Level" box
-                  ></v-select>
-                </v-flex>                
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.course_fee" label="Course Fee" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.course_duration" label="Course Duration" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-menu
-                    ref="menu1"
-                    :close-on-content-click="false"
-                    v-model="startdate"
-                    :nudge-right="40"
-                    :return-value.sync="editedItem.startdate"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="editedItem.startdate"
-                      label="Start Date"
-                      prepend-icon="event"
-                      readonly box
-                    ></v-text-field>
-                    <v-date-picker v-model="editedItem.startdate" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn flat color="primary" @click="startdate = false">Cancel</v-btn>
-                      <v-btn flat color="primary" @click="$refs.menu1.save(editedItem.startdate)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-menu
-                    ref="menu2"
-                    :close-on-content-click="false"
-                    v-model="enddate"
-                    :nudge-right="40"
-                    :return-value.sync="editedItem.enddate"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="editedItem.enddate"
-                      label="End Date"
-                      prepend-icon="event"
-                      readonly box
-                    ></v-text-field>
-                    <v-date-picker v-model="editedItem.enddate" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn flat color="primary" @click="enddate = false">Cancel</v-btn>
-                      <v-btn flat color="primary" @click="$refs.menu2.save(editedItem.enddate)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-select :items="mode" v-model="editedItem.mode" label="Mode" box></v-select>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-select
-                    :items="course_mode"
-                    v-model="editedItem.course_mode"
-                    label="Course Mode" box
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-select
-                    :items="institutionsResults"
-                    item-text="name"
-                    item-value="_id"
-                    v-model="editedItem.university_id"
-                    label="University" box
-                  ></v-select>
-                  <!-- <v-text-field v-model="editedItem.university_id" label="University"></v-text-field> -->
-                </v-flex>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="editedItem.website" label="WebSite URL" box></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="editedItem.description" label="Description" box></v-textarea>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-select :items="status" v-model="editedItem.status" label="Course Status" box></v-select>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
                 </v-flex>
               </v-layout>
-            </v-container>
-          </v-card-text>
+            </v-card-title>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="editedItem.name" label="Course name" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="editedItem.degree" label="Degree" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select
+                      :items="course_level"
+                      v-model="editedItem.course_level"
+                      label="Course Level"
+                      box
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.course_fee" label="Course Fee" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.course_duration" label="Course Duration" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-menu
+                      ref="menu1"
+                      :close-on-content-click="false"
+                      v-model="startdate"
+                      :nudge-right="40"
+                      :return-value.sync="editedItem.startdate"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        v-model="editedItem.startdate"
+                        label="Start Date"
+                        prepend-icon="event"
+                        readonly
+                        box
+                      ></v-text-field>
+                      <v-date-picker v-model="editedItem.startdate" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="startdate = false">Cancel</v-btn>
+                        <v-btn
+                          flat
+                          color="primary"
+                          @click="$refs.menu1.save(editedItem.startdate)"
+                        >OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-menu
+                      ref="menu2"
+                      :close-on-content-click="false"
+                      v-model="enddate"
+                      :nudge-right="40"
+                      :return-value.sync="editedItem.enddate"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        v-model="editedItem.enddate"
+                        label="End Date"
+                        prepend-icon="event"
+                        readonly
+                        box
+                      ></v-text-field>
+                      <v-date-picker v-model="editedItem.enddate" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="enddate = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="$refs.menu2.save(editedItem.enddate)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select :items="mode" v-model="editedItem.mode" label="Mode" box></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select
+                      :items="course_mode"
+                      v-model="editedItem.course_mode"
+                      label="Course Mode"
+                      box
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-select
+                      :items="institutionsResults"
+                      item-text="name"
+                      item-value="_id"
+                      v-model="editedItem.university_id"
+                      label="University"
+                      box
+                    ></v-select>
+                    <!-- <v-text-field v-model="editedItem.university_id" label="University"></v-text-field> -->
+                  </v-flex>
+                  <v-flex xs12 sm6 md12>
+                    <v-text-field v-model="editedItem.website" label="WebSite URL" box></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea v-model="editedItem.description" label="Description" box></v-textarea>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-select :items="status" v-model="editedItem.status" label="Course Status" box></v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
 
-        </v-toolbar>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
     </v-container>
 
     <v-data-table :headers="headers" :items="courseResults" class="elevation-1">
@@ -189,21 +187,21 @@ import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
 
 export default {
   data: () => ({
-    title: 'Manage Courses',
-    icon: 'playlist_add_check',
+    title: "Manage Courses",
+    icon: "playlist_add_check",
     breadcrumbs: [
-    {
-      text: 'Home',
-      disabled: true
-    },
-    {
-      text: 'Institutions',
-      disabled: true
-    },
-    {
-      text: 'Manage Courses',
-      disabled: true
-    }
+      {
+        text: "Home",
+        disabled: true
+      },
+      {
+        text: "Institutions",
+        disabled: true
+      },
+      {
+        text: "Manage Courses",
+        disabled: true
+      }
     ],
     dialog: false,
     course_level: ["Under Graduate", "Post Graduate"],
