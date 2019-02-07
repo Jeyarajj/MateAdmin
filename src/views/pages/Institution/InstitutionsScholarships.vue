@@ -273,8 +273,8 @@ export default {
         return {
           text: "",
           page: {
-            from: false,
-            limit: false
+            from: 0,
+            limit: 10
           }
         };
       },

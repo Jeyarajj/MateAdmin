@@ -161,7 +161,7 @@
         </v-toolbar>
     </v-container>
 
-    <v-data-table :headers="headers" :items="courseResults" class="elevation-1">
+    <v-data-table :headers="headers" :items="courseResults" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.name }}</td>
         <td class="justify-center">{{ props.item.course_level }}</td>
@@ -177,6 +177,7 @@
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+    <Pagination/>
   </div>
 </template>
 
@@ -186,8 +187,12 @@ import {
   UPDATE_COURSE
 } from "../../../gql-constants/courses";
 import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
+import Pagination from "@/components/shared/Pagination";
 
 export default {
+  components: {
+    Pagination
+  },
   data: () => ({
     title: 'Manage Courses',
     icon: 'playlist_add_check',
@@ -215,6 +220,9 @@ export default {
     menu1: false,
     searchCourse: "",
     menu2: false,
+    currentIndex: null,
+    totalPages: null,
+    currentPage: null,
     courseListLimit: 10,
     headers: [
       {
@@ -269,18 +277,18 @@ export default {
         return {
           text: this.searchCourse,
           page: {
-            from: 0,
-            limit: 5
+            from: this.$route.query.pageindex,
+            limit: this.courseListLimit
           }
         };
       },
       update(data) {
-        // this.$store.commit("SET_PAGES_DATA", {
-        //   currentIndex: data.search.course.page.from,
-        //   totalPages: data.search.course.pages.total,
-        //   currentPage: data.search.course.pages.current,
-        //   listLimit: this.courseListLimit
-        // });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: data.search.course.page.from,
+          totalPages: data.search.course.pages.total,
+          currentPage: data.search.course.pages.current,
+          listLimit: this.courseListLimit
+        });
         return data.search.course.items;
       },
       error(error) {
@@ -293,13 +301,12 @@ export default {
         return {
           text: "",
           page: {
-            from: false,
-            limit: false
+            from: 0,
+            limit: 10
           }
         };
       },
       update(data) {
-        console.log(data.search.university.items);
         return data.search.university.items;
       },
       error(error) {

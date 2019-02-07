@@ -7,6 +7,13 @@ export const GET_INSTITUTIONS_INDEX = gql`
         items {
           ...university_search_result
         }
+        page {
+          from
+        }
+        pages {
+          current
+          total
+        }
       }
     }
   }
