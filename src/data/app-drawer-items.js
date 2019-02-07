@@ -24,8 +24,8 @@ export default [
   },
 
   {
-    title: 'Scholarships',
-    group: 'scholarships',
+    title: 'Students',
+    group: 'students',
     icon: 'card_giftcard',
     items: [
       { title: 'Students List', name: 'StudentsList' },
@@ -34,11 +34,11 @@ export default [
   },
 
   {
-    title: 'Counsellors',
+    title: 'Counselors',
     group: 'counselors',
     icon: 'people',
     items: [
-      { title: 'Manage Counsellors', name: 'CounselorsList' }
+      { title: 'Manage Counselors', name: 'CounselorsList' }
     ]
   },
   {

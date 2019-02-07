@@ -4,15 +4,7 @@
       <v-toolbar-title>Counselor</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
-
     </v-toolbar>
-           <v-switch
-        :label="`: ${defaultStudent.status}`"
-        v-model="defaultStudent.active"
-      ></v-switch>
-
-
-
     <v-data-table :headers="headers" :items="studentsList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item._id }}</td>
