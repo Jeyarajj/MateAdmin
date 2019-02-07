@@ -6,9 +6,96 @@ export const QUERIES = {
           _id 
           email
           active
+          profile {
+            name
+            city
+            country
+            student_id
+            gender
+            dob
+            education{
+              degree
+              institution
+              start_date
+              end_date
+            }
+            work{
+              position
+              company
+              address
+              start_date
+              end_date
+            }
+            scores{
+              title
+              score
+            }
+            nationality
+            Others{
+              other_key
+              value
+            }
+            Settings{
+              language
+              privacy{
+                profile
+                mail
+                contact
+                activity
+              }
+            }
+            }
           }
     }
   `,
+    GET_STUDENT: gql `
+      query studentInfo($_id:ObjectID) {
+        studentInfo(_id:$_id ) { 
+          _id 
+          email
+          active
+          profile {
+            name
+            city
+            country
+            student_id
+            gender
+            dob
+            education{
+              degree
+              institution
+              start_date
+              end_date
+            }
+            work{
+              position
+              company
+              address
+              start_date
+              end_date
+            }
+            scores{
+              title
+              score
+            }
+            nationality
+            Others{
+              other_key
+              value
+            }
+            Settings{
+              language
+              privacy{
+                profile
+                mail
+                contact
+                activity
+              }
+            }
+            }
+            }
+      }
+    `,
     GET_APPLICATIONS: gql `
 query getApplications($limit: Number,$skip:Number) {
   getApplications(limit: $limit, skip: $skip ) { 

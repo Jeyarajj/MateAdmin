@@ -76,26 +76,6 @@ export default {
   },
 
   methods: {   
-    save() {   
-      console.log(this.editedItem);
-      this.$apollo
-        .mutate({
-          mutation: UPDATE_COUNSELOR,
-          variables: this.editedItem
-        })
-        .then(data => {
-          this.editedItem._id = data.data.createcounselor._id;
-          if (this.editedIndex == -1) {
-            // Only on create condition
-            this.counselorsList.push(this.editedItem);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-
-      this.close();
-    }
   }
 };
 </script>
