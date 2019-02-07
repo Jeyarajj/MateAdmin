@@ -28,8 +28,8 @@ import InstitutionsScholarships from '@/views/pages/Institution/InstitutionsScho
 
 import ManageScholarships from '@/views/pages/Scholarships/ManageScholarships';
 
-//import ScholarshipsList from '@/views/pages/Scholarships/ScholarshipsList';
 import StudentsList from '@/views/pages/Students/StudentsList';
+import Student from '@/views/pages/Students/Student';
 import StudentsApplicationsList from '@/views/pages/Students/StudentsApplicationsList';
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';
 
@@ -222,6 +222,16 @@ export const routes = [
       footer: AppFooter
     },
     name: 'students/StudentsList'
+  },
+  {
+    path: '/Students/:student_id',
+    components: {
+      default: Student,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'students/'
   },
   {
     path: '/Students/StudentsApplicationsList',

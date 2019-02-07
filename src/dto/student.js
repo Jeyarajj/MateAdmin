@@ -11,11 +11,33 @@ export class Student {
     profile={
         name:"",
         city:"",
-        country:""
+        country:"",
+        student_id:"",
+        gender:"",
+        dob:"",
+        education:[],
+        work:[],
+        scores:[],
+        nationality:"",
+        Others:[],
+        Settings:{
+            language:"",
+            privacy:{
+                profile:"",
+                mail:"",
+                contact:"",
+                activity:""
+            }
+        }
     }
     preference={
-        profile:"",
-        email:""
+        country:[],
+        course:[],
+        area_of_study:"",
+        specialization:"",
+        duration:"",
+        university_type:"",
+        funding:""
     }
     constructor(student) {
         if(student)
@@ -26,6 +48,15 @@ export class Student {
             delete student.preference
             Object.assign(this, student)
         }
+    }
+    static async getStudent(_id){
+            return apolloClient
+            .query({
+                query: QUERIES.GET_STUDENT,
+                variables: {
+                   _id:_id
+                  }
+            })
     }
     updateStatus() {
         var mutationQuery;
