@@ -9,7 +9,6 @@
     <!-- <app-settings :drawer="subDrawer" @toggleSubDrawer="handleSubdrawer"></app-settings> -->
   </v-app>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
 

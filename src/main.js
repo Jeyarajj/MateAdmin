@@ -4,6 +4,10 @@ import VueRouter from 'vue-router';
 import router from './router/index';
 import { store } from './store/index';
 import Vuetify from 'vuetify';
+import jQuery from 'jquery';
+window.$ = window.jQuery = jQuery;
+import 'select2'; // globally assign select2 fn to $ element
+import 'select2/dist/css/select2.css';
 import './stylus/main.styl';
 Vue.use(VueRouter);
 // apollo
@@ -17,9 +21,13 @@ import colors from 'vuetify/es5/util/colors';
 import InputTag from 'vue-input-tag';
 //import { createI18n } from './i18n/index'
 
+import Vuebar from 'vuebars'
+import Trend from 'vuetrend'
+Vue.use(Vuebar)
+Vue.use(Trend)
+
 //import {truncate} from 'lodash'
 import App from './App.vue';
-
 const VueUploadComponent = require('vue-upload-component');
 Vue.component('file-upload', VueUploadComponent);
 Vue.component('input-tag', InputTag);

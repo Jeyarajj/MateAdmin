@@ -19,7 +19,7 @@
           <v-btn slot="activator" color="primary" dark class="mb-2">
             <v-icon left dark>add_circle</v-icon>Add New Institution
           </v-btn>
-          <v-card>
+          <v-card id="myModal">
             <v-card-title>
               <v-layout>
                 <v-flex row xs6>
@@ -68,9 +68,9 @@
                   </v-flex>-->
                   <v-flex xs12 sm6 md6>
                     <country-select
-                      class="countryselectborder"
+                      class="countryselectborder form-control select2"
                       v-model="editedItem.country"
-                      :country="country"
+                      :country="editedItem.country"
                       topCountry="US"
                       :error-messages="fieldErrors('editedItem.country')"
                       @input="$v.editedItem.country.$touch()"
@@ -79,10 +79,10 @@
                   </v-flex>
                   <v-flex xs12 sm6 md6>
                     <region-select
-                      class="regionselectborder"
+                      class="regionselectborder form-control select2"
                       v-model="editedItem.city"
                       :country="editedItem.country"
-                      :region="city"
+                      :region="editedItem.city"
                     />
                   </v-flex>
                   <!-- <v-flex xs12 sm6 md4>
@@ -113,10 +113,18 @@
                       box
                     ></v-textarea>
                   </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-select
+                      :items="status"
+                      v-model="editedItem.status"
+                      label="Institution Status"
+                      box
+                    ></v-select>
+                  </v-flex>
                   <template v-if="editedIndex !== -1">
                     <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <v-flex xs12 sm12 md12>
-                      <ul>
+                      <ul v-if="institutionLogo.exists || editedItem.logourl">
                         <li v-if="institutionLogo.exists">
                           <img :src="institutionLogo.fileUrl" width="50" height="auto">
                           <span @click="removeImage(institutionLogo)">Remove</span>
@@ -139,25 +147,16 @@
                           <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
                         </v-btn>
                       </file-upload>
-                    </v-flex>-->
-                    <v-flex xs12 sm12 md12>
-                      <v-textarea
-                        v-model="editedItem.address"
-                        :error-messages="fieldErrors('editedItem.address')"
-                        @input="$v.editedItem.address.$touch()"
-                        @blur="$v.editedItem.address.$touch()"
-                        label="Institution Address"
-                        auto-grow
-                        rows="2"
-                        box
-                      ></v-textarea>
                     </v-flex>
 
                     <v-flex xs12 sm12 md12>
                       <br>
                       <br>
+                      <v-icon v-if="institutionBanners.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+
                       <ul>
                         <div v-if="institutionBanners.length > 0">
+                          <v-icon v-if="institutionBanners.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                           <li v-for="(image,i) in institutionBanners" :key="i">
                             <span>{{image.fileData.name}}</span> -
                             <img :src="image.fileUrl" width="50" height="auto">
@@ -189,6 +188,8 @@
                       <ul>
                         <div v-if="institutionPhotos.length > 0">
                           <li v-for="(image,i) in institutionPhotos" :key="i">
+                            <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+
                             <span>{{image.fileData.name}}</span> -
                             <img :src="image.fileUrl" width="50" height="auto">
                             <span @click="removeBannerImage(i)">Remove</span>
@@ -212,27 +213,9 @@
                           <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
                         </v-btn>
                       </file-upload>
-                      <v-textarea
-                        v-model="editedItem.description"
-                        :error-messages="fieldErrors('editedItem.description')"
-                        @input="$v.editedItem.description.$touch()"
-                        @blur="$v.editedItem.description.$touch()"
-                        label="Description min 200 words"
-                        auto-grow
-                        rows="2"
-                        box
-                      ></v-textarea>
-                    </v-flex>
-                    <v-flex xs12 sm6 md6>
-                      <v-select
-                        :items="status"
-                        v-model="editedItem.status"
-                        label="Institution Status"
-                        box
-                      ></v-select>
                     </v-flex>
                   </template>
-                  <template v-if="editedIndex !== -1">
+                  <!-- <template v-if="editedIndex !== -1">
                     <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                     <v-flex xs12 sm12 md12>
                       <ul>
@@ -316,7 +299,7 @@
                         Upload Photos
                       </file-upload>
                     </v-flex>
-                  </template>
+                  </template>-->
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -330,7 +313,6 @@
         </v-dialog>
       </v-toolbar>
     </v-container>
-
     <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.name }}</td>
@@ -519,7 +501,13 @@ export default {
       val || this.close();
     }
   },
-
+  mounted() {
+    window.$(function() {
+      window.$(".select2").select2({
+        dropdownParent: window.$("#myModal")
+      });
+    });
+  },
   methods: {
     onInstitutionLogo(value) {
       let file = event.target.files[0];

@@ -29,12 +29,7 @@
       </v-list>
     </v-toolbar>
     <!-- Drawer Items -->
-    <v-list
-      dense="dense"
-      expand="expand"
-      class="nav-drawer"
-      id="app-sidebar"
-    >
+    <v-list dense="dense" expand="expand" class="nav-drawer" id="app-sidebar">
       <template v-for="(item, i) in items">
         <!--group with subitems-->
         <v-list-group
@@ -52,7 +47,12 @@
           </v-list-tile>
           <template v-for="(subItem, i) in item.items">
             <!--sub group-->
-            <v-list-group v-if="subItem.items" :group="subItem.group" sub-group :key="`${i}-subitems`">
+            <v-list-group
+              v-if="subItem.items"
+              :group="subItem.group"
+              sub-group
+              :key="`${i}-subitems`"
+            >
               <v-list-tile slot="activator" ripple class="list__tile-inner-group">
                 <v-list-tile-action v-if="subItem.icon">
                   <v-icon>{{ subItem.icon }}</v-icon>
@@ -66,7 +66,13 @@
                   <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile v-for="(grand, i) in subItem.items" :key="i" :to="genChildTarget(item, grand)" :href="grand.href" ripple>
+              <v-list-tile
+                v-for="(grand, i) in subItem.items"
+                :key="i"
+                :to="genChildTarget(item, grand)"
+                :href="grand.href"
+                ripple
+              >
                 <v-list-tile-action v-if="grand.icon">
                   <v-icon>{{ grand.icon }}</v-icon>
                 </v-list-tile-action>
@@ -82,27 +88,49 @@
             </v-list-group>
 
             <!--child item-->
-            <v-list-tile v-else :key="i" :to="genChildTarget(item, subItem)" :href="subItem.href" :disabled="subItem.disabled" :target="subItem.target" ripple>
+            <v-list-tile
+              v-else
+              :key="i"
+              :to="genChildTarget(item, subItem)"
+              :href="subItem.href"
+              :disabled="subItem.disabled"
+              :target="subItem.target"
+              ripple
+            >
               <v-list-tile-action>
                 <v-icon v-if="subItem.prependIcon">{{ subItem.prependIcon }}</v-icon>
                 <v-avatar size="28" v-else>
                   <span>{{ subItem.title | first2Char }}</span>
                 </v-avatar>
               </v-list-tile-action>
-              <v-list-tile-content class="">
-                <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
+              <v-list-tile-content class>
+                <v-list-tile-title>
+                  <span>{{ subItem.title }}</span>
+                </v-list-tile-title>
               </v-list-tile-content>
-              <v-chip v-if="subItem.badge" color="primary" disabled class="white--text pa-0 chip--x-small">{{ subItem.badge }}</v-chip>
+              <v-chip
+                v-if="subItem.badge"
+                color="primary"
+                disabled
+                class="white--text pa-0 chip--x-small"
+              >{{ subItem.badge }}</v-chip>
               <v-list-tile-action v-if="subItem.action">
                 <v-icon :class="[subItem.actionClass || 'success--text']">{{ subItem.action }}</v-icon>
               </v-list-tile-action>
             </v-list-tile>
           </template>
         </v-list-group>
-        <v-subheader v-else-if="item.header" class="heading-text" :key="`${i}-item`" :class="[i !== 0 ? 'mt-3' : '']">{{ item.header }}</v-subheader>
-        <v-divider v-else-if="item.divider" :key="`${i}-item`"></v-divider><!--top-level link-->
+        <v-subheader
+          v-else-if="item.header"
+          class="heading-text"
+          :key="`${i}-item`"
+          :class="[i !== 0 ? 'mt-3' : '']"
+        >{{ item.header }}</v-subheader>
+        <v-divider v-else-if="item.divider" :key="`${i}-item`"></v-divider>
+        <!--top-level link-->
         <v-list-tile
-          v-else :to="!item.href ? { name: item.name } : null"
+          v-else
+          :to="!item.href ? { name: item.name } : null"
           :href="item.href"
           ripple
           :disabled="item.disabled"
@@ -120,11 +148,21 @@
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
-          <v-chip v-if="item.badge" :color="item.color || 'primary'" disabled class="white--text pa-0 chip--x-small">{{ item.badge }}</v-chip>
+          <v-chip
+            v-if="item.badge"
+            :color="item.color || 'primary'"
+            disabled
+            class="white--text pa-0 chip--x-small"
+          >{{ item.badge }}</v-chip>
           <v-list-tile-action v-if="item.subAction">
             <v-icon class="success--text">{{ item.subAction }}</v-icon>
           </v-list-tile-action>
-          <v-chip v-else-if="item.chip" label="label" small="small" class="caption blue lighten-2 white--text mx-0">{{ item.chip }}</v-chip>
+          <v-chip
+            v-else-if="item.chip"
+            label="label"
+            small="small"
+            class="caption blue lighten-2 white--text mx-0"
+          >{{ item.chip }}</v-chip>
         </v-list-tile>
       </template>
       <v-spacer class="mb-5"></v-spacer>
@@ -133,116 +171,131 @@
   </v-navigation-drawer>
 </template>
 <script>
-  import { mapGetters } from 'vuex'
-  import appDrawerItems from '@/data/app-drawer-items'
-  import { camel } from '@/utils/helpers'
+import { mapGetters } from "vuex";
+import appDrawerItems from "@/data/app-drawer-items";
+import { camel } from "@/utils/helpers";
 
-  export default {
-    data () {
-      return {
-        items: appDrawerItems,
-        dark: false
-      }
+export default {
+  data() {
+    return {
+      items: appDrawerItems,
+      dark: false
+    };
+  },
+  mounted() {
+    const ps = document.getElementById("app-drawer");
+    //ps.addEventListener('mouseenter', this.miniEnterVariantHandler)
+    ps.addEventListener("mouseleave", this.miniLeaveVariantHandler);
+  },
+  beforeDestroy() {
+    const ps = document.getElementById("app-drawer");
+    if (ps) {
+      ps.removeEventListener("mouseenter", this.miniEnterVariantHandler);
+      ps.removeEventListener("mouseleave", this.miniVariantHandler);
+    }
+  },
+  computed: {
+    ...mapGetters({
+      clipped: "navClipped",
+      navDrawer: "navDrawer",
+      navMiniVarient: "navMiniVarient",
+      navDrawerPosition: "navDrawerPosition",
+      navDrawerScheme: "navDrawerScheme",
+      navDrawerAlphaMod: "navDrawerAlphaMod",
+      navDrawerAlphaImg: "navDrawerAlphaImg",
+      navDrawerVariant: "navDrawerVariant",
+      fixedFooter: "fixedFooter",
+      showFooter: "showFooter",
+      miniview: "miniview"
+    }),
+    activemenu() {
+      return this.$vuetify.theme.activemenu;
     },
-    mounted () {
-      const ps = document.getElementById('app-drawer')
-      //ps.addEventListener('mouseenter', this.miniEnterVariantHandler)
-      ps.addEventListener('mouseleave', this.miniLeaveVariantHandler)
-    },
-    beforeDestroy () {
-      const ps = document.getElementById('app-drawer')
-      if (ps) {
-        ps.removeEventListener('mouseenter', this.miniEnterVariantHandler)
-        ps.removeEventListener('mouseleave', this.miniVariantHandler)
-      }
-    },
-    computed: {
-      ...mapGetters({
-        clipped: 'navClipped',
-        navDrawer: 'navDrawer',
-        navMiniVarient: 'navMiniVarient',
-        navDrawerPosition: 'navDrawerPosition',
-        navDrawerScheme: 'navDrawerScheme',
-        navDrawerAlphaMod: 'navDrawerAlphaMod',
-        navDrawerAlphaImg: 'navDrawerAlphaImg',
-        navDrawerVariant: 'navDrawerVariant',
-        fixedFooter: 'fixedFooter',
-        showFooter: 'showFooter',
-        miniview: 'miniview'
-      }),
-      activemenu () {
-        return this.$vuetify.theme.activemenu
+    drawer: {
+      get() {
+        return this.navDrawer;
       },
-      drawer: {
-        get () {
-          return this.navDrawer
-        },
-        set (value) {
-          this.$store.dispatch('toggleDrawer', value)
-        }
-      }
-    },
-    methods: {
-      miniEnterVariantHandler () {
-        // if it's tab or small devive then it won't listen this event
-        if (this.miniview && this.navMiniVarient === true && this.$vuetify.breakpoint.mdAndDown === false) {
-          this.$store.dispatch('toggleMiniVarient', false)
-          // const container = document.querySelector('#app-sidebar')
-          // container.scrollTop = 0
-        }
-      },
-      miniLeaveVariantHandler () {
-        // if it's tab or small devive then it won't listen this event
-        if (this.miniview && this.navMiniVarient === false && this.$vuetify.breakpoint.mdAndDown === false) {
-          this.$store.dispatch('toggleMiniVarient', true)
-          // const container = document.querySelector('#app-sidebar')
-          // container.scrollTop = 0
-        }
-      },
-      genChildTarget (item, subItem) {
-        if (subItem.href) return
-        if (item.component) {
-          return {
-            name: item.component,
-            params: {
-              section: item.group,
-              component: subItem.name
-            }
-          }
-        }
-        // console.log(`Sidebar:`)
-        // console.log({ name: `${item.group}/${camel(subItem.name)}` })
-        return { name: `${item.group}/${camel(subItem.name)}` }
+      set(value) {
+        this.$store.dispatch("toggleDrawer", value);
       }
     }
+  },
+  methods: {
+    miniEnterVariantHandler() {
+      // if it's tab or small devive then it won't listen this event
+      if (
+        this.miniview &&
+        this.navMiniVarient === true &&
+        this.$vuetify.breakpoint.mdAndDown === false
+      ) {
+        this.$store.dispatch("toggleMiniVarient", false);
+        // const container = document.querySelector('#app-sidebar')
+        // container.scrollTop = 0
+      }
+    },
+    miniLeaveVariantHandler() {
+      // if it's tab or small devive then it won't listen this event
+      if (
+        this.miniview &&
+        this.navMiniVarient === false &&
+        this.$vuetify.breakpoint.mdAndDown === false
+      ) {
+        this.$store.dispatch("toggleMiniVarient", true);
+        // const container = document.querySelector('#app-sidebar')
+        // container.scrollTop = 0
+      }
+    },
+    genChildTarget(item, subItem) {
+      if (subItem.href) return;
+      if (item.component) {
+        return {
+          name: item.component,
+          params: {
+            section: item.group,
+            component: subItem.name
+          }
+        };
+      }
+      // console.log(`Sidebar:`)
+      // console.log({ name: `${item.group}/${camel(subItem.name)}` })
+      return { name: `${item.group}/${camel(subItem.name)}` };
+    }
   }
+};
 </script>
 <style scoped lang="stylus">
-  // .no-overflow
-  //   overflow: hidden
-  #app-drawer
-    img.logo
-      margin 40px 0 15px
+// .no-overflow
+// overflow: hidden
+#app-drawer {
+  img.logo {
+    margin: 40px 0 15px;
+  }
 
-    .chip--x-small
-      font-size: 10px
-      height: 16px
+  .chip--x-small {
+    font-size: 10px;
+    height: 16px;
 
-      .chip__content
-        line-height: 1
-        padding: 8px
+    .chip__content {
+      line-height: 1;
+      padding: 8px;
+    }
+  }
 
-    .diamond-sponsor
-      // todo trim down actual image file dimensions
-      height: 35px
-      margin-bottom 0.25em
+  .diamond-sponsor {
+    // todo trim down actual image file dimensions
+    height: 35px;
+    margin-bottom: 0.25em;
 
-      aside.navigation-drawer ul li
-        font-size 14px
-        color: #373737
+    aside.navigation-drawer ul li {
+      font-size: 14px;
+      color: #373737;
+    }
 
-      &-label
-        color #676767
-        margin: 24px 0 16px 0
-        font-size 13px
+    &-label {
+      color: #676767;
+      margin: 24px 0 16px 0;
+      font-size: 13px;
+    }
+  }
+}
 </style>
