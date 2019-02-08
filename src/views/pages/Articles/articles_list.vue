@@ -8,29 +8,19 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
+          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
-            <v-breadcrumbs-item
-              v-for="item in breadcrumbs"
-              :key="item.text"
-              :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn @click="addNewItem()" color="primary" dark class="mb-2">
-          <v-icon left dark>add_circle</v-icon>New Article</v-btn>
-        </v-toolbar>
+          <v-icon left dark>add_circle</v-icon>New Article
+        </v-btn>
+      </v-toolbar>
     </v-container>
 
     <!-- <v-btn @click="addNewItem()" color="info">New Article</v-btn> -->
-
     <v-data-table :headers="headers" :items="articleList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
@@ -52,22 +42,22 @@ import { GET_ARTICLE } from "@/gql-constants/article";
 export default {
   data() {
     return {
-      title: 'Articles List',
-    icon: 'playlist_add_check',
-    breadcrumbs: [
-    {
-      text: 'Home',
-      disabled: true
-    },
-    {
-      text: 'Articles',
-      disabled: true
-    },
-    {
-      text: 'Articles List',
-      disabled: true
-    }
-    ],
+      title: "Articles List",
+      icon: "playlist_add_check",
+      breadcrumbs: [
+        {
+          text: "Home",
+          disabled: true
+        },
+        {
+          text: "Articles",
+          disabled: true
+        },
+        {
+          text: "Articles List",
+          disabled: true
+        }
+      ],
       page: 1,
       perPage: 10,
       headers: [
@@ -103,21 +93,21 @@ export default {
   methods: {
     addNewItem() {
       this.$router.push({
-        name: 'articles/Article_Page',
+        name: "articles/Article_Page",
         params: { mode: "create" }
       });
     },
     detailArticle(item) {
       // need to load the detailed page with item all value
       this.$router.push({
-        name: 'articles/Article_Page',
+        name: "articles/Article_Page",
         params: { article_id: item._id, mode: "detail" }
       });
     },
     editArticle(item) {
       //load the edit page with  item all value
       this.$router.push({
-        name: 'articles/Article_Page',
+        name: "articles/Article_Page",
         params: { article_id: item._id, mode: "edit" }
       });
     }

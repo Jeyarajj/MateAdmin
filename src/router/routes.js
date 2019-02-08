@@ -106,7 +106,7 @@ export const routes = [
     name: 'articles/Articles_List'
   },
   {
-    path: '/articles/article_Page/:mode/:article_id?',
+    path: '/articles/article_Page/:mode?/:article_id?',
     components: {
       default: Article_Page,
       sidebar: AppSidebar,

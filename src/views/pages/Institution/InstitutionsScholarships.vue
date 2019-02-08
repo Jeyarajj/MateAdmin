@@ -8,13 +8,8 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs v-if="breadcrumbs" class="pl-0">
+          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
-            <v-breadcrumbs-item
-              v-for="item in breadcrumbs"
-              :key="item.text"
-              :disabled="item.disabled"
-            >{{ item.text }}</v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>

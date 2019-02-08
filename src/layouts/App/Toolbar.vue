@@ -34,7 +34,7 @@
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
         <img
-          :src="currentUserdata._profile.photo !== undefined  
+          :src="currentUserdata._profile.photo   
         ? currentUserdata._profile.photo
         : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
         >
@@ -44,7 +44,7 @@
           <v-list-tile-avatar>
             <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
             <img
-              :src="currentUserdata._profile.photo !== undefined
+              :src="currentUserdata._profile.photo 
         ? currentUserdata._profile.photo
         : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
             >
