@@ -8,13 +8,55 @@ export class Student {
     _id = ""
     active = true;
     email = ""
+    profile={
+        name:"",
+        city:"",
+        country:"",
+        student_id:"",
+        gender:"",
+        dob:"",
+        education:[],
+        work:[],
+        scores:[],
+        nationality:"",
+        Others:[],
+        Settings:{
+            language:"",
+            privacy:{
+                profile:"",
+                mail:"",
+                contact:"",
+                activity:""
+            }
+        }
+    }
+    preference={
+        country:[],
+        course:[],
+        area_of_study:"",
+        specialization:"",
+        duration:"",
+        university_type:"",
+        funding:""
+    }
     constructor(student) {
         if(student)
-        if (student._id)
+        if (student._id){
+            if(!student.profile)
+            delete student.profile
+            if(!student.preference)
+            delete student.preference
             Object.assign(this, student)
+        }
     }
-    console(){
-        console.log('asdf')
+    static async getStudent(_id){
+            return apolloClient
+            .query({
+                query: QUERIES.GET_STUDENT,
+                variables: {
+                   _id:_id
+                  }
+            })
     }
     updateStatus() {
         var mutationQuery;

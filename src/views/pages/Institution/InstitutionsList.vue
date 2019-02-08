@@ -313,7 +313,13 @@
         </v-dialog>
       </v-toolbar>
     </v-container>
-    <v-data-table :headers="headers" :items="institutionsResults" class="elevation-1">
+
+    <v-data-table
+      :headers="headers"
+      :items="institutionsResults"
+      :hide-actions="true"
+      class="elevation-1"
+    >
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.name }}</td>
         <td class="justify-center">{{ props.item.city }}</td>
@@ -329,6 +335,7 @@
         <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
+    <Pagination/>
   </div>
 </template>
 <script>
@@ -347,8 +354,12 @@ import {
   GET_INSTITUTIONS_INDEX,
   UPDATEUNIVERSITY
 } from "../../../gql-constants/university";
+import Pagination from "@/components/shared/Pagination";
 const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
 export default {
+  components: {
+    Pagination
+  },
   mixins: [validationMixin],
   validations: {
     editedItem: {
@@ -409,6 +420,10 @@ export default {
     institutionLogo: imageType,
     institutionBanners: [],
     institutionPhotos: [],
+    currentIndex: null,
+    totalPages: null,
+    currentPage: null,
+    institutionListLimit: 10,
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
     imageUrl: "",
@@ -467,19 +482,18 @@ export default {
         return {
           text: this.searchInstitution,
           page: {
-            from: 0,
-            limit: 5
+            from: this.$route.query.pageindex,
+            limit: this.institutionListLimit
           }
         };
       },
       update(data) {
-        console.log(data.search.university.items);
-        // this.$store.commit("SET_PAGES_DATA", {
-        //   currentIndex: data.search.university.page.from,
-        //   totalPages: data.search.university.pages.total,
-        //   currentPage: data.search.university.pages.current,
-        //   listLimit: this.institutionListLimit
-        // });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: data.search.university.page.from,
+          totalPages: data.search.university.pages.total,
+          currentPage: data.search.university.pages.current,
+          listLimit: this.institutionListLimit
+        });
         return data.search.university.items;
       },
       error(error) {

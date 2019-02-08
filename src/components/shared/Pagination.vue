@@ -5,7 +5,7 @@
         :class="{'current-page': checkIfCurrentPage(1)}"
         class="pagination__li"> 1 </li>
     <li v-for="(page, i) in pageLists"
-        v-if="totalPages > 1"
+        :v-if="totalPages > 1"
         :key="i"
         @click="goTo(page)"
         :class="{'current-page': checkIfCurrentPage(page)}"
@@ -152,18 +152,18 @@ export default {
 
 <style lang="scss">
   .pagination {
-    background-color: var(--dark-blue-grey);
+    background-color: gray;
     border-radius: 2px;
     li { display: inline-block; }
     .current-page {
-      background-color: var(--soft-blue) !important;
+      background-color:red !important;
       color: white !important;
     }
     .pagination__ul {
       padding: 1rem;
       text-align: center;
       .pagination__li {
-        font-size: 1.5rem;
+        font-size: 1rem;
         color: var(--dark-blue-grey);
         margin: 0 1rem;
         padding: .5rem 1.3rem;

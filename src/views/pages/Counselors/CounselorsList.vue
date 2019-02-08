@@ -219,7 +219,7 @@ export default {
     counselordata: "",
     editedIndex: -1,
     editedItem: {
-      _id: "",
+      _id: null,
       name: "",
       email: "",
       country: "",
@@ -228,6 +228,7 @@ export default {
       image: ""
     },
     defaultItem: {
+      _id:null,
       name: "",
       mail: "",
       country: "",
