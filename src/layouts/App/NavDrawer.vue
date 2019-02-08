@@ -23,7 +23,7 @@
             <img src="../../assets/mate_logo.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title class="headline">Hi Admin</v-list-tile-title>
+            <v-list-tile-title class="headline">Hi {{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -166,6 +166,7 @@
         navDrawerAlphaMod: 'navDrawerAlphaMod',
         navDrawerAlphaImg: 'navDrawerAlphaImg',
         navDrawerVariant: 'navDrawerVariant',
+        currentUserdata: "currentUserdata",
         fixedFooter: 'fixedFooter',
         showFooter: 'showFooter',
         miniview: 'miniview'

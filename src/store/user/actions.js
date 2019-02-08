@@ -2,12 +2,21 @@ import * as firebase from 'firebase';
 // import TrashIconAsset from '@/assets/svg-icons/trash-2.svg'
 import route from './../../router';
 import gql from 'graphql-tag';
-import { LOCATION_CITY, LOCATION_COUNTRY } from '../../gql-constants/locations';
-import { GET_METATAGS } from '../../gql-constants/settings';
-import { apolloClient } from '../../apollo-controller/index';
-import { parse } from 'path';
+import {
+  LOCATION_CITY,
+  LOCATION_COUNTRY
+} from '../../gql-constants/locations';
+import {
+  GET_METATAGS
+} from '../../gql-constants/settings';
+import {
+  apolloClient
+} from '../../apollo-controller/index';
+import {
+  parse
+} from 'path';
 export const userActions = {
-  login: function(context, payload) {
+  login: function (context, payload) {
     if (payload === 'facebook') {
       // fb isn't activated yet
       firebase
@@ -61,7 +70,7 @@ export const userActions = {
       }
     }
   },
-  logout: function(context) {
+  logout: function (context) {
     firebase
       .auth()
       .signOut()
@@ -75,7 +84,7 @@ export const userActions = {
     // clear the current user data from the store
     // context.dispatch('resetModulesAfterLogout')
   },
-  metatags: function(context) {
+  metatags: function (context) {
     apolloClient
       .query({
         query: GET_METATAGS
@@ -85,7 +94,7 @@ export const userActions = {
         console.log(err);
       });
   },
-  checkUserAuthChanged: function(context) {
+  checkUserAuthChanged: function (context) {
     // see if a user is currently signed in
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -104,7 +113,7 @@ export const userActions = {
       }
     });
   },
-  createUserWithEmailAndPassword: function(context, payload) {
+  createUserWithEmailAndPassword: function (context, payload) {
     // checking for an email or password value
     if (!payload.email) {
       context.commit('setErrorAuthNotification', 'Please provide an email');
@@ -123,7 +132,7 @@ export const userActions = {
         });
     }
   },
-  sendVerificationEmail: function() {
+  sendVerificationEmail: function () {
     let user = firebase.auth().currentUser;
     let rootUrl = window.location.origin;
     let firebaseSetting = {
@@ -133,7 +142,7 @@ export const userActions = {
     // firebase method to send Email Verification
     user.sendEmailVerification(firebaseSetting);
   },
-  sendForgotPasswordEmail: function(context, payload) {
+  sendForgotPasswordEmail: function (context, payload) {
     let rootUrl = window.location.origin;
 
     if (!payload) {
@@ -141,7 +150,9 @@ export const userActions = {
     } else {
       firebase
         .auth()
-        .sendPasswordResetEmail(payload, { url: rootUrl })
+        .sendPasswordResetEmail(payload, {
+          url: rootUrl
+        })
         .then(() => {
           context.commit('setEmailUserSend', true);
         })
@@ -150,7 +161,7 @@ export const userActions = {
         });
     }
   },
-  location: function(context, payload) {
+  location: function (context, payload) {
     apolloClient
       .query({
         query: LOCATION_CITY
@@ -169,8 +180,8 @@ export const userActions = {
         console.log(err);
       });
   },
-  checkpermission: function(context, payload) {
-    const jobQuery = gql`
+  checkpermission: function (context, payload) {
+    const jobQuery = gql `
       query($token: String!) {
         rolePermissionOut(token: $token) {
           _id
@@ -200,8 +211,8 @@ export const userActions = {
         console.log(err);
       });
   },
-  basicProfileinfo: function(context, payload) {
-    const profileInfo = gql`
+  basicProfileinfo: function (context, payload) {
+    const profileInfo = gql `
       query($uid: String!) {
         getBasicInfo(uid: $uid) {
           _id
@@ -218,33 +229,33 @@ export const userActions = {
       })
       .then(result => {
         context.commit('setBasicInfoUserProfile', result);
-        context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
+        context.dispatch('currentUserinfo', '5c5c273e9bc71525c7f84aea');
       })
       .catch(err => {
         console.log(err);
       });
   },
-  currentUserinfo: function(context, payload) {
-    const currentUserInfo = gql`
+  updatecurrentInfo:({commit}, payload) => {
+    commit('updatecurrentUserinfo', payload)
+  },
+  currentUserinfo: function (context, payload) {
+    const currentUserInfo = gql `
       query($Id: ObjectID!) {
-        profile(_id: $Id) {
-          _id
-          photo
+        getProfile(_id: $Id) {
           email
-          dob
-          phone
-          name {
-            first
-          }
-          username
-          id
-          languages {
-            name
-          }
-          nationality
-          address {
-            city
-            country
+          _id
+          _profile{
+              phone
+              dob
+              name {
+                first
+              }
+              username
+              nationality
+              address {
+                  city
+                  country
+              }
           }
         }
       }
@@ -263,7 +274,7 @@ export const userActions = {
         console.log(err);
       });
   },
-  checkIfUserLogin: function(context) {
+  checkIfUserLogin: function (context) {
     let expirationDate = new Date(localStorage.getItem('expirationDate'));
     let token = localStorage.getItem('token');
     let now = new Date();
@@ -279,7 +290,9 @@ export const userActions = {
       context.dispatch('checkUserAuthChanged');
     }
   },
-  deleteMyAccount: function({ dispatch }) {
+  deleteMyAccount: function ({
+    dispatch
+  }) {
     // todo-JP: additional security checks
     // todo-JP: see if this can be authorized by the BE
     // todo-JP: change +new Date to something meaningful about this operation

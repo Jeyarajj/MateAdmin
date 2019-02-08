@@ -33,22 +33,28 @@
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-        <img :src="this.currentUserdata.photo
-        ? this.currentUserdata.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'" :key="this.currentUserdata.photo">
+        <img
+          :src="currentUserdata._profile.photo !== undefined  
+        ? currentUserdata._profile.photo
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
+        >
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
           <v-list-tile-avatar>
             <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-            <img :src="this.currentUserdata.photo
-        ? this.currentUserdata.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'">
+            <img
+              :src="currentUserdata._profile.photo !== undefined
+        ? currentUserdata._profile.photo
+        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
+            >
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-text="this.currentUserdata.username ? this.currentUserdata.username : ''"></v-list-tile-title>
-            <v-list-tile-sub-title>{{this.currentUserdata.username ? this.currentUserdata.username : ''}}</v-list-tile-sub-title>
+            <v-list-tile-title
+              v-text="currentUserdata._profile.name ? currentUserdata._profile.name.first : ''"
+            ></v-list-tile-title>
+            <v-list-tile-sub-title>{{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -57,18 +63,6 @@
             <v-icon>person</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>Edit Profile</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="() => {}">
-          <v-list-tile-avatar>
-            <v-icon>settings_applications</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>Settings</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="() => {}">
-          <v-list-tile-avatar>
-            <v-icon>mail</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>Inbox</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>
         <v-list-tile @click.prevent="logout">
@@ -86,8 +80,8 @@
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
-              :avatarurl="updatedata.updates.photo"
-              :userid="this.UserID"
+              :avatarurl="updatedata._profile.photo"
+              :userid="this.current_userid"
               @clicked="avatarclick"
             />
           </v-flex>
@@ -102,7 +96,7 @@
                         color="primary"
                         prepend-icon="person"
                         label="First name"
-                        v-model="updatedata.updates.username"
+                        v-model="updatedata._profile.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -112,7 +106,7 @@
                         prepend-icon="email"
                         label="Email"
                         readonly
-                        v-model="updatedata.updates.email"
+                        v-model="email"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -121,7 +115,7 @@
                         color="primary"
                         prepend-icon="phone"
                         label="Phone No."
-                        v-model="updatedata.updates.phone"
+                        v-model="updatedata._profile.phone"
                         required
                       ></v-text-field>
                     </v-flex>
@@ -140,14 +134,14 @@
                       >
                         <v-text-field
                           slot="activator"
-                          v-model="updatedata.updates.dob"
+                          v-model="updatedata._profile.dob"
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
                           prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
-                          v-model="updatedata.updates.dob"
+                          v-model="updatedata._profile.dob"
                           no-title
                           @input="datepicker = false"
                         ></v-date-picker>
@@ -159,7 +153,7 @@
                         item-text="name"
                         item-value="name"
                         label="City"
-                        v-model="updatedata.updates.address.city"
+                        v-model="updatedata._profile.address.city"
                         outline
                       ></v-select>
                     </v-flex>
@@ -169,7 +163,7 @@
                         item-text="name"
                         item-value="name"
                         label="Country"
-                        v-model="updatedata.updates.address.country"
+                        v-model="updatedata._profile.address.country"
                         outline
                       ></v-select>
                     </v-flex>
@@ -194,7 +188,7 @@
 import { authUser } from "@/data/dummyData";
 import { mapActions, mapGetters } from "vuex";
 import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
-import { UPDATEUSER } from "@/gql-constants/users";
+import { UPDATE_USER } from "@/gql-constants/users";
 export default {
   components: {
     AvatarUpload
@@ -204,22 +198,15 @@ export default {
       title: "Vuse",
       updateDialog: false,
       datepicker: false,
-      UserID: "",
+      current_userid: "",
+      email:"",
       updatedata: {
-        token: "",
-        userid: "",
-        updates: {
-          customClaims: {
-            role: ""
+        _profile: {
+          name: {
+            first: "",
+            middle: "",
+            last: ""
           },
-          email: "",
-          languages: [
-            {
-              name: ""
-            }
-          ],
-          username: "",
-          nationality: "",
           dob: "",
           phone: "",
           photo: "",
@@ -266,47 +253,56 @@ export default {
     },
     editProfile() {
       const data = this.currentUserdata;
+      console.log(data);
       this.updateDialog = true;
-      this.updatedata.userid = data ? data.id : "";
-      this.UserID = this.userBasicInfoProfile._id;
-      this.updatedata.updates.username = data ? data.username : "";
-      this.updatedata.updates.email = data ? data.email : "";
-      this.updatedata.updates.phone = data ? data.phone : "";
-      this.updatedata.updates.photo = data
-        ? data.photo
+      //this.updatedata.userid = data ? data.id : "";
+      this.current_userid = data._id; //this.userBasicInfoProfile._id;
+      this.updatedata._profile.name.first = data
+        ? data._profile.name.first
+        : "";
+      this.email = data ? data.email : "";
+      this.updatedata._profile.phone = data ? data._profile.phone : "";
+      this.updatedata._profile.photo = data
+        ? data._profile.photo
         : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5";
       if (data) {
-        this.updatedata.updates.dob = data.dob;
-        this.updatedata.updates.address.city = data.address
-          ? data.address.city
+        this.updatedata._profile.dob = data._profile.dob;
+        this.updatedata._profile.address.city = data._profile.address
+          ? data._profile.address.city
           : "";
-        this.updatedata.updates.address.country = data.address
-          ? data.address.country
+        this.updatedata._profile.address.country = data._profile.address
+          ? data._profile.address.country
           : "";
       } else {
-        this.updatedata.updates.dob = "";
-        this.updatedata.updates.address.city = "";
-        this.updatedata.updates.address.country = "";
+        this.updatedata._profile.dob = "";
+        this.updatedata._profile.address.city = "";
+        this.updatedata._profile.address.country = "";
       }
     },
     avatarclick(value) {
-      this.updatedata.updates.photo = value;
+      this.updatedata._profile.photo = value;
     },
     updateclick() {
       //this.updatedata.userid = this.$route.query.uid;
-      console.log(this.updatedata.updates);
-      var dateobj = new Date(this.updatedata.updates.dob);
-      this.updatedata.updates.dob = dateobj.toISOString();
+      console.log(this.updatedata._profile);
+      var dateobj = new Date(this.updatedata._profile.dob);
+      this.updatedata._profile.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
     },
     updateUser(updatedata) {
       this.$apollo
         .mutate({
-          mutation: UPDATEUSER,
-          variables: updatedata
+          mutation: UPDATE_USER,
+          variables: {
+            _id: this.current_userid,
+            _profile: updatedata._profile
+          }
         })
         .then(
           data => {
+            this.updatedata.email = this.email;
+            this.updatedata._id = this.current_userid
+            this.$store.dispatch("updatecurrentInfo", updatedata);
             this.updateDialog = false;
           },
           error => {
