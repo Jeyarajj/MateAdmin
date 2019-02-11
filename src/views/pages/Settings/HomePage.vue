@@ -26,12 +26,6 @@
 
         </v-toolbar>
 
-    <!-- <v-toolbar flat color="white">
-      <v-toolbar-title>Home Settings</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-    </v-toolbar> -->
-
     <v-layout>
       <v-flex xs12 sm12>
         <v-card>
@@ -39,11 +33,21 @@
             <v-icon>arrow_right</v-icon>
             <v-toolbar-title>Banner Images</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="openbannerDialog()">Add New Banner</v-btn>
-            <v-dialog v-model="bannerdialog" max-width="500px">
+            <v-btn color="primary" dark class="mb-2" @click="openbannerDialog()">
+              <v-icon left dark>add_circle</v-icon>Add New Banner</v-btn>
+            <v-dialog v-model="bannerdialog" persistent max-width="500px">
               <v-card>
                 <v-card-title>
-                  <span class="headline">{{formTitle}}</span>
+                  <v-layout>
+                <v-flex row xs6>
+                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
+                </v-flex>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
                 </v-card-title>
 
                 <v-card-text>
@@ -83,8 +87,8 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-                  <v-btn color="blue darken-1" flat @click.native="uploadBanner">Upload</v-btn>
+                  <v-btn color="normal" @click.native="close">Cancel</v-btn>
+                  <v-btn color="green" dark @click.native="uploadBanner">Upload</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -101,14 +105,18 @@
                   <img :src="props.item">
                 </v-avatar>
               </td>
-              <td class="justify-center layout px-0">
-                <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+              <td class="justify-center">
+                <v-btn flat icon @click="editItem(props.item)">
+                <v-icon color="primary" small>edit</v-icon>
+                </v-btn>
+                <v-btn flat icon @click="deleteItem(props.item)">
+                <v-icon color="primary" small>delete</v-icon>
+                </v-btn>
               </td>
             </template>
             <template slot="no-data">
               <v-card-title>
-                <span class="headline">{{nodata}}</span>
+                <span class="v-toolbar__title primary--text">{{nodata}}</span>
               </v-card-title>
             </template>
           </v-data-table>
@@ -123,11 +131,21 @@
             <v-icon>arrow_right</v-icon>
             <v-toolbar-title>Logo</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="openlogoDialog()">Add Logo</v-btn>
-            <v-dialog v-model="logoDialog" max-width="500px">
+            <v-btn color="primary" dark class="mb-2" @click="openlogoDialog()">
+              <v-icon left dark>add_circle</v-icon>Add Logo</v-btn>
+            <v-dialog v-model="logoDialog" persistent max-width="500px">
               <v-card>
                 <v-card-title>
-                  <span class="headline">{{logoTitle}}</span>
+                  <v-layout>
+                <v-flex row xs6>
+                  <span class="v-toolbar__title primary--text">{{logoTitle}}</span>
+                </v-flex>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="logoclose()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>                  
                 </v-card-title>
 
                 <v-card-text>
@@ -160,8 +178,8 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click.native="logoclose">Cancel</v-btn>
-                  <v-btn color="blue darken-1" flat @click.native="uploadLogo">Upload</v-btn>
+                  <v-btn color="normal" @click.native="logoclose">Cancel</v-btn>
+                  <v-btn color="green" dark @click.native="uploadLogo">Upload</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -178,24 +196,25 @@
                   <img :src="props.item">
                 </v-avatar>
               </td>
-              <td class="justify-center layout px-0">
-                <v-icon small class="mr-2" @click="leditItem(props.item)">edit</v-icon>
-                <v-icon small @click="ldeleteItem(props.item)">delete</v-icon>
+              <td class="justify-center">
+                <v-btn flat icon @click="leditItem(props.item)">
+                <v-icon color="primary" small>edit</v-icon>
+                </v-btn>
+                <v-btn flat icon @click="ldeleteItem(props.item)">
+                <v-icon color="primary" small>delete</v-icon>
+                </v-btn>
               </td>
             </template>
             <template slot="no-data">
               <v-card-title>
-                <span class="headline">{{nodata}}</span>
+                <span class="v-toolbar__title primary--text">{{nodata}}</span>
               </v-card-title>
             </template>
           </v-data-table>
         </v-card>
       </v-flex>
     </v-layout>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn color="success" @click="save()">Save</v-btn>
-    </v-card-actions>
+      <v-btn color="green" dark block large @click="save()">Save</v-btn>
     <v-flex>
   <UserTypes/>
   </v-flex>
@@ -262,7 +281,7 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Actions", align: "center", value: "name", sortable: false }
+      { text: "Actions", value: "name", sortable: false }
     ],
     lheaders: [
       {
@@ -271,7 +290,7 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Actions", align: "center", value: "name", sortable: false }
+      { text: "Actions", value: "name", sortable: false }
     ],
     homesettings: {
       banners: [],

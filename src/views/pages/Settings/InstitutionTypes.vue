@@ -4,11 +4,21 @@
       <v-toolbar-title>InstitutionTypes</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New InstitutionTypes</v-btn>
+      <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon>Add New InstitutionTypes</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ iformTitle }}</span>
+            <v-layout>
+                <v-flex row xs6>
+                  <span class="v-toolbar__title primary--text">{{ iformTitle }}</span>
+                </v-flex>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
           </v-card-title>
 
           <v-card-text>
@@ -26,19 +36,23 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            <v-btn color="normal" @click="close">Cancel</v-btn>
+            <v-btn color="green" dark @click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="imetaList" class="elevation-1">
+    <v-data-table :headers="headers" :items="imetaList" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.ilabel }}</td>
         <td class="justify-center">{{props.item.ivalue}}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon small @click="deleteItemType(props.item)">delete</v-icon>
+        <td class="justify-center">
+          <v-btn flat icon @click="editItem(props.item)">
+          <v-icon color="primary" small>edit</v-icon>
+          </v-btn>
+          <v-btn flat icon @click="deleteItemType(props.item)">
+          <v-icon color="primary" small>delete</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">
@@ -55,7 +69,8 @@ export default {
   data: () => ({
     headers: [
       { text: "Label", value: "ilabel" },
-      { text: "Value", value: "ivalue" }
+      { text: "Value", value: "ivalue" },
+      { text: "Actions", value: "actions" }
     ],
     dialog: false,
     editedIndex: -1,

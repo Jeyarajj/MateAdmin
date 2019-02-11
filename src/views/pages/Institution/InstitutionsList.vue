@@ -22,7 +22,7 @@
             <v-card-title>
               <v-layout>
                 <v-flex row xs6>
-                  <span class="headline">{{ formTitle }}</span>
+                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
                 </v-flex>
                 <v-flex row xs6 text-xs-right>
                   <v-btn flat icon color="primary" @click.native="close()">
@@ -36,10 +36,10 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md12>
-                    <v-text-field v-model="editedItem.name" label="Institution Name" box></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Institution Name"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.slug" label="Institution Slug" box></v-text-field>
+                    <v-text-field v-model="editedItem.slug" label="Institution Slug"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-text-field
@@ -48,7 +48,6 @@
                       @input="$v.editedItem.website.$touch()"
                       @blur="$v.editedItem.website.$touch()"
                       label="Website URL"
-                      box
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
@@ -59,12 +58,8 @@
                       @input="$v.editedItem.institution_type.$touch()"
                       @blur="$v.editedItem.institution_type.$touch()"
                       label="Institution Type"
-                      box
                     ></v-select>
                   </v-flex>
-                  <!-- <v-flex xs12 sm6 md4>
-                  <v-select :items="city" label="City" v-model="editedItem.city" outline></v-select>
-                  </v-flex>-->
                   <v-flex xs12 sm6 md6>
                     <country-select
                       class="countryselectborder form-control select2"
@@ -84,9 +79,6 @@
                       :region="editedItem.city"
                     />
                   </v-flex>
-                  <!-- <v-flex xs12 sm6 md4>
-                  <v-select :items="country" label="Country" v-model="editedItem.country" outline></v-select>
-                  </v-flex>-->
                   <v-flex xs12 sm12 md12>
                     <v-textarea
                       v-model="editedItem.address"
@@ -96,7 +88,6 @@
                       label="Institution Address"
                       auto-grow
                       rows="2"
-                      box
                     ></v-textarea>
                   </v-flex>
 
@@ -109,7 +100,6 @@
                       label="Description min 200 words"
                       auto-grow
                       rows="2"
-                      box
                     ></v-textarea>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
@@ -117,36 +107,43 @@
                       :items="status"
                       v-model="editedItem.status"
                       label="Institution Status"
-                      box
                     ></v-select>
                   </v-flex>
-                  <template v-if="editedIndex !== -1">
-                    <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <v-flex xs12 sm12 md12>
-                      <ul v-if="institutionLogo.exists || editedItem.logourl">
-                        <li v-if="institutionLogo.exists">
-                          <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                          <span @click="removeImage(institutionLogo)">Remove</span>
-                        </li>
-                        <li v-else>
-                          <img :src="editedItem.logourl" height="50" width="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        input-id="file1"
-                        class="btn btn-primary"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="false"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionLogo"
-                        ref="upload"
-                      >
-                        <v-btn color="primary" dark>
-                          <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
-                        </v-btn>
-                      </file-upload>
-                    </v-flex>
+                  <v-flex xs12 sm12 md6>
+                  </v-flex>
+                  <template v-if="editedIndex !== -1">                    
+                    <v-flex xs12 sm12 md6>
+                      <v-progress-linear
+                  v-if="institutionLogo.uploadStatus"
+                  indeterminate
+                  color="light-green darken-2"
+                  class="mb-0"
+                ></v-progress-linear>
+                <span v-if="institutionLogo.exists || editedItem.logourl">
+                <span v-if="institutionLogo.exists">
+                  <v-img :src="institutionLogo.fileUrl" aspect-ratio="1.7"></v-img>
+                  <v-btn color="error" dark @click="removeImage(institutionLogo)" class="removebtn_counsellor">
+                    <v-icon dark left>remove_circle</v-icon>Remove
+                  </v-btn>
+                </span>
+                  <span v-else>
+                    <v-img :src="editedItem.logourl" aspect-ratio="1.7"></v-img>
+                  </span>
+                </span>
+                  <file-upload
+                    input-id="file1"
+                    class="btn btn-primary"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="false"
+                    :size="1024 * 1024 * 10"
+                    @input="onInstitutionLogo"
+                    ref="upload">
+                    <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
+                    </v-btn>
+                  </file-upload>
+                </v-flex>
 
                     <v-flex xs12 sm12 md12>
                       <br>
@@ -214,99 +211,14 @@
                       </file-upload>
                     </v-flex>
                   </template>
-                  <!-- <template v-if="editedIndex !== -1">
-                    <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <v-flex xs12 sm12 md12>
-                      <ul>
-                        <li v-if="institutionLogo.exists">
-                          <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                          <span @click="removeImage(institutionLogo)">Remove</span>
-                        </li>
-                        <li v-else>
-                          <img :src="editedItem.logourl" height="50" width="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        input-id="file1"
-                        class="btn btn-primary"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="false"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionLogo"
-                        ref="upload"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Logo
-                      </file-upload>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <ul>
-                        <div v-if="institutionBanners.length > 0">
-                          <li v-for="(image,i) in institutionBanners" :key="i">
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.bannerurl" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file2"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionBanner"
-                        ref="uploadBanners"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Banner
-                      </file-upload>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <ul>
-                        <div v-if="institutionPhotos.length > 0">
-                          <li v-for="(image,i) in institutionPhotos" :key="i">
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.photos" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file3"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionPhotos"
-                        ref="uploadPhotos"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Photos
-                      </file-upload>
-                    </v-flex>
-                  </template>-->
                 </v-layout>
               </v-container>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+              <v-btn color="normal" @click="close">Cancel</v-btn>
+              <v-btn color="green" dark @click="save">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -324,9 +236,13 @@
         <td class="justify-center">{{ props.item.address }}</td>
         <td class="justify-center">{{ props.item.status }}</td>
 
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
+        <td class="justify-center">
+          <v-btn flat icon @click="editItem(props.item)">
+          <v-icon small color="primary">edit</v-icon>
+          </v-btn>
+          <v-btn flat icon @click="deleteItem(props.item)">
+          <v-icon v-if="props.item.status != 'disable'" small color="primary">delete</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">
@@ -440,7 +356,8 @@ export default {
       },
       { text: "City", value: "city" },
       { text: "Address", value: "address" },
-      { text: "Status", value: "status" }
+      { text: "Status", value: "status" },
+      { text: "Action", value: "action" }
     ],
     desserts: [],
     editedIndex: -1,

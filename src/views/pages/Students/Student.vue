@@ -98,7 +98,7 @@
     <br>
     contact: {{defaultStudent.profile.Settings.privacy.contact}}
     <br>
-    acitvity: {{defaultStudent.profile.Settings.privacy.activity}}
+    activity: {{defaultStudent.profile.Settings.privacy.activity}}
     <br>
   </div>
 </template>
