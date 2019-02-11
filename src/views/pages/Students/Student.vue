@@ -24,43 +24,46 @@
     <br>
     dob: {{defaultStudent.profile.dob}}
     <br>Education:
-    <div v-for="(item,index) in defaultStudent.profile.education" :key="index">
-      {{item.degree}}
+    <div v-for="(eduItem,eduIndex) in defaultStudent.profile.education" :key="'edu'+eduIndex">
+      {{eduItem.degree}}
       <br>
-      {{item.institution}}
+      {{eduItem.institution}}
       <br>
-      {{item.start_date}}
+      {{eduItem.start_date}}
       <br>
-      {{item.end_date}}
+      {{eduItem.end_date}}
       <br>
     </div>
     <br>Work:
-    <div v-for="(item,index) in defaultStudent.profile.work" :key="index">
-      {{item.position}}
+    <div v-for="(workItem,workIndex) in defaultStudent.profile.work" :key="'work'+workIndex">
+      {{workItem.position}}
       <br>
-      {{item.company}}
+      {{workItem.company}}
       <br>
-      {{item.address}}
+      {{workItem.address}}
       <br>
-      {{item.start_date}}
+      {{workItem.start_date}}
       <br>
-      {{item.end_date}}
+      {{workItem.end_date}}
       <br>
     </div>
     <br>Scores:
-    <div v-for="(item,index) in defaultStudent.profile.scores" :key="index">
-      {{item.title}}
+    <template>
+
+    <div v-for="(scoreItem,scoreIndex) in defaultStudent.profile.scores" :key="'score'+scoreIndex">
+      {{scoreItem.title}}
       <br>
-      {{item.score}}
+      {{scoreItem.score}}
       <br>
     </div>
+    </template>
     <br>
     Nationality: {{defaultStudent.profile.nationality}}
     <br>Others:
-    <div v-for="(item,index) in defaultStudent.profile.Others" :key="index">
-      {{item.other_key}}
+    <div v-for="(otherItem,Otherindex) in defaultStudent.profile.Others" :key="'other'+Otherindex">
+      {{otherItem.other_key}}
       <br>
-      {{item.value}}
+      {{otherItem.value}}
       <br>
     </div>
 

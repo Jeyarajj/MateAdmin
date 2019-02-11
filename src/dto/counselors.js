@@ -3,8 +3,8 @@ import {
 } from '../apollo-controller/index';
 import {
     QUERIES
-} from '../gql-constants/university'
-export class University {
+} from '../gql-constants/counselor'
+export class Counselor {
     _id = ""
     email = ""
     data = {
@@ -12,47 +12,38 @@ export class University {
     }
     _details = {
         name: "",
-        slug: "",
-        website: "",
-        institutionType: "",
-        country: "",
-        city: "",
+        phone: "",
         Address: {
             city: "",
             country: "",
             zip: ""
         },
-        description: "",
-        logo: "",
-        banners: "",
-        photos: ""
+        photo: ""
     }
-    created_by = "5c541361f5ba0f315db125d7"
-    updated_by = "5c541361f5ba0f315db125d7"
     active = true;
-    constructor(university) {
-        if (university) {
-            if (university._id) {
-                if (!university._details)
-                    delete university._details
-                Object.assign(this, university)
+    constructor(counselor) {
+        if (counselor) {
+            if (counselor._id) {
+                if (!counselor._details)
+                    delete counselor._details
+                Object.assign(this, counselor)
             }
         }
     }
-    static async getUniversity(_id) {
+    static async getCounselor(_id) {
         return apolloClient
             .query({
-                query: QUERIES.GET_UNIVERSITY,
+                query: QUERIES.GET_COUNSELOR,
                 variables: {
                     _id: _id
                 }
             })
     }
 
-    static async getUniversities() {
+    static async getCounselors() {
         return apolloClient
             .query({
-                query: QUERIES.GET_UNIVERSITIES,
+                query: QUERIES.GET_COUNSELORS,
                 variables: {
                     limit: "10",
                     skip: "0"
@@ -72,9 +63,9 @@ export class University {
     updateStatus() {
         var mutationQuery;
         if (!this.active) {
-            mutationQuery = QUERIES.BLOCK_UNIVERSITY
+            mutationQuery = QUERIES.BLOCK_COUNSELOR
         } else {
-            mutationQuery = QUERIES.UNBLOCK_UNIVERSITY
+            mutationQuery = QUERIES.UNBLOCK_COUNSELOR
         }
         apolloClient
             .mutate({
@@ -90,17 +81,18 @@ export class University {
                 console.log(err);
             });
     }
-    async createUniversity() {
+
+    async createCounselor() {
         if (!this._id) {
             return apolloClient
                 .mutate({
-                    mutation: QUERIES.CREATE_UNIVERSITY,
+                    mutation: QUERIES.CREATE_COUNSELOR,
                     variables: this.toJSON('create')
                 })
         } else {
             return apolloClient
                 .mutate({
-                    mutation: QUERIES.UPDATE_UNIVERSITY,
+                    mutation: QUERIES.UPDATE_COUNSELOR,
                     variables: {
                         _id: this._id,
                         _profile: this.toJSON('update')

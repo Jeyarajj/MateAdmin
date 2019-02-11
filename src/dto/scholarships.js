@@ -5,46 +5,45 @@
     import {
         QUERIES
     } from '../gql-constants/courses'
-    export class Course {
+    export class Scholarship {
         _id = ""
         _details={
             name:"",
-            courseLevel:"",
-            courseDuration:"",
-            degree:"",
-            couseFee:"",
             website:"",
             description:"",
-            mode:"",
-            courseMode:"",
+            picture:"",
+            amount:{
+                currency: "USD",
+                value: 0
+              },
             university_id:""
         }
         created_by = "5c541361f5ba0f315db125d7"
         updated_by = "5c541361f5ba0f315db125d7"
         active = true;
-        constructor(course) {
-            if (course) {
-                if (course._id) {
-                    if (!course._details)
-                        delete course._details
-                    Object.assign(this, course)
+        constructor(scholarship) {
+            if (scholarship) {
+                if (scholarship._id) {
+                    if (!scholarship._details)
+                        delete scholarship._details
+                    Object.assign(this, scholarship)
                 }
             }
         }
-        static async getCourse(_id) {
+        static async getScholarship(_id) {
             return apolloClient
                 .query({
-                    query: QUERIES.GET_COURSE,
+                    query: QUERIES.GET_SCHOLARSHIP,
                     variables: {
                         _id: _id
                     }
                 })
         }
     
-        static async getCourses() {
+        static async getScholarships() {
             return apolloClient
                 .query({
-                    query: QUERIES.GET_COURSES,
+                    query: QUERIES.GET_SCHOLARSHIPS,
                     variables: {
                         limit: "10",
                         skip: "0"
@@ -64,9 +63,9 @@
         updateStatus() {
             var mutationQuery;
             if (!this.active) {
-                mutationQuery = QUERIES.BLOCK_COURSE
+                mutationQuery = QUERIES.BLOCK_SCHOLARSHIP
             } else {
-                mutationQuery = QUERIES.UNBLOCK_COURSE
+                mutationQuery = QUERIES.UNBLOCK_SCHOLARSHIP
             }
             apolloClient
                 .mutate({
@@ -82,17 +81,17 @@
                     console.log(err);
                 });
         }
-        async createCourse() {
+        async createScholarship() {
             if (!this._id) {
                 return apolloClient
                     .mutate({
-                        mutation: QUERIES.CREATE_COURSE,
+                        mutation: QUERIES.CREATE_SCHOLARSHIP,
                         variables: this.toJSON('create')
                     })
             } else {
                 return apolloClient
                     .mutate({
-                        mutation: QUERIES.UPDATE_COURSE,
+                        mutation: QUERIES.UPDATE_SCHOLARSHIP,
                         variables: {
                             _id: this._id,
                             _profile: this.toJSON('update')
@@ -110,8 +109,7 @@
                     }
                 case "create":
                     return {
-                        email: this.email,
-                        password: this.data.password
+
                     }
                 case "default":
                     console.log('default')
