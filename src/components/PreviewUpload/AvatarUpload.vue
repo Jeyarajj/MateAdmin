@@ -104,6 +104,19 @@
 import Cropper from "cropperjs";
 import FileUpload from "vue-upload-component";
 import { imageType } from "../../dto/imageType";
+import AWS from "aws-sdk";
+// Initialize the Amazon Cognito credentials provider
+AWS.config.region = "us-east-1"; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+  IdentityPoolId: "us-east-1:79de41e8-b5ea-415b-996b-de4fb71c50c1"
+});
+const s3URL = "https://s3.us-east-2.amazonaws.com/matefiles/";
+const bucketName = "matefiles"; // Eter your bucket name
+var bucket = new AWS.S3({
+  params: {
+    Bucket: bucketName
+  }
+});
 export default {
   components: {
     FileUpload
@@ -114,7 +127,7 @@ export default {
       files: [],
       edit: false,
       cropper: false,
-      imageurl:"",
+      imageurl: "",
       avatarPicture: imageType,
       mutableavatarurl: this.imageurl
     };
@@ -159,7 +172,7 @@ export default {
   },
 
   methods: {
-    editSave() {
+    async editSave() {
       this.edit = false;
 
       let oldFile = this.files[0];
@@ -178,9 +191,18 @@ export default {
       let file = new File([arr], oldFile.name, { type: oldFile.type });
 
       //emit from child to parent
-      this.imageurl = this.avatarPicture.fileUrl;
-       this.$emit('clicked', this.imageurl)
+      let path = "Avatar/" + this.userid;
 
+      let filename = file.name;
+      let fileURL = s3URL + encodeURI(path) + "/" + encodeURI(filename);
+      var objKey = path + "/" + file.name;
+      var params = {
+        Key: objKey,
+        ContentType: file.type,
+        Body: file
+      };
+      var result = await bucket.putObject(params).promise();
+      if (result) this.$emit("clicked", fileURL);
 
       this.$refs.upload.update(oldFile.id, {
         file,
@@ -207,7 +229,7 @@ export default {
     inputFilter(newFile, oldFile, prevent) {
       //upload aws s3
       let path = "Avatar/" + this.userid;
-      this.avatarPicture = new imageType(newFile.file, path, this.$store);
+      this.avatarPicture = new imageType(newFile.file, path, this.$store, "");
       //upload aws s3
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {

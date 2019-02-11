@@ -1,7 +1,6 @@
 <template>
   <div>
-    
-      <v-container fluid grid-list-xl class="pb-0">
+    <v-container fluid grid-list-xl class="pb-0">
       <v-toolbar flat extended class="transparent section-definition-toolbar">
         <v-avatar class="box-glow" tile>
           <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -9,107 +8,97 @@
         </v-avatar>
         <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
         <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
+          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
             <v-icon slot="divider" color="primary">chevron_right</v-icon>
-            <v-breadcrumbs-item
-              v-for="item in breadcrumbs"
-              :key="item.text"
-              :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
           </v-breadcrumbs>
           <slot></slot>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-      <v-dialog v-model="dialog" persistent max-width="500px">
-        <v-btn slot="activator" @click="addNewRole()" color="primary" dark class="mb-2">
-          <v-icon left dark>add_circle</v-icon>Add New Role</v-btn>
-        <v-card>
-          <v-card-title>
-            <v-layout>
-              <v-flex row xs6>
-                <span class="headline">{{ formTitle }}</span>
-              </v-flex>
-              <v-flex row xs6 text-xs-right>
-                <v-btn flat icon color="primary" @click.native="close()">
-                  <v-icon>close</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field
-                    v-model="defaultRole.role_name"
-                    box
-                    label="Role name"
-                    :error-messages="fieldErrors('defaultRole.role_name')"
-                    @input="$v.defaultRole.role_name.$touch()"
-                    @blur="$v.defaultRole.role_name.$touch()"
-                  ></v-text-field>
+        <v-dialog v-model="dialog" persistent max-width="500px">
+          <v-btn slot="activator" @click="addNewRole()" color="primary" dark class="mb-2">
+            <v-icon left dark>add_circle</v-icon>Add New Role
+          </v-btn>
+          <v-card>
+            <v-card-title>
+              <v-layout>
+                <v-flex row xs6>
+                  <span class="headline">{{ formTitle }}</span>
                 </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    v-model="defaultRole.role_description"
-                    auto-grow
-                    box
-                    rows="2"
-                    label="Role Description"
-                    :error-messages="fieldErrors('defaultRole.role_description')"
-                    @input="$v.defaultRole.role_description.$touch()"
-                    @blur="$v.defaultRole.role_description.$touch()"
-                  ></v-textarea>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
                 </v-flex>
               </v-layout>
-              <v-layout wrap>
-                <v-flex>
-                  <table>
-                    <tr>
-                      <th v-for="(headers,index) in mheaders" :key="index">{{headers.text}}</th>
-                    </tr>
-                    <tr
-                      v-for="(rolePermission,index2) in defaultRole.role_permission"
-                      :key="index2"
-                    >
-                      <td>{{ defaultRole.role_permission[index2].module_name }}</td>
-                      <td v-for="(access,index3) in accessControls" :key="index3">
-                        <v-checkbox
-                          v-model="defaultRole.role_permission[index2].has_access[access]"
-                          :value="true"
-                          class="Rolepermission-14"
-                        ></v-checkbox>
-                      </td>
-                    </tr>
-                  </table>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
+            </v-card-title>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="dialog=false">Cancel</v-btn>
-            <v-btn
-              
-              flat
-              @click="createRole()"
-              :disabled="$v.$invalid"
-              block
-              :class="$v.$invalid ? '' : 'green'"
-              color="act"
-            >Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-     </v-toolbar>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm12 md12>
+                    <v-text-field
+                      v-model="defaultRole.role_name"
+                      box
+                      label="Role name"
+                      :error-messages="fieldErrors('defaultRole.role_name')"
+                      @input="$v.defaultRole.role_name.$touch()"
+                      @blur="$v.defaultRole.role_name.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      v-model="defaultRole.role_description"
+                      auto-grow
+                      box
+                      rows="2"
+                      label="Role Description"
+                      :error-messages="fieldErrors('defaultRole.role_description')"
+                      @input="$v.defaultRole.role_description.$touch()"
+                      @blur="$v.defaultRole.role_description.$touch()"
+                    ></v-textarea>
+                  </v-flex>
+                </v-layout>
+                <v-layout wrap>
+                  <v-flex>
+                    <table>
+                      <tr>
+                        <th v-for="(headers,index) in mheaders" :key="index">{{headers.text}}</th>
+                      </tr>
+                      <tr
+                        v-for="(rolePermission,index2) in defaultRole.role_permission"
+                        :key="index2"
+                      >
+                        <td>{{ defaultRole.role_permission[index2].module_name }}</td>
+                        <td v-for="(access,index3) in accessControls" :key="index3">
+                          <v-checkbox
+                            v-model="defaultRole.role_permission[index2].has_access[access]"
+                            :value="true"
+                            class="Rolepermission-14"
+                          ></v-checkbox>
+                        </td>
+                      </tr>
+                    </table>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="dialog=false">Cancel</v-btn>
+              <v-btn
+                flat
+                @click="createRole()"
+                :disabled="$v.$invalid"
+                block
+                :class="$v.$invalid ? '' : 'green'"
+                color="act"
+              >Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
     </v-container>
 
     <v-data-table :headers="headers" :items="allroles" class="elevation-1">
@@ -265,7 +254,7 @@ export default {
       this.initializeRole(modules);
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     initializeRole(elements) {
       this.defaultRole.role_permission = [];
