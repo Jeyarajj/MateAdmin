@@ -1,5 +1,13 @@
 import gql from 'graphql-tag';
 
+
+
+export const QUERIES={
+  GET_UNIVERSITIES:{
+
+  },
+  
+}
 export const GET_INSTITUTIONS_INDEX = gql`
   query universityResult($text: Text, $page: PageOption) {
     search(text: $text, page: $page) {
