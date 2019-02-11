@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-container fluid grid-list-xl class="pb-0">
       <v-toolbar flat extended class="transparent section-definition-toolbar">
         <v-avatar class="box-glow" tile>
           <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -18,9 +17,7 @@
           <v-icon left dark>add_circle</v-icon>New Article
         </v-btn>
       </v-toolbar>
-    </v-container>
-
-    <!-- <v-btn @click="addNewItem()" color="info">New Article</v-btn> -->
+      <!-- <v-btn @click="addNewItem()" color="info">New Article</v-btn> -->
     <v-data-table :headers="headers" :items="articleList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>

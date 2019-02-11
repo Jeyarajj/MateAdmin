@@ -1,9 +1,28 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Student</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
     </v-toolbar>
     Student Profile
     ID: {{defaultStudent._id}}
@@ -89,6 +108,22 @@ export default {
   validations: {},
   validationMessages: {},
   data: () => ({
+    title: 'Students Applications List',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Students',
+      disabled: true
+    },
+    {
+      text: 'Students Applications List',
+      disabled: true
+    }
+    ],
     studentsList: [],
     defaultStudent: Student,
     dialog: false

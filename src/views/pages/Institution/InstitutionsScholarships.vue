@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-container fluid grid-list-xl class="pb-0">
       <v-toolbar flat extended class="transparent section-definition-toolbar">
         <v-avatar class="box-glow" tile>
           <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -127,7 +126,6 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
-    </v-container>
 
     <v-data-table :headers="headers" :items="scholarships" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">

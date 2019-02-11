@@ -3,7 +3,9 @@
     <router-view name="header"/>
     <router-view name="sidebar"/>
     <v-content>
+      <v-container fluid grid-list-xl class="pb-0">
       <router-view></router-view>
+      </v-container>
     </v-content>
     <router-view name="footer"/>
     <!-- <app-settings :drawer="subDrawer" @toggleSubDrawer="handleSubdrawer"></app-settings> -->

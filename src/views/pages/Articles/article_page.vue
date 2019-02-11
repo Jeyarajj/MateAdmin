@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-container fluid grid-list-xl class="pb-0">
       <v-toolbar flat extended class="transparent section-definition-toolbar">
         <v-avatar class="box-glow" tile>
           <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -15,9 +14,8 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
-    </v-container>
 
-    <v-layout row wrap pa-4>
+    <v-layout row wrap>
       <v-flex v-if="$apollo.loading">
         <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
       </v-flex>

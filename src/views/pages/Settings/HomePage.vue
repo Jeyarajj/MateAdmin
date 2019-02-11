@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-container fluid grid-list-xl class="pb-0">
       <v-toolbar flat extended class="transparent section-definition-toolbar">
         <v-avatar class="box-glow" tile>
           <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -26,7 +25,6 @@
         <v-spacer></v-spacer>
 
         </v-toolbar>
-    </v-container>
 
     <!-- <v-toolbar flat color="white">
       <v-toolbar-title>Home Settings</v-toolbar-title>
@@ -34,7 +32,7 @@
       <v-spacer></v-spacer>
     </v-toolbar> -->
 
-    <v-layout class="Cardpadding-25">
+    <v-layout>
       <v-flex xs12 sm12>
         <v-card>
           <v-toolbar flat>
@@ -118,7 +116,7 @@
       </v-flex>
     </v-layout>
     <!--LOGO  -->
-    <v-layout class="Cardpadding-25">
+    <v-layout>
       <v-flex xs12 sm12>
         <v-card>
           <v-toolbar flat>
