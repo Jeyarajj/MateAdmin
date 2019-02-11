@@ -1,98 +1,170 @@
 <template>
   <div>
-      <v-toolbar flat extended class="transparent section-definition-toolbar">
-        <v-avatar class="box-glow" tile>
-          <v-icon dark v-html="icon" v-if="icon"></v-icon>
-          <span v-else>{{ title | first2Char }}</span>
-        </v-avatar>
-        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
-        <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
-            <v-icon slot="divider" color="primary">chevron_right</v-icon>
-          </v-breadcrumbs>
-          <slot></slot>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+      <v-avatar class="box-glow" tile>
+        <v-icon dark v-html="icon" v-if="icon"></v-icon>
+        <span v-else>{{ title | first2Char }}</span>
+      </v-avatar>
+      <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="toobar-extension" slot="extension">
+        <v-breadcrumbs :items="breadcrumbs" class="pl-0">
+          <v-icon slot="divider" color="primary">chevron_right</v-icon>
+        </v-breadcrumbs>
+        <slot></slot>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
 
-        <v-dialog v-model="dialog" persistent max-width="900px">
-          <v-btn slot="activator" color="primary" dark class="mb-2">
-            <v-icon left dark>add_circle</v-icon>Add New Institution
-          </v-btn>
-          <v-card id="myModal">
-            <v-card-title>
-              <v-layout>
-                <v-flex row xs6>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-flex>
-                <v-flex row xs6 text-xs-right>
-                  <v-btn flat icon color="primary" @click.native="close()">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-card-title>
+      <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" @click="openEditInstitution()" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon>Add New Institution
+        </v-btn>
+        <v-card id="myModal">
+          <v-card-title>
+            <v-layout>
+              <v-flex row xs6>
+                <span class="headline">{{ formTitle }}</span>
+              </v-flex>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click.native="close()">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
 
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12 sm6 md12>
-                    <v-text-field v-model="editedItem.name" label="Institution Name" box></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.slug" label="Institution Slug" box></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field
-                      v-model="editedItem.website"
-                      :error-messages="fieldErrors('editedItem.website')"
-                      @input="$v.editedItem.website.$touch()"
-                      @blur="$v.editedItem.website.$touch()"
-                      label="Website URL"
-                      box
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-select
-                      :items="institution_type"
-                      v-model="editedItem.institution_type"
-                      :error-messages="fieldErrors('editedItem.institution_type')"
-                      @input="$v.editedItem.institution_type.$touch()"
-                      @blur="$v.editedItem.institution_type.$touch()"
-                      label="Institution Type"
-                      box
-                    ></v-select>
-                  </v-flex>
-                  <!-- <v-flex xs12 sm6 md4>
-                  <v-select :items="city" label="City" v-model="editedItem.city" outline></v-select>
-                  </v-flex>-->
-                  <v-flex xs12 sm6 md6>
-                    <country-select
-                      class="countryselectborder form-control select2"
-                      v-model="editedItem.country"
-                      :country="editedItem.country"
-                      topCountry="US"
-                      :error-messages="fieldErrors('editedItem.country')"
-                      @input="$v.editedItem.country.$touch()"
-                      @blur="$v.editedItem.country.$touch()"
-                    />
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <region-select
-                      class="regionselectborder form-control select2"
-                      v-model="editedItem.city"
-                      :country="editedItem.country"
-                      :region="editedItem.city"
-                    />
-                  </v-flex>
-                  <!-- <v-flex xs12 sm6 md4>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md12>
+                  <v-text-field
+                    :error-messages="fieldErrors('defaultInstitution._details.name')"
+                    @input="$v.defaultInstitution._details.name.$touch()"
+                    @blur="$v.defaultInstitution._details.name.$touch()"
+                    v-model="defaultInstitution._details.name"
+                    label="Institution Name"
+                    box
+                  ></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm6 md12>
+                  <v-text-field
+                    :error-messages="fieldErrors('defaultInstitution.email')"
+                    @input="$v.defaultInstitution.email.$touch()"
+                    @blur="$v.defaultInstitution.email.$touch()"
+                    v-model="defaultInstitution.email"
+                    label="Institution Mail"
+                    box
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field
+                    v-model="defaultInstitution._details.slug"
+                    label="Institution Slug"
+                    box
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field
+                    v-model="defaultInstitution._details.website"
+                    :error-messages="fieldErrors('defaultInstitution._details.website')"
+                    @input="$v.defaultInstitution._details.website.$touch()"
+                    @blur="$v.defaultInstitution._details.website.$touch()"
+                    label="Website URL"
+                    box
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-select
+                    :items="institution_type"
+                    v-model="defaultInstitution._details.institutionType"
+                    :error-messages="fieldErrors('defaultInstitution._details.institutionType')"
+                    @input="$v.defaultInstitution._details.institutionType.$touch()"
+                    @blur="$v.defaultInstitution._details.institutionType.$touch()"
+                    label="Institution Type"
+                    box
+                  ></v-select>
+                </v-flex>
+
+                <v-flex xs12 sm6 md6>
+                  <country-select
+                    class="countryselectborder"
+                    v-model="defaultInstitution._details.address.country"
+                    :country="defaultInstitution._details.address.country"
+                    topCountry="US"
+                    :error-messages="fieldErrors('defaultInstitution._details.address.country')"
+                    @input="$v.defaultInstitution._details.address.country.$touch()"
+                    @blur="$v.defaultInstitution._details.address.country.$touch()"
+                  />
+                </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <region-select
+                    class="regionselectborder"
+                    v-model="defaultInstitution._details.address.city"
+                    :country="defaultInstitution._details.address.country"
+                    :region="defaultInstitution._details.address.city"
+                  />
+                </v-flex>
+                <!-- <v-flex xs12 sm6 md4>
                   <v-select :items="country" label="Country" v-model="editedItem.country" outline></v-select>
+                </v-flex>-->
+                <v-flex xs12 sm12 md12>
+                  <v-textarea
+                    v-model="defaultInstitution._details.address.addr"
+                    :error-messages="fieldErrors('defaultInstitution._details.address.addr')"
+                    @input="$v.defaultInstitution._details.address.addr.$touch()"
+                    @blur="$v.defaultInstitution._details.address.addr.$touch()"
+                    label="Institution Address"
+                    auto-grow
+                    rows="2"
+                    box
+                  ></v-textarea>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12>
+                  <v-textarea
+                    v-model="defaultInstitution._details.description"
+                    :error-messages="fieldErrors('defaultInstitution._details.description')"
+                    @input="$v.defaultInstitution._details.description.$touch()"
+                    @blur="$v.defaultInstitution._details.description.$touch()"
+                    label="Description min 200 words"
+                    auto-grow
+                    rows="2"
+                    box
+                  ></v-textarea>
+                </v-flex>
+                <template>
+                  <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                  <v-flex xs12 sm12 md12>
+                    <ul>
+                      <li v-if="institutionLogo.exists">
+                        <img :src="institutionLogo.fileUrl" width="50" height="auto">
+                        <span @click="removeImage(institutionLogo)">Remove</span>
+                      </li>
+                      <li v-else>
+                        <img :src="defaultInstitution._details.logo" height="50" width="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      input-id="file1"
+                      class="btn btn-primary"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="false"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionLogo"
+                      ref="upload"
+                    >
+                      <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
+                      </v-btn>
+                    </file-upload>
                   </v-flex>-->
                   <v-flex xs12 sm12 md12>
                     <v-textarea
-                      v-model="editedItem.address"
-                      :error-messages="fieldErrors('editedItem.address')"
-                      @input="$v.editedItem.address.$touch()"
-                      @blur="$v.editedItem.address.$touch()"
+                      v-model="defaultInstitution._details.address.addr"
+                      :error-messages="fieldErrors('defaultInstitution._details.address.addr')"
+                      @input="$v.defaultInstitution._details.address.addr.$touch()"
+                      @blur="$v.defaultInstitution._details.address.addr.$touch()"
                       label="Institution Address"
                       auto-grow
                       rows="2"
@@ -101,11 +173,71 @@
                   </v-flex>
 
                   <v-flex xs12 sm12 md12>
+                    <br>
+                    <br>
+                    <ul>
+                      <!-- <div v-if="institutionBanners.length > 0">
+                        <li v-for="(image,i) in institutionBanners" :key="i">
+                          <span>{{image.fileData.name}}</span> -
+                          <img :src="image.fileUrl" width="50" height="auto">
+                          <span @click="removeBannerImage(i)">Remove</span>
+                        </li>
+                      </div>-->
+                      <li v-for="(image,i) in defaultInstitution._details.banners" :key="i">
+                        <img :src="image" width="50" height="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      class="btn btn-primary"
+                      input-id="file2"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="true"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionBanner"
+                      ref="uploadBanners"
+                    >
+                      <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Banner
+                      </v-btn>
+                    </file-upload>
+                  </v-flex>
+                  <v-flex xs12 sm12 md12>
+                    <br>
+                    <br>
+                    <ul>
+                      <!-- <div v-if="institutionPhotos.length > 0">
+                        <li v-for="(image,i) in institutionPhotos" :key="i">
+                          <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+
+                          <span>{{image.fileData.name}}</span> -
+                          <img :src="image.fileUrl" width="50" height="auto">
+                          <span @click="removeBannerImage(i)">Remove</span>
+                        </li>
+                      </div>-->
+                      <li v-for="(image,i) in defaultInstitution._details.photos" :key="i">
+                        <img :src="image" width="50" height="auto">
+                      </li>
+                    </ul>
+                    <file-upload
+                      class="btn btn-primary"
+                      input-id="file3"
+                      extensions="gif,jpg,jpeg,png,webp"
+                      accept="image/png, image/gif, image/jpeg, image/webp"
+                      :multiple="true"
+                      :size="1024 * 1024 * 10"
+                      @input="onInstitutionPhotos"
+                      ref="uploadPhotos"
+                    >
+                      <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
+                      </v-btn>
+                    </file-upload>
                     <v-textarea
-                      v-model="editedItem.description"
-                      :error-messages="fieldErrors('editedItem.description')"
-                      @input="$v.editedItem.description.$touch()"
-                      @blur="$v.editedItem.description.$touch()"
+                      v-model="defaultInstitution._details.description"
+                      :error-messages="fieldErrors('defaultInstitution._details.description')"
+                      @input="$v.defaultInstitution._details.description.$touch()"
+                      @blur="$v.defaultInstitution._details.description.$touch()"
                       label="Description min 200 words"
                       auto-grow
                       rows="2"
@@ -115,218 +247,41 @@
                   <v-flex xs12 sm6 md6>
                     <v-select
                       :items="status"
-                      v-model="editedItem.status"
+                      v-model="defaultInstitution.active"
                       label="Institution Status"
                       box
                     ></v-select>
                   </v-flex>
-                  <template v-if="editedIndex !== -1">
-                    <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <v-flex xs12 sm12 md12>
-                      <ul v-if="institutionLogo.exists || editedItem.logourl">
-                        <li v-if="institutionLogo.exists">
-                          <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                          <span @click="removeImage(institutionLogo)">Remove</span>
-                        </li>
-                        <li v-else>
-                          <img :src="editedItem.logourl" height="50" width="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        input-id="file1"
-                        class="btn btn-primary"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="false"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionLogo"
-                        ref="upload"
-                      >
-                        <v-btn color="primary" dark>
-                          <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
-                        </v-btn>
-                      </file-upload>
-                    </v-flex>
+                </template>
+              </v-layout>
+            </v-container>
+          </v-card-text>
 
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <v-icon v-if="institutionBanners.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn
+              :disabled="$v.$invalid"
+              block
+              :class="$v.$invalid ? '' : 'white--text'"
+              color="blue darken-1"
+              @click.native="save"
+            >Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
 
-                      <ul>
-                        <div v-if="institutionBanners.length > 0">
-                          <v-icon v-if="institutionBanners.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                          <li v-for="(image,i) in institutionBanners" :key="i">
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.bannerurl" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file2"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionBanner"
-                        ref="uploadBanners"
-                      >
-                        <v-btn color="primary" dark>
-                          <v-icon left dark>add_photo_alternate</v-icon>Upload Banner
-                        </v-btn>
-                      </file-upload>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <ul>
-                        <div v-if="institutionPhotos.length > 0">
-                          <li v-for="(image,i) in institutionPhotos" :key="i">
-                            <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.photos" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file3"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionPhotos"
-                        ref="uploadPhotos"
-                      >
-                        <v-btn color="primary" dark>
-                          <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
-                        </v-btn>
-                      </file-upload>
-                    </v-flex>
-                  </template>
-                  <!-- <template v-if="editedIndex !== -1">
-                    <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <v-flex xs12 sm12 md12>
-                      <ul>
-                        <li v-if="institutionLogo.exists">
-                          <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                          <span @click="removeImage(institutionLogo)">Remove</span>
-                        </li>
-                        <li v-else>
-                          <img :src="editedItem.logourl" height="50" width="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        input-id="file1"
-                        class="btn btn-primary"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="false"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionLogo"
-                        ref="upload"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Logo
-                      </file-upload>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <ul>
-                        <div v-if="institutionBanners.length > 0">
-                          <li v-for="(image,i) in institutionBanners" :key="i">
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.bannerurl" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file2"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionBanner"
-                        ref="uploadBanners"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Banner
-                      </file-upload>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <br>
-                      <br>
-                      <ul>
-                        <div v-if="institutionPhotos.length > 0">
-                          <li v-for="(image,i) in institutionPhotos" :key="i">
-                            <span>{{image.fileData.name}}</span> -
-                            <img :src="image.fileUrl" width="50" height="auto">
-                            <span @click="removeBannerImage(i)">Remove</span>
-                          </li>
-                        </div>
-                        <li v-else v-for="(image,i) in editedItem.photos" :key="i">
-                          <img :src="image" width="50" height="auto">
-                        </li>
-                      </ul>
-                      <file-upload
-                        class="btn btn-primary"
-                        input-id="file3"
-                        extensions="gif,jpg,jpeg,png,webp"
-                        accept="image/png, image/gif, image/jpeg, image/webp"
-                        :multiple="true"
-                        :size="1024 * 1024 * 10"
-                        @input="onInstitutionPhotos"
-                        ref="uploadPhotos"
-                      >
-                        <i class="fa fa-plus"></i>
-                        Upload Photos
-                      </file-upload>
-                    </v-flex>
-                  </template>-->
-                </v-layout>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-
-    <v-data-table
-      :headers="headers"
-      :items="institutionsResults"
-      :hide-actions="true"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="institutions" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td class="justify-center">{{ props.item.name }}</td>
-        <td class="justify-center">{{ props.item.city }}</td>
-        <td class="justify-center">{{ props.item.address }}</td>
-        <td class="justify-center">{{ props.item.status }}</td>
+        <td class="justify-center">{{ props.item._details.name }}</td>
+        <td class="justify-center">{{ props.item._details.address.city }}</td>
+        <td class="justify-center">{{ props.item._details.address.addr }}</td>
+        <td class="justify-center">{{ props.item.active }}</td>
 
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
+          <v-icon v-if="props.item.active != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <template slot="no-data">
@@ -348,54 +303,52 @@ import validationMixin from "@/mixins/validationMixin";
 
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
-import {
-  GET_INSTITUTIONS_INDEX,
-  UPDATEUNIVERSITY
-} from "../../../gql-constants/university";
+import { University } from "../../../dto/university";
 import Pagination from "@/components/shared/Pagination";
-const baseUrl = "https://s3.us-east-2.amazonaws.com/matefiles/Institution/";
+import { QUERIES } from "../../../gql-constants/university";
 export default {
   components: {
     Pagination
   },
   mixins: [validationMixin],
   validations: {
-    editedItem: {
-      institution_name: { required },
-      institution_slug: { required },
-      website: { required },
-      institution_type: { required },
-      address: { required },
-      country: { required },
-      description: { required }
-    }
-  },
-  validationMessages: {
-    editedItem: {
-      institution_name: {
-        required: "Institution Name is required"
-      },
-      institution_slug: {
-        required: "Slug required"
-      },
-      website: {
-        required: "Institution Website"
-      },
-      institution_type: {
-        required: "Select Type"
-      },
-      country: {
-        required: "Select Country"
-      },
-      address: {
-        required: "Address required"
-      },
-      description: {
-        required: "Enter Description"
+    defaultInstitution: {
+      email: { required, email },
+      _details: {
+        name: { required },
+        slug: { required },
+        website: { required },
+        institutionType: { required },
+        address: {
+          country: { required },
+          addr: { required }
+        },
+        description: { required }
       }
     }
   },
+  validationMessages: {
+    defaultInstitution: {
+      email: {
+        required: "Email is required.",
+        email: "Please provide valid email."
+      },
+      _details: {
+        name: { required: "Institution Name is required" },
+        slug: { required: "Slug required" },
+        website: { required: "Institution Website" },
+        institutionType: { required: "Select Type" },
+        address: {
+          country: { required: "Select Country" },
+          addr: { required: "Enter Address" }
+        }
+      },
+      description: { required: "Enter Description" }
+    }
+  },
   data: () => ({
+    defaultInstitution: University,
+    institutions: [],
     title: "Manage Institutions",
     icon: "playlist_add_check",
     status: ["enable", "disable"],
@@ -416,20 +369,11 @@ export default {
       }
     ],
     institutionLogo: imageType,
-    institutionBanners: [],
-    institutionPhotos: [],
-    currentIndex: null,
     totalPages: null,
     currentPage: null,
     institutionListLimit: 10,
     dialog: false,
     institution_type: ["University", "Language School", "Private College"],
-    imageUrl: "",
-    imageName: "",
-    bannerUrl: "",
-    bannerName: "",
-    multipleUrl: "",
-    multipleName: "",
     searchInstitution: "",
     headers: [
       {
@@ -438,79 +382,31 @@ export default {
         sortable: false,
         value: "name"
       },
+      {
+        text: "Mail",
+        align: "left",
+        sortable: false,
+        value: "email"
+      },
       { text: "City", value: "city" },
       { text: "Address", value: "address" },
       { text: "Status", value: "status" }
-    ],
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      slug: "",
-      website: "",
-      institution_type: "",
-      country: "",
-      city: "",
-      address: "",
-      description: "",
-      logourl: "",
-      bannerurl: [],
-      photos: [],
-      status: "enable"
-    },
-    defaultItem: {
-      name: "",
-      slug: "",
-      website: "",
-      institution_type: "",
-      country: "",
-      city: "",
-      address: "",
-      description: "",
-      logourl: "",
-      bannerurl: [],
-      photos: [],
-      status: "enable"
-    }
+    ]
   }),
-  apollo: {
-    institutionsResults: {
-      query: GET_INSTITUTIONS_INDEX,
-      variables() {
-        return {
-          text: this.searchInstitution,
-          page: {
-            from: this.$route.query.pageindex,
-            limit: this.institutionListLimit
-          }
-        };
-      },
-      update(data) {
-        this.$store.commit("SET_PAGES_DATA", {
-          currentIndex: data.search.university.page.from,
-          totalPages: data.search.university.pages.total,
-          currentPage: data.search.university.pages.current,
-          listLimit: this.institutionListLimit
-        });
-        return data.search.university.items;
-      },
-      error(error) {
-        console.log(error);
-      }
-    }
-  },
   computed: {
     ...mapGetters(["institutionFiles", "institutionBanner"]),
     formTitle() {
-      return this.editedIndex === -1
-        ? "Add New Institution"
-        : "Edit Institution";
+      return "Edit Institution";
     }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    $route(to, from) {
+      console.log(to.query.pageindex);
+      this.getInstitutes(to.query.pageindex);
     }
   },
   mounted() {
@@ -521,11 +417,30 @@ export default {
     });
   },
   methods: {
+    async getInstitutes(page) {
+      if (page === undefined) page = 0;
+      const universities = await University.getUniversities(page);
+      this.institutions = [];
+      if (universities) {
+        universities.data.getUniversities.university.forEach(element => {
+          this.institutions.push(new University(element));
+        });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: universities.data.getUniversities.total_pages,
+          currentPage: universities.data.getUniversities.current,
+          listLimit: QUERIES.listLimit
+        });
+      }
+    },
+    openEditInstitution() {
+      this.defaultInstitution = new University();
+    },
     onInstitutionLogo(value) {
       let file = event.target.files[0];
       let path = "Institution/" + this.editedItem._id + "/Logo";
-      this.institutionLogo = new imageType(file, path, this.$store, "");
-      this.editedItem.logourl = this.institutionLogo.fileUrl;
+      this.institutionLogo = new imageType(file, path, this.$store);
+      this.editedItem.logourl = this.institutionLogo.fileurl;
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);
@@ -554,34 +469,14 @@ export default {
         photos.push(image.fileUrl);
         this.institutionPhotos.push(image);
       }
-      this.editedItem.photos = photos;
     },
     removeBannerImage(index) {
       this.institutionBanners[index].delete(this.$store);
       this.institutionBanners.splice(index, 1);
     },
-    fileurl(name) {
-      return baseUrl + encodeURI(name);
-    },
-    inputUpdate(value) {
-      let data = {
-        folder_name: "Institution",
-        file: event.target.files[0]
-      };
-      this.$store.dispatch("upload", data);
-    },
-    inputUpdateBanner(value) {
-      let files = event.target.files;
-      let data = {
-        folder_name: "Institution",
-        file: files
-      };
-      this.$store.dispatch("uploadMultiple", data);
-    },
 
     editItem(item) {
-      this.editedIndex = this.institutionsResults.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.defaultInstitution = new University(item);
       this.dialog = true;
     },
 
@@ -591,52 +486,25 @@ export default {
         this.deleteUniversity(item);
     },
     deleteUniversity(item) {
-      item.status = "disable";
-      this.$apollo
-        .mutate({
-          mutation: UPDATEUNIVERSITY,
-          variables: item
-        })
-        .then(data => {
-          console.log("Status updated Successfully");
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      console.log(item);
     },
     close() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(
-          this.institutionsResults[this.editedIndex],
-          this.editedItem
-        );
-        this.editedItem._id = this.institutionsResults[this.editedIndex]._id;
+    async save() {
+      const res = await this.defaultInstitution.createUniversity();
+      if (res.data.hasOwnProperty("createUniversity")){
+        this.defaultInstitution._id = res.data.createUniversity._id;
+      this.institutions.push(this.defaultInstitution);
       }
-      this.$apollo
-        .mutate({
-          mutation: UPDATEUNIVERSITY,
-          variables: this.editedItem
-        })
-        .then(data => {
-          this.editedItem._id = data.data.UpdateUniversity._id;
-          if (this.editedIndex == -1) {
-            // Only on create condition
-            this.institutionsResults.push(this.editedItem);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
       this.close();
     }
+  },
+  created() {
+    this.defaultInstitution = new University();
+    this.getInstitutes(this.$route.query.pageindex);
+    console.log(this.defaultInstitution);
   }
 };
 </script>

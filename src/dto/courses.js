@@ -12,12 +12,15 @@
             courseLevel:"",
             courseDuration:"",
             degree:"",
-            couseFee:"",
+            courseFee:"",
             website:"",
             description:"",
             mode:"",
             courseMode:"",
-            university_id:""
+            university_id:"",
+            startDate:"",
+            endDate:"",
+            duration:""
         }
         created_by = "5c541361f5ba0f315db125d7"
         updated_by = "5c541361f5ba0f315db125d7"

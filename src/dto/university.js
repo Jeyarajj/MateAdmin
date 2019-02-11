@@ -15,17 +15,15 @@ export class University {
         slug: "",
         website: "",
         institutionType: "",
-        country: "",
-        city: "",
-        Address: {
+        address: {
             city: "",
             country: "",
-            zip: ""
+            addr: ""
         },
         description: "",
         logo: "",
-        banners: "",
-        photos: ""
+        banners: [],
+        photos: []
     }
     created_by = "5c541361f5ba0f315db125d7"
     updated_by = "5c541361f5ba0f315db125d7"
@@ -49,13 +47,13 @@ export class University {
             })
     }
 
-    static async getUniversities() {
+    static async getUniversities(page) {
         return apolloClient
             .query({
                 query: QUERIES.GET_UNIVERSITIES,
                 variables: {
-                    limit: "10",
-                    skip: "0"
+                    limit: QUERIES.listLimit,
+                    skip: page
                 }
             })
     }
@@ -101,25 +99,32 @@ export class University {
             return apolloClient
                 .mutate({
                     mutation: QUERIES.UPDATE_UNIVERSITY,
-                    variables: {
-                        _id: this._id,
-                        _profile: this.toJSON('update')
-                    }
+                    variables: this.toJSON('update')    
                 })
         }
     }
+getPassword(){
+    return Math.random()
+    .toString(36)
+    .slice(-8);
 
+}
     toJSON(type) {
-
         switch (type) {
             case "update":
-                return {
-
-                }
+            delete this._details.__typename
+            delete this._details.address.__typename
+            return {
+                _id:this._id,
+                _details:this._details,
+            }
             case "create":
                 return {
                     email: this.email,
-                    password: this.data.password
+                    password: this.getPassword(),
+                    _details:this._details,
+                    updated_by:this.updated_by,
+                    created_by:this.created_by
                 }
             case "default":
                 console.log('default')
