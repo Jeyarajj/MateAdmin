@@ -42,7 +42,6 @@
                     @blur="$v.form.name.$touch()"
                     @focusout="generateSlug()"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md4>
@@ -51,7 +50,6 @@
                     label="Article Slug"
                     v-model="form.slug"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -60,7 +58,6 @@
                     label="Short Description"
                     v-model="form.short_description"
                     required
-                    box
                   ></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -77,7 +74,6 @@
                     label="Category"
                     v-model="form.category"
                     required
-                    box
                     :items="category"
                     :error-messages="fieldErrors('form.category')"
                     @blur="$v.form.category.$touch()"
@@ -85,7 +81,7 @@
                 </v-flex>
 
                 <v-flex xs12 sm6>
-                  <v-select :items="status" v-model="form.status" box label="Article Status"></v-select>
+                  <v-select :items="status" v-model="form.status" label="Article Status"></v-select>
                 </v-flex>
 
                 <v-flex xs12 sm6 class="meta_background">
