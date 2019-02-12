@@ -125,6 +125,14 @@
                     rows="2"
                   ></v-textarea>
                 </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <v-select
+                    :items="status"
+                    v-model="defaultInstitution.active"
+                    label="Institution Status"
+                    box
+                  ></v-select>
+                </v-flex>
                 <template>
 
                    <v-flex xs12 sm12 md6>
@@ -245,13 +253,6 @@
                         <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
                       </v-btn>
                     </file-upload>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-select
-                      :items="status"
-                      v-model="defaultInstitution.active"
-                      label="Institution Status"
-                    ></v-select>
                   </v-flex>
                 </template>
               </v-layout>
@@ -494,9 +495,9 @@ export default {
 
     async save() {
       const res = await this.defaultInstitution.createUniversity();
-      if (res.data.hasOwnProperty("createUniversity")){
+      if (res.data.hasOwnProperty("createUniversity")) {
         this.defaultInstitution._id = res.data.createUniversity._id;
-      this.institutions.push(this.defaultInstitution);
+        this.institutions.push(this.defaultInstitution);
       }
       this.close();
     }
