@@ -47,12 +47,12 @@ export class University {
             })
     }
 
-    static async getUniversities(page) {
+    static async getUniversities(limit,page) {
         return apolloClient
             .query({
                 query: QUERIES.GET_UNIVERSITIES,
                 variables: {
-                    limit: QUERIES.listLimit,
+                    limit: limit,
                     skip: page
                 }
             })

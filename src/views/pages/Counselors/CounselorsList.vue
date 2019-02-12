@@ -49,7 +49,7 @@
                   :error-messages="fieldErrors('editedItem.name')"
                   @input="$v.editedItem.name.$touch()"
                   @blur="$v.editedItem.name.$touch()"
-                  label="First Name" box></v-text-field>
+                  label="First Name"></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md6>
@@ -58,7 +58,7 @@
                   @input="$v.editedItem.email.$touch()"
                   @blur="$v.editedItem.email.$touch()"
                   label="Email *"
-                  required box></v-text-field>
+                  required></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 sm6 md6>
@@ -66,7 +66,7 @@
                   :error-messages="fieldErrors('editedItem.phone')"
                   @input="$v.editedItem.phone.$touch()"
                   @blur="$v.editedItem.phone.$touch()"
-                  label="Phone" box></v-text-field>
+                  label="Phone"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
                   <country-select

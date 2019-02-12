@@ -16,7 +16,7 @@
     </v-toolbar>
 
     <v-layout row wrap>
-      <v-flex v-if="$apollo.loading">
+      <v-flex v-if="$apollo.loading && this.mode != 'create'">
         <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
       </v-flex>
 
@@ -42,7 +42,6 @@
                     @blur="$v.form.name.$touch()"
                     @focusout="generateSlug()"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md4>
@@ -51,7 +50,6 @@
                     label="Article Slug"
                     v-model="form.slug"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -60,7 +58,6 @@
                     label="Short Description"
                     v-model="form.short_description"
                     required
-                    box
                   ></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -77,7 +74,6 @@
                     label="Category"
                     v-model="form.category"
                     required
-                    box
                     :items="category"
                     :error-messages="fieldErrors('form.category')"
                     @blur="$v.form.category.$touch()"
@@ -85,14 +81,16 @@
                 </v-flex>
 
                 <v-flex xs12 sm6>
-                  <v-select :items="status" v-model="form.status" box label="Article Status"></v-select>
+                  <v-select :items="status" v-model="form.status" label="Article Status"></v-select>
                 </v-flex>
+
+                <v-flex xs12 sm6 class="meta_background">
                 <vue-cloneya :maximum="5" multiple="true" v-model="exampleMultipleData">
                   <div class="input-group">
                     <!-- Add the "v-cloneya-input" directive to elements you wish to set v-bind:value -->
                     <!-- Only input, select, radio, checkbox etc. -->
                     <select
-                      class="form-control select2"
+                      class="form-control select2 articlepage_metaselect round"
                       placeholder="Meta Tags"
                       v-cloneya-input="'meta_name'"
                     >
@@ -104,25 +102,25 @@
                     </select>
                     <input
                       type="text"
-                      class="form-control"
-                      placeholder="Meta Value"
-                      v-cloneya-input="'meta_value'"
-                    >
+                      class="form-control articlepage_metainput"
+                      placeholder="Enter Meta value"
+                      v-cloneya-input="'meta_value'">
                     
                     <span class="input-group-btn">
                       <!-- Add the "v-cloneya-add" directive to elements you wish to add the click listener
                       that will clone the root element-->
-                      <button type="button" class="btn btn-success" tabindex="-1" v-cloneya-add>
-                        <i class="fa fa-plus"></i>
-                      </button>
-                      <!-- Add the "v-cloneya-remove" directive to elements you wish to add the click listener
-                      that will remove the element-->
-                      <button type="button" class="btn btn-danger" tabindex="-1" v-cloneya-remove>
-                        <i class="fa fa-minus"></i>
-                      </button>
+                      <v-btn flat icon v-cloneya-add>
+                        <v-icon color="primary">add_circle</v-icon>
+                      </v-btn>
+
+                      <v-btn flat icon v-cloneya-remove>
+                        <v-icon color="primary">remove_circle</v-icon>
+                      </v-btn>
                     </span>
                   </div>
                 </vue-cloneya>
+                </v-flex>
+
               </v-layout>
             </v-container>
             <v-flex xs12 sm12 md6>
@@ -236,6 +234,7 @@ import AWS from "aws-sdk";
 import { mapGetters } from "vuex";
 import {
   CREATE_ARTICLE,
+  GET_ARTICLE,
   REVIEW_ARTICLE,
   GET_ARTICLE_BY_ID
 } from "@/gql-constants/article";
@@ -282,31 +281,37 @@ export default {
   computed: {
     ...mapGetters(["metatags", "currentUserdata"])
   },
-
-  // apollo: {
-  //   articleList: {
-  //     query: GET_ARTICLE_BY_ID,
-  //     variables() {
-  //       return {
-  //         article_id: this.article_id
-  //       };
-  //     },
-  //     update(data) {
-  //       // return data.getIdArticle;
-  //       if (this.mode != "create") {
-  //         this.action = this.mode.toUpperCase();
-  //         this.form = data.getIdArticle;
-  //         this.value = data.getIdArticle.article_content;
-  //         this.comments = data.getIdArticle.review_comment;
-  //       } else {
-  //         this.action = "Creation";
-  //       }
-  //     },
-  //     error(error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // },
+  mounted() {
+    if (this.mode === "create") {
+      this.$apollo.queries.articleList.skip = true;
+    }
+  },
+  apollo: {
+    articleList: {
+      query: GET_ARTICLE_BY_ID,
+      variables() {
+        return {
+          article_id: this.article_id
+        };
+      },
+      update(data) {
+        // return data.getIdArticle;
+        if (this.mode != "create") {
+          console.log(data.getIdArticle);
+          this.action = this.mode.toUpperCase();
+          this.form = data.getIdArticle;
+          this.value = data.getIdArticle.article_content;
+          this.exampleMultipleData = data.getIdArticle.meta_data;
+          this.comments = data.getIdArticle.review_comment;
+        } else {
+          this.action = "Creation";
+        }
+      },
+      error(error) {
+        console.log(error);
+      }
+    }
+  },
 
   data() {
     return {
@@ -429,13 +434,20 @@ export default {
     },
     saveArticle() {
       // Save the article here
+      let meta = [];
+      for (let i = 0; i < this.exampleMultipleData.length; i++) {
+        meta.push({
+          meta_name: this.exampleMultipleData[i].meta_name,
+          meta_value: this.exampleMultipleData[i].meta_value
+        });
+      }
       let data = {
         name: this.form.name,
         article_content: this.value,
         slug: this.form.slug,
         cover_image: this.form.cover_image,
         category: this.form.category,
-        meta_data: this.exampleMultipleData,
+        meta_data: meta,
         short_description: this.form.short_description,
         created_by: this.currentUserdata._id,
         updated_by: this.currentUserdata._id,
@@ -450,6 +462,7 @@ export default {
           variables: data
         })
         .then(data1 => {
+          console.log(data1);
           this.$router.push({
             name: "articles/Articles_List"
           });

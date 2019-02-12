@@ -48,7 +48,7 @@
                         <!-- Login form submit -->
                         <v-flex xs12 class="no-mrpd">
                           <v-btn
-                            color="secondary"
+                            color="green"
                             type="submit"
                             :disabled="$v.$invalid"
                             block

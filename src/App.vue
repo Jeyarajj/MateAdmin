@@ -4,7 +4,7 @@
     <router-view name="sidebar"/>
     <v-content>
       <v-container fluid grid-list-xl class="pb-0">
-      <router-view></router-view>
+        <router-view></router-view>
       </v-container>
     </v-content>
     <router-view name="footer"/>
