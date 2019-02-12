@@ -1,23 +1,23 @@
 <template>
   <div>
-      <v-toolbar flat extended class="transparent section-definition-toolbar">
-        <v-avatar class="box-glow" tile>
-          <v-icon dark v-html="icon" v-if="icon"></v-icon>
-          <span v-else>{{ title | first2Char }}</span>
-        </v-avatar>
-        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
-        <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
-            <v-icon slot="divider" color="primary">chevron_right</v-icon>
-          </v-breadcrumbs>
-          <slot></slot>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn @click="addNewItem()" color="primary" dark class="mb-2">
-          <v-icon left dark>add_circle</v-icon>New Article
-        </v-btn>
-      </v-toolbar>
-      <!-- <v-btn @click="addNewItem()" color="info">New Article</v-btn> -->
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+      <v-avatar class="box-glow" tile>
+        <v-icon dark v-html="icon" v-if="icon"></v-icon>
+        <span v-else>{{ title | first2Char }}</span>
+      </v-avatar>
+      <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="toobar-extension" slot="extension">
+        <v-breadcrumbs :items="breadcrumbs" class="pl-0">
+          <v-icon slot="divider" color="primary">chevron_right</v-icon>
+        </v-breadcrumbs>
+        <slot></slot>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn @click="addNewItem()" color="primary" dark class="mb-2">
+        <v-icon left dark>add_circle</v-icon>New Article
+      </v-btn>
+    </v-toolbar>
+    <!-- <v-btn @click="addNewItem()" color="info">New Article</v-btn> -->
     <v-data-table :headers="headers" :items="articleList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
@@ -39,6 +39,7 @@ import { GET_ARTICLE } from "@/gql-constants/article";
 export default {
   data() {
     return {
+      loader: "",
       title: "Articles List",
       icon: "playlist_add_check",
       breadcrumbs: [
@@ -75,17 +76,22 @@ export default {
   apollo: {
     articleList: {
       query: GET_ARTICLE,
+      fetchPolicy: "network-only",
       variables: {
         page: 1,
         perPage: 10
       },
       update(data) {
+        this.loader.hide();
         return data.getAllArticle;
       },
       error(error) {
         console.log(error);
       }
     }
+  },
+  mounted() {
+    this.loader = this.$loading.show();
   },
   methods: {
     addNewItem() {

@@ -16,7 +16,7 @@
     </v-toolbar>
 
     <v-layout row wrap>
-      <v-flex v-if="$apollo.loading">
+      <v-flex v-if="$apollo.loading && this.mode != 'create'">
         <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
       </v-flex>
 
@@ -236,6 +236,7 @@ import AWS from "aws-sdk";
 import { mapGetters } from "vuex";
 import {
   CREATE_ARTICLE,
+  GET_ARTICLE,
   REVIEW_ARTICLE,
   GET_ARTICLE_BY_ID
 } from "@/gql-constants/article";
@@ -282,31 +283,37 @@ export default {
   computed: {
     ...mapGetters(["metatags", "currentUserdata"])
   },
-
-  // apollo: {
-  //   articleList: {
-  //     query: GET_ARTICLE_BY_ID,
-  //     variables() {
-  //       return {
-  //         article_id: this.article_id
-  //       };
-  //     },
-  //     update(data) {
-  //       // return data.getIdArticle;
-  //       if (this.mode != "create") {
-  //         this.action = this.mode.toUpperCase();
-  //         this.form = data.getIdArticle;
-  //         this.value = data.getIdArticle.article_content;
-  //         this.comments = data.getIdArticle.review_comment;
-  //       } else {
-  //         this.action = "Creation";
-  //       }
-  //     },
-  //     error(error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // },
+  mounted() {
+    if (this.mode === "create") {
+      this.$apollo.queries.articleList.skip = true;
+    }
+  },
+  apollo: {
+    articleList: {
+      query: GET_ARTICLE_BY_ID,
+      variables() {
+        return {
+          article_id: this.article_id
+        };
+      },
+      update(data) {
+        // return data.getIdArticle;
+        if (this.mode != "create") {
+          console.log(data.getIdArticle);
+          this.action = this.mode.toUpperCase();
+          this.form = data.getIdArticle;
+          this.value = data.getIdArticle.article_content;
+          this.exampleMultipleData = data.getIdArticle.meta_data;
+          this.comments = data.getIdArticle.review_comment;
+        } else {
+          this.action = "Creation";
+        }
+      },
+      error(error) {
+        console.log(error);
+      }
+    }
+  },
 
   data() {
     return {
@@ -429,13 +436,20 @@ export default {
     },
     saveArticle() {
       // Save the article here
+      let meta = [];
+      for (let i = 0; i < this.exampleMultipleData.length; i++) {
+        meta.push({
+          meta_name: this.exampleMultipleData[i].meta_name,
+          meta_value: this.exampleMultipleData[i].meta_value
+        });
+      }
       let data = {
         name: this.form.name,
         article_content: this.value,
         slug: this.form.slug,
         cover_image: this.form.cover_image,
         category: this.form.category,
-        meta_data: this.exampleMultipleData,
+        meta_data: meta,
         short_description: this.form.short_description,
         created_by: this.currentUserdata._id,
         updated_by: this.currentUserdata._id,
@@ -450,6 +464,7 @@ export default {
           variables: data
         })
         .then(data1 => {
+          console.log(data1);
           this.$router.push({
             name: "articles/Articles_List"
           });

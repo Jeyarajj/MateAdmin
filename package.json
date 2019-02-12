@@ -43,6 +43,7 @@
     "vue-cloneya": "^1.0.10",
     "vue-country-region-select": "^1.1.0",
     "vue-input-tag": "^2.0.4",
+    "vue-loading-overlay": "^3.1.1",
     "vue-meta": "^1.5.8",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.2",

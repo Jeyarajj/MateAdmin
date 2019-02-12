@@ -8,7 +8,7 @@ export const CREATE_ARTICLE = gql`
     $cover_image: String
     $category: String
     $short_description: Text
-    $meta_data: [MetaTag]
+    $meta_data: [MetaTag1]
     $article_content: Text
     $status: String
     $created_by: ObjectID
@@ -33,10 +33,12 @@ export const CREATE_ARTICLE = gql`
       cover_image
       category
       short_description
-      meta_data
+      meta_data {
+        meta_name
+        meta_value
+      }
       article_content
       created_by
-      google_tags
     }
   }
 `;
@@ -67,7 +69,10 @@ export const GET_ARTICLE = gql`
       category
       short_description
       article_content
-      meta_data
+      meta_data {
+        meta_name
+        meta_value
+      }
       status
       created_by
       updated_by
@@ -93,7 +98,10 @@ export const GET_ARTICLE_BY_ID = gql`
       cover_image
       category
       article_content
-      meta_data
+      meta_data {
+        meta_name
+        meta_value
+      }
       status
       created_by {
         _id
@@ -133,7 +141,11 @@ export const REVIEW_ARTICLE = gql`
     ) {
       reviewed_at
       comment
-      reviewed_by
+      reviewed_by {
+        _id
+        name
+        email
+      }
     }
   }
 `;

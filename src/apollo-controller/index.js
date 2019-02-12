@@ -21,7 +21,6 @@
 //   })
 // }
 
-
 // import { ApolloClient } from 'apollo-client'
 // import { HttpLink } from 'apollo-link-http'
 // import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -36,15 +35,13 @@
 //   connectToDevTools: true
 // })
 
-
-
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.0.58:22641/Mate/point/graphql',
+  uri: 'http://192.168.0.58:22641/Mate/point/graphql'
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -54,9 +51,9 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `Bearer ${token}` : ''
     }
-  }
+  };
 });
 
 export const apolloClient = new ApolloClient({
