@@ -86,17 +86,21 @@ export const userActions = {
   },
   checkUserAuthChanged: function(context) {
     // see if a user is currently signed in
-    firebase.auth().onAuthStateChanged(user => {
+     firebase.auth().onAuthStateChanged( (user)  =>  {
       if (user) {
-        user.getIdToken(true).then(token => {
+        user.getIdToken(true).then( async(token) => {
+          
+          //context.dispatch('checkpermission', user.uid);
+          const result = await context.dispatch('basicProfileinfo', user.uid);
+          context.commit('setBasicInfoUserProfile', result);
+         const result_ = await context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
+         context.commit('setcurrentUserinfo', result_);
           context.commit('setUserCredential', {
             token,
             isEmailVerified: user.emailVerified,
             name: user.email,
             userProviderData: user.providerData
           });
-          //context.dispatch('checkpermission', user.uid);
-          context.dispatch('basicProfileinfo', user.uid);
         });
       } else {
         context.commit('removeUserCredentials');
@@ -201,34 +205,27 @@ export const userActions = {
         console.log(err);
       });
   },
-  basicProfileinfo: function(context, payload) {
+  basicProfileinfo: async function(context, payload) {
     const profileInfo = gql`
       query($uid: String!) {
         getBasicInfo(uid: $uid) {
           _id
-          id
+          uid
         }
       }
     `;
-    apolloClient
+    return apolloClient
       .query({
         query: profileInfo,
         variables: {
           uid: payload
         }
       })
-      .then(result => {
-        context.commit('setBasicInfoUserProfile', result);
-        context.dispatch('currentUserinfo', result.data.getBasicInfo._id);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   },
   updatecurrentInfo: ({ commit }, payload) => {
     commit('updatecurrentUserinfo', payload);
   },
-  currentUserinfo: function(context, payload) {
+  currentUserinfo: async function(context, payload) {
     const currentUserInfo = gql`
       query($Id: ObjectID!) {
         getProfile(_id: $Id) {
@@ -251,20 +248,13 @@ export const userActions = {
         }
       }
     `;
-    apolloClient
+    return apolloClient
       .query({
         query: currentUserInfo,
         variables: {
           Id: payload //TODO : get userBasicInfoProfile._id
         }
       })
-      .then(result => {
-        console.log(result);
-        context.commit('setcurrentUserinfo', result);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   },
   checkIfUserLogin: function(context) {
     let expirationDate = new Date(localStorage.getItem('expirationDate'));
