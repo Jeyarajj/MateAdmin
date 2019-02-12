@@ -22,7 +22,7 @@
           <v-card-title>
             <v-layout>
               <v-flex row xs6>
-                <span class="headline">{{ formTitle }}</span>
+                <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
               </v-flex>
               <v-flex row xs6 text-xs-right>
                 <v-btn flat icon color="primary" @click.native="close()">
@@ -42,7 +42,6 @@
                     @blur="$v.defaultInstitution._details.name.$touch()"
                     v-model="defaultInstitution._details.name"
                     label="Institution Name"
-                    box
                   ></v-text-field>
                 </v-flex>
 
@@ -53,14 +52,12 @@
                     @blur="$v.defaultInstitution.email.$touch()"
                     v-model="defaultInstitution.email"
                     label="Institution Mail"
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field
                     v-model="defaultInstitution._details.slug"
                     label="Institution Slug"
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
@@ -70,7 +67,6 @@
                     @input="$v.defaultInstitution._details.website.$touch()"
                     @blur="$v.defaultInstitution._details.website.$touch()"
                     label="Website URL"
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
@@ -81,7 +77,6 @@
                     @input="$v.defaultInstitution._details.institutionType.$touch()"
                     @blur="$v.defaultInstitution._details.institutionType.$touch()"
                     label="Institution Type"
-                    box
                   ></v-select>
                 </v-flex>
 
@@ -116,7 +111,6 @@
                     label="Institution Address"
                     auto-grow
                     rows="2"
-                    box
                   ></v-textarea>
                 </v-flex>
 
@@ -129,11 +123,42 @@
                     label="Description min 200 words"
                     auto-grow
                     rows="2"
-                    box
                   ></v-textarea>
                 </v-flex>
                 <template>
-                  <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+
+                   <v-flex xs12 sm12 md6>
+                  <v-progress-linear
+                  v-if="institutionLogo.uploadStatus"
+                  indeterminate
+                  color="light-green darken-2"
+                  class="mb-0"
+                ></v-progress-linear>
+                    <span v-if="institutionLogo.exists">
+                       <v-img :src="institutionLogo.fileUrl" aspect-ratio="1.7"></v-img>
+                      <v-btn color="error" dark @click="removeImage(institutionLogo)" class="removebtn_counsellor">
+                        <v-icon dark left>remove_circle</v-icon>Remove
+                      </v-btn>
+                    </span>
+                    <span>
+                      <v-img :src="defaultInstitution._details.logo" aspect-ratio="1.7"></v-img>
+                    </span>
+                  <file-upload
+                    input-id="file1"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="false"
+                    :size="1024 * 1024 * 10"
+                    @input="onInstitutionLogo"
+                    ref="upload">
+                    <v-btn color="primary" dark>
+                        <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                    </v-btn>
+                 </file-upload>
+                </v-flex>
+
+
+                  <!-- <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                   <v-flex xs12 sm12 md12>
                     <ul>
                       <li v-if="institutionLogo.exists">
@@ -158,20 +183,7 @@
                         <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
                       </v-btn>
                     </file-upload>
-                  </v-flex>-->
-                  <v-flex xs12 sm12 md12>
-                    <v-textarea
-                      v-model="defaultInstitution._details.address.addr"
-                      :error-messages="fieldErrors('defaultInstitution._details.address.addr')"
-                      @input="$v.defaultInstitution._details.address.addr.$touch()"
-                      @blur="$v.defaultInstitution._details.address.addr.$touch()"
-                      label="Institution Address"
-                      auto-grow
-                      rows="2"
-                      box
-                    ></v-textarea>
-                  </v-flex>
-
+                  </v-flex> -->
                   <v-flex xs12 sm12 md12>
                     <br>
                     <br>
@@ -233,23 +245,12 @@
                         <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
                       </v-btn>
                     </file-upload>
-                    <v-textarea
-                      v-model="defaultInstitution._details.description"
-                      :error-messages="fieldErrors('defaultInstitution._details.description')"
-                      @input="$v.defaultInstitution._details.description.$touch()"
-                      @blur="$v.defaultInstitution._details.description.$touch()"
-                      label="Description min 200 words"
-                      auto-grow
-                      rows="2"
-                      box
-                    ></v-textarea>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
                     <v-select
                       :items="status"
                       v-model="defaultInstitution.active"
                       label="Institution Status"
-                      box
                     ></v-select>
                   </v-flex>
                 </template>
@@ -259,12 +260,11 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="normal" @click="close">Cancel</v-btn>
             <v-btn
               :disabled="$v.$invalid"
-              block
               :class="$v.$invalid ? '' : 'white--text'"
-              color="blue darken-1"
+              color="act"
               @click.native="save"
             >Save</v-btn>
           </v-card-actions>

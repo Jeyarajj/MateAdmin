@@ -67,9 +67,13 @@
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.meta_label }}</td>
         <td class="justify-center">{{props.item.value}}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+        <td class="justify-center">
+           <v-btn flat icon @click="editItem(props.item)">          
+          <v-icon small color="primary">edit</v-icon>
+          </v-btn>
+          <v-btn flat icon @click="deleteItem(props.item)">
+          <v-icon small color="primary">delete</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">
@@ -102,7 +106,8 @@ export default {
     ],
     headers: [
       { text: "Meta Label", value: "meta_label" },
-      { text: "Value", value: "value" }
+      { text: "Value", value: "value" },
+      { text: "Actions", value:  "actions" }
     ],
     dialog: false,
     editedIndex: -1,
