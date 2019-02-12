@@ -46,6 +46,12 @@ export const CREATE_METATAGS = gql`
     }
   }
 `;
+
+export const DELETE_META = gql`
+  mutation deletemeta($_id: ObjectID) {
+    deleteMeta(_id: $_id)
+  }
+`;
 //Usertypes
 export const GET_USERTYPES = gql`
   query {

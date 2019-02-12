@@ -75,7 +75,11 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { GET_METATAGS, CREATE_METATAGS } from "@/gql-constants/settings";
+import {
+  GET_METATAGS,
+  CREATE_METATAGS,
+  DELETE_META
+} from "@/gql-constants/settings";
 
 export default {
   data: () => ({
@@ -153,11 +157,26 @@ export default {
     },
 
     deleteItem(item) {
-      const index = this.metaList.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.metaList.splice(index, 1);
+        this.deleteMetaTag(item);
     },
-
+    deleteMetaTag(item) {
+      this.$apollo
+        .mutate({
+          mutation: DELETE_META,
+          variables: {
+            _id: item._id
+          }
+        })
+        .then(data => {
+          this.$toaster.info("Meta Tag Deleted Successfully");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      const index = this.metaList.indexOf(item);
+      this.metaList.splice(index, 1);
+    },
     close() {
       this.dialog = false;
       setTimeout(() => {
