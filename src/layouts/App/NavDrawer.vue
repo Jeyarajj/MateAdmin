@@ -4,7 +4,7 @@
     :class="[navDrawerAlphaMod ? 'alpha' : '', navDrawerScheme, navDrawerVariant ? 'google-material-effect' : '']"
     persistent
     fixed
-    width="260"
+    width="230"
     :mini-variant.sync="navMiniVarient"
     :clipped="clipped"
     v-model="drawer"

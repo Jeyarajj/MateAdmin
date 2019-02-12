@@ -31,7 +31,7 @@
           <v-card-title>
             <v-layout>
             <v-flex row xs6>
-              <span class="headline">{{ formTitle }}</span>
+              <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
             </v-flex>
             <v-flex row xs6 text-xs-right>
               <v-btn flat icon color="primary" @click.native="close()">
@@ -117,8 +117,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            <v-btn color="normal" @click="close">Cancel</v-btn>
+            <v-btn color="green" dark @click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -131,9 +131,13 @@
         <td class="justify-center">{{ props.item.email }}</td>
         <td class="justify-center">{{props.item.phone}}</td>
         <td class="justify-center">{{ props.item.country }}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+        <td class="justify-center">
+          <v-btn flat icon @click="editItem(props.item)">          
+          <v-icon small color="primary">edit</v-icon>
+          </v-btn>
+          <v-btn flat icon @click="deleteItem(props.item)">
+          <v-icon small color="primary">delete</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">
@@ -208,7 +212,8 @@ export default {
       },
       { text: "Mail", value: "email" },
       { text: "Phone", value: "Phone" },
-      { text: "Country", value: "Country" }
+      { text: "Country", value: "Country" },
+      { text: "Action", value: "action" }
     ],
     dialog: false,
 

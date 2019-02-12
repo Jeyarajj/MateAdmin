@@ -152,12 +152,14 @@ export default {
 
 <style lang="scss">
   .pagination {
-    background-color: gray;
+    background-color: #eeeeee;
     border-radius: 2px;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12) !important;
     li { display: inline-block; }
     .current-page {
-      background-color:red !important;
+      background-color:#37474F !important;
       color: white !important;
+      box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
     }
     .pagination__ul {
       padding: 1rem;
@@ -165,22 +167,23 @@ export default {
       .pagination__li {
         font-size: 1rem;
         color: var(--dark-blue-grey);
-        margin: 0 1rem;
-        padding: .5rem 1.3rem;
+        margin: 0 10px;
+        padding: 0.5rem 1rem;
         cursor: pointer;
         background-color: white;
         border-radius: 3px;
         border: none;
         transition: all .3s;
+        box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
         &:first-child {
-          margin-right: 2.5rem;
+          //margin-right: 2.5rem;
         }
         &:last-child {
-          margin-left: 2.5rem;
+          //margin-left: 2.5rem;
         }
         &:hover {
           background-color: var(--soft-blue);
-          color: white;
+          color: #37474F;
         }
       }
     }

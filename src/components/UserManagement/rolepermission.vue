@@ -22,7 +22,7 @@
             <v-card-title>
               <v-layout>
                 <v-flex row xs6>
-                  <span class="headline">{{ formTitle }}</span>
+                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
                 </v-flex>
                 <v-flex row xs6 text-xs-right>
                   <v-btn flat icon color="primary" @click.native="close()">
@@ -38,7 +38,6 @@
                   <v-flex xs12 sm12 md12>
                     <v-text-field
                       v-model="defaultRole.role_name"
-                      box
                       label="Role name"
                       :error-messages="fieldErrors('defaultRole.role_name')"
                       @input="$v.defaultRole.role_name.$touch()"
@@ -49,7 +48,6 @@
                     <v-textarea
                       v-model="defaultRole.role_description"
                       auto-grow
-                      box
                       rows="2"
                       label="Role Description"
                       :error-messages="fieldErrors('defaultRole.role_description')"
@@ -85,13 +83,11 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog=false">Cancel</v-btn>
+              <v-btn color="normal" @click="dialog=false">Cancel</v-btn>
               <v-btn
-                flat
                 @click="createRole()"
                 :disabled="$v.$invalid"
-                block
-                :class="$v.$invalid ? '' : 'green'"
+                :class="$v.$invalid ? '' : 'white--text'"
                 color="act"
               >Save</v-btn>
             </v-card-actions>
@@ -105,8 +101,9 @@
         <td class="justify-center">{{ props.item.role_description }}</td>
         <td class="justify-center">{{ props.item.created_by }}</td>
         <td class="justify-center">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <!-- <v-icon small @click="deleteItem(props.item)">delete</v-icon> -->
+          <v-btn flat icon @click="editItem(props.item)">
+          <v-icon small color="primary">edit</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">

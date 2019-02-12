@@ -15,12 +15,13 @@
         <v-spacer></v-spacer>
 
         <v-dialog v-model="dialog" persistent max-width="900px">
-          <v-btn slot="activator" color="primary" dark class="mb-2">Add New Course</v-btn>
+          <v-btn slot="activator" color="primary" dark class="mb-2">
+            <v-icon left dark>add_circle</v-icon>Add New Course</v-btn>
           <v-card>
             <v-card-title>
               <v-layout>
                 <v-flex row xs6>
-                  <span class="headline">{{ formTitle }}</span>
+                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
                 </v-flex>
                 <v-flex row xs6 text-xs-right>
                   <v-btn flat icon color="primary" @click.native="close()">
@@ -34,24 +35,23 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="editedItem.name" label="Course name" box></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Course name"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="editedItem.degree" label="Degree" box></v-text-field>
+                    <v-text-field v-model="editedItem.degree" label="Degree"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-select
                       :items="course_level"
                       v-model="editedItem.course_level"
                       label="Course Level"
-                      box
                     ></v-select>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.course_fee" label="Course Fee" box></v-text-field>
+                    <v-text-field v-model="editedItem.course_fee" label="Course Fee"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.course_duration" label="Course Duration" box></v-text-field>
+                    <v-text-field v-model="editedItem.course_duration" label="Course Duration"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
                     <v-menu
@@ -72,7 +72,6 @@
                         label="Start Date"
                         prepend-icon="event"
                         readonly
-                        box
                       ></v-text-field>
                       <v-date-picker v-model="editedItem.startdate" no-title scrollable>
                         <v-spacer></v-spacer>
@@ -104,7 +103,6 @@
                         label="End Date"
                         prepend-icon="event"
                         readonly
-                        box
                       ></v-text-field>
                       <v-date-picker v-model="editedItem.enddate" no-title scrollable>
                         <v-spacer></v-spacer>
@@ -114,14 +112,13 @@
                     </v-menu>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-select :items="mode" v-model="editedItem.mode" label="Mode" box></v-select>
+                    <v-select :items="mode" v-model="editedItem.mode" label="Mode"></v-select>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-select
                       :items="course_mode"
                       v-model="editedItem.course_mode"
                       label="Course Mode"
-                      box
                     ></v-select>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
@@ -131,18 +128,17 @@
                       item-value="_id"
                       v-model="editedItem.university_id"
                       label="University"
-                      box
                     ></v-select>
                     <!-- <v-text-field v-model="editedItem.university_id" label="University"></v-text-field> -->
                   </v-flex>
                   <v-flex xs12 sm6 md12>
-                    <v-text-field v-model="editedItem.website" label="WebSite URL" box></v-text-field>
+                    <v-text-field v-model="editedItem.website" label="WebSite URL"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm12 md12>
-                    <v-textarea v-model="editedItem.description" label="Description" box></v-textarea>
+                    <v-textarea v-model="editedItem.description" label="Description"></v-textarea>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
-                    <v-select :items="status" v-model="editedItem.status" label="Course Status" box></v-select>
+                    <v-select :items="status" v-model="editedItem.status" label="Course Status"></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -150,8 +146,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+              <v-btn color="normal" @click="close">Cancel</v-btn>
+              <v-btn color="green" dark @click="save">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

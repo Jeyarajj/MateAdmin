@@ -1,14 +1,43 @@
 <template>
   <div>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Counselor</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add New Counsellor</v-btn>
+     <v-toolbar flat extended class="transparent section-definition-toolbar">
+        <v-avatar class="box-glow" tile>
+          <v-icon dark v-html="icon" v-if="icon"></v-icon>
+          <span v-else>{{ title | first2Char }}</span>
+        </v-avatar>
+        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="toobar-extension" slot="extension">
+          <v-breadcrumbs
+            v-if="breadcrumbs"
+            class="pl-0"
+          >
+            <v-icon slot="divider" color="primary">chevron_right</v-icon>
+            <v-breadcrumbs-item
+              v-for="item in breadcrumbs"
+              :key="item.text"
+              :disabled="item.disabled"
+            >
+              {{ item.text }}
+            </v-breadcrumbs-item>
+          </v-breadcrumbs>
+          <slot></slot>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon>Add New MetaTag</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <v-layout>
+                <v-flex row xs6>
+                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
+                </v-flex>
+                <v-flex row xs6 text-xs-right>
+                  <v-btn flat icon color="primary" @click.native="close()">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>     
           </v-card-title>
 
           <v-card-text>
@@ -26,12 +55,14 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            <v-btn color="normal" @click="close">Cancel</v-btn>
+            <v-btn color="success" @click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+
+        </v-toolbar>
+
     <v-data-table :headers="headers" :items="metaList" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.meta_label }}</td>
@@ -53,6 +84,22 @@ import { GET_METATAGS, CREATE_METATAGS } from "@/gql-constants/settings";
 
 export default {
   data: () => ({
+    title: 'Meta Tags',
+    icon: 'playlist_add_check',
+    breadcrumbs: [
+    {
+      text: 'Home',
+      disabled: true
+    },
+    {
+      text: 'Settings',
+      disabled: true
+    },
+    {
+      text: 'Meta Tags',
+      disabled: true
+    }
+    ],
     headers: [
       { text: "Meta Label", value: "meta_label" },
       { text: "Value", value: "value" }
