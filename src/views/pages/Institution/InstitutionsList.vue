@@ -132,6 +132,14 @@
                     box
                   ></v-textarea>
                 </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <v-select
+                    :items="status"
+                    v-model="defaultInstitution.active"
+                    label="Institution Status"
+                    box
+                  ></v-select>
+                </v-flex>
                 <template>
                   <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
                   <v-flex xs12 sm12 md12>
@@ -233,24 +241,6 @@
                         <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
                       </v-btn>
                     </file-upload>
-                    <v-textarea
-                      v-model="defaultInstitution._details.description"
-                      :error-messages="fieldErrors('defaultInstitution._details.description')"
-                      @input="$v.defaultInstitution._details.description.$touch()"
-                      @blur="$v.defaultInstitution._details.description.$touch()"
-                      label="Description min 200 words"
-                      auto-grow
-                      rows="2"
-                      box
-                    ></v-textarea>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-select
-                      :items="status"
-                      v-model="defaultInstitution.active"
-                      label="Institution Status"
-                      box
-                    ></v-select>
                   </v-flex>
                 </template>
               </v-layout>
@@ -494,9 +484,9 @@ export default {
 
     async save() {
       const res = await this.defaultInstitution.createUniversity();
-      if (res.data.hasOwnProperty("createUniversity")){
+      if (res.data.hasOwnProperty("createUniversity")) {
         this.defaultInstitution._id = res.data.createUniversity._id;
-      this.institutions.push(this.defaultInstitution);
+        this.institutions.push(this.defaultInstitution);
       }
       this.close();
     }
