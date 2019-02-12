@@ -24,7 +24,9 @@ import InputTag from 'vue-input-tag';
 import Vuebar from 'vuebars';
 import Trend from 'vuetrend';
 import VueCloneya from 'vue-cloneya';
-
+import Toaster from 'v-toaster';
+import 'v-toaster/dist/v-toaster.css';
+Vue.use(Toaster, { timeout: 2000 });
 Vue.use(VueCloneya);
 Vue.use(Vuebar);
 Vue.use(Trend);
