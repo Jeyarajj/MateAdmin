@@ -27,14 +27,14 @@
         
         <!-- Create Contact Modal -->
         
-    <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
+    <v-dialog v-model="contactDialog" persistent max-width="480px">
       <v-btn slot="activator" color="primary" dark class="mb-2">
         <v-icon left dark>add_circle</v-icon> Add New User</v-btn>
-      <v-card class="create-dialog-card">
+      <v-card>
         <v-card-title>
           <v-layout>
             <v-flex row xs6>
-              <span class="white--text">New User</span>
+              <span class="v-toolbar__title primary--text">New User</span>
             </v-flex>
             <v-flex row xs6 text-xs-right>
               <v-btn flat icon color="primary" @click.native="closedialog()">
@@ -76,7 +76,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="white--text" color="menuhover" @click.native="contactDialog=false">Close</v-btn>
+          <v-btn color="normal" @click.native="contactDialog=false">Close</v-btn>
           <v-btn
             class="white--text"
             color="act"
@@ -86,7 +86,6 @@
           >Edit</v-btn>
           <v-btn
             :disabled="$v.$invalid"
-            block
             :class="$v.$invalid ? '' : 'white--text'"
             color="act"
             @click.native="createNewUser()"
@@ -102,27 +101,20 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item._id }}</td>
           <td>{{ props.item.email }}</td>
-          <!--<td class="text-xs-right">{{ props.item.phone }}</td>-->
           <td>{{ props.item._profile.phone}}</td>
-          <td class="text-xs-right">
-            <v-flex xs12 sm3>
-              <v-btn @click="editUser(props.item)" flat icon color="primary">
-                <v-icon>remove_red_eye</v-icon>
-              </v-btn>
-            </v-flex>
-          </td>
-          <td class="text-xs-right">
-            <v-flex xs12 sm3>
-              <v-btn
-                @click="Updatedata(props.item)"
-                flat
-                icon
-                color="primary"
-              >
-                <v-icon>edit</v-icon>
-              </v-btn>
-            </v-flex>
-          </td>
+
+          <td class="justify-center">
+          <v-btn @click="editUser(props.item)" flat icon color="primary">
+            <v-icon small>remove_red_eye</v-icon>
+          </v-btn>
+         <v-btn
+            @click="Updatedata(props.item)"
+            flat
+            icon
+            color="primary">
+            <v-icon small>edit</v-icon>
+          </v-btn>
+        </td>
         </template>
         <v-alert
           slot="no-results"
@@ -132,72 +124,6 @@
         >Your search for "{{ search }}" found no results.</v-alert>
       </v-data-table>
     </v-card>
-
-    <!-- Create Contact Modal -->
-    <!-- <v-dialog v-model="contactDialog" scrollable persistent max-width="480px">
-      <v-card class="create-dialog-card">
-        <v-card-title>
-          <v-layout>
-            <v-flex row xs6>
-              <span class="white--text">New User</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="closedialog()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-alert :value="showerror" type="error">{{errormessage}}</v-alert>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field
-                  @input="$v.defaultUser.users.email.$touch()"
-                  @blur="$v.defaultUser.users.email.$touch()"
-                  prepend-icon="email"
-                  v-model="defaultUser.users.email"
-                  label="Email *"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-select
-                  @input="$v.defaultUser.users._role.$touch()"
-                  @blur="$v.defaultUser.users._role.$touch()"
-                  :items="allroles"
-                  item-text="role_name"
-                  item-value="_id"
-                  prepend-icon="people"
-                  v-model="defaultUser.users._role"
-                  label="Role *"
-                ></v-select>
-              </v-flex>
-            </v-layout>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="white--text" color="menuhover" @click.native="resetContactForm()">Close</v-btn>
-          <v-btn
-            class="white--text"
-            color="act"
-            @click.native="updateContact()"
-            :disabled="$v.defaultUser.$invalid"
-            v-if="isEditformMod"
-          >Edit</v-btn>
-          <v-btn
-            :disabled="$v.$invalid"
-            block
-            :class="$v.$invalid ? '' : 'white--text'"
-            color="act"
-            @click.native="createNewUser()"
-            v-else
-          >Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
 
     <!-- Profile view -->
     <v-dialog v-model="profileDialog" max-width="300">

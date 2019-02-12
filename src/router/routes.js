@@ -214,7 +214,7 @@ export const routes = [
     name: 'events/ManageWebinars'
   },
   {
-    path: '/Students/StudentsList',
+    path: '/students/studentsList',
     components: {
       default: StudentsList,
       sidebar: AppSidebar,
@@ -224,17 +224,17 @@ export const routes = [
     name: 'students/StudentsList'
   },
   {
-    path: '/Students/:student_id',
+    path: '/studentProfile/:student_id',
     components: {
       default: Student,
       sidebar: AppSidebar,
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'students/'
+    name: 'studentProfile/'
   },
   {
-    path: '/Students/StudentsApplicationsList',
+    path: '/students/studentsApplicationsList',
     components: {
       default: StudentsApplicationsList,
       sidebar: AppSidebar,
@@ -321,7 +321,7 @@ export const routes = [
     name: 'settings/Notify'
   },
   {
-    path: '/Settings/MetaTags',
+    path: '/settings/metaTags',
     components: {
       default: MetaTags,
       sidebar: AppSidebar,

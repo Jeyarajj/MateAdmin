@@ -4,7 +4,7 @@
     :class="[navDrawerAlphaMod ? 'alpha' : '', navDrawerScheme, navDrawerVariant ? 'google-material-effect' : '']"
     persistent
     fixed
-    width="260"
+    width="230"
     :mini-variant.sync="navMiniVarient"
     :clipped="clipped"
     v-model="drawer"
@@ -23,7 +23,7 @@
             <img src="../../assets/mate_logo.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title class="headline">Hi {{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-title>
+            <v-list-tile-title>Hi {{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
