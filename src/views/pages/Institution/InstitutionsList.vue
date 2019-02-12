@@ -420,7 +420,7 @@ export default {
   methods: {
     async getInstitutes(page) {
       if (page === undefined) page = 0;
-      const universities = await University.getUniversities(page);
+      const universities = await University.getUniversities(QUERIES.listLimit,page);
       this.institutions = [];
       if (universities) {
         universities.data.getUniversities.university.forEach(element => {

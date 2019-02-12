@@ -23,7 +23,7 @@
             <img src="../../assets/mate_logo.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title class="headline">Hi {{userdata.name ? userdata.name.first : ''}}</v-list-tile-title>
+            <v-list-tile-title class="">Hi {{userdata.name ? userdata.name.first : ''}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>

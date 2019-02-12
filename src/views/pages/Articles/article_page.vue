@@ -42,7 +42,6 @@
                     @blur="$v.form.name.$touch()"
                     @focusout="generateSlug()"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md4>
@@ -51,7 +50,6 @@
                     label="Article Slug"
                     v-model="form.slug"
                     required
-                    box
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -60,7 +58,6 @@
                     label="Short Description"
                     v-model="form.short_description"
                     required
-                    box
                   ></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm12>
@@ -77,7 +74,6 @@
                     label="Category"
                     v-model="form.category"
                     required
-                    box
                     :items="category"
                     :error-messages="fieldErrors('form.category')"
                     @blur="$v.form.category.$touch()"
@@ -85,14 +81,16 @@
                 </v-flex>
 
                 <v-flex xs12 sm6>
-                  <v-select :items="status" v-model="form.status" box label="Article Status"></v-select>
+                  <v-select :items="status" v-model="form.status" label="Article Status"></v-select>
                 </v-flex>
+
+                <v-flex xs12 sm6 class="meta_background">
                 <vue-cloneya :maximum="5" multiple="true" v-model="exampleMultipleData">
                   <div class="input-group">
                     <!-- Add the "v-cloneya-input" directive to elements you wish to set v-bind:value -->
                     <!-- Only input, select, radio, checkbox etc. -->
                     <select
-                      class="form-control select2"
+                      class="form-control select2 articlepage_metaselect round"
                       placeholder="Meta Tags"
                       v-cloneya-input="'meta_name'"
                     >
@@ -104,25 +102,25 @@
                     </select>
                     <input
                       type="text"
-                      class="form-control"
-                      placeholder="Meta Value"
-                      v-cloneya-input="'meta_value'"
-                    >
+                      class="form-control articlepage_metainput"
+                      placeholder="Enter Meta value"
+                      v-cloneya-input="'meta_value'">
                     
                     <span class="input-group-btn">
                       <!-- Add the "v-cloneya-add" directive to elements you wish to add the click listener
                       that will clone the root element-->
-                      <button type="button" class="btn btn-success" tabindex="-1" v-cloneya-add>
-                        <i class="fa fa-plus"></i>
-                      </button>
-                      <!-- Add the "v-cloneya-remove" directive to elements you wish to add the click listener
-                      that will remove the element-->
-                      <button type="button" class="btn btn-danger" tabindex="-1" v-cloneya-remove>
-                        <i class="fa fa-minus"></i>
-                      </button>
+                      <v-btn flat icon v-cloneya-add>
+                        <v-icon color="primary">add_circle</v-icon>
+                      </v-btn>
+
+                      <v-btn flat icon v-cloneya-remove>
+                        <v-icon color="primary">remove_circle</v-icon>
+                      </v-btn>
                     </span>
                   </div>
                 </vue-cloneya>
+                </v-flex>
+
               </v-layout>
             </v-container>
             <v-flex xs12 sm12 md6>

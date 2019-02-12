@@ -1,134 +1,120 @@
 <template>
   <div>
-      <v-toolbar flat extended class="transparent section-definition-toolbar">
-        <v-avatar class="box-glow" tile>
-          <v-icon dark v-html="icon" v-if="icon"></v-icon>
-          <span v-else>{{ title | first2Char }}</span>
-        </v-avatar>
-        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
-        <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
-            <v-icon slot="divider" color="primary">chevron_right</v-icon>
-          </v-breadcrumbs>
-          <slot></slot>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+      <v-avatar class="box-glow" tile>
+        <v-icon dark v-html="icon" v-if="icon"></v-icon>
+        <span v-else>{{ title | first2Char }}</span>
+      </v-avatar>
+      <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="toobar-extension" slot="extension">
+        <v-breadcrumbs :items="breadcrumbs" class="pl-0">
+          <v-icon slot="divider" color="primary">chevron_right</v-icon>
+        </v-breadcrumbs>
+        <slot></slot>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
 
-        <v-dialog v-model="dialog" persistent max-width="900px">
-          <v-btn slot="activator" color="primary" dark class="mb-2">
-            <v-icon left dark>add_circle</v-icon>Add Scholarship
-          </v-btn>
-          <v-card>
-            <v-card-title>
-              <v-layout>
-                <v-flex row xs6>
-                  <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
+      <v-dialog v-model="dialog" persistent max-width="900px">
+        <v-btn slot="activator" @click="openEdit()" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon>Add Scholarship
+        </v-btn>
+        <v-card>
+          <v-card-title>
+            <v-layout>
+              <v-flex row xs6>
+                <span class="v-toolbar__title primary--text">{{ formTitle }}</span>
+              </v-flex>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click.native="close()">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="defaultScholarship._details.name" label="First Name"></v-text-field>
                 </v-flex>
-                <v-flex row xs6 text-xs-right>
-                  <v-btn flat icon color="primary" @click.native="close()">
-                    <v-icon>close</v-icon>
-                  </v-btn>
+
+                <v-flex xs12 sm6 md2>
+                  <v-select
+                    :items="availableCurrencies"
+                    v-model="defaultScholarship._details.amount.currency"
+                    label="Currency"
+                  ></v-select>
+                </v-flex>
+
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="defaultScholarship._details.amount.value" label="Amount"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <v-select
+                    :items="institutions"
+                    item-text="_details.name"
+                    item-value="_id"
+                    v-model="defaultScholarship._details.university_id"
+                    label="University"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="defaultScholarship._details.website" label="Website URL"></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12>
+                  <v-textarea
+                    v-model="defaultScholarship._details.description"
+                    label="Description min 200 words"
+                  ></v-textarea>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12>
+                  <ul>
+                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
+                    <li v-if="scholarshipPicture.exists">
+                      <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
+                      <span @click="removeImage(scholarshipPicture)">Remove</span>
+                    </li>
+                    <li v-else>
+                      <img :src="defaultScholarship._details.picture" width="50" height="auto">
+                    </li>
+                  </ul>
+                  <file-upload
+                    input-id="scholarshipPicture"
+                    class="btn btn-primary"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="false"
+                    :size="1024 * 1024 * 10"
+                    @input="onPicture"
+                    ref="upload"
+                  >
+                    <i class="fa fa-plus"></i>
+                    Upload Picture
+                  </file-upload>
                 </v-flex>
               </v-layout>
-            </v-card-title>
+            </v-container>
+          </v-card-text>
 
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs12 sm6 md6>
-                    <v-text-field
-                      prepend-icon="email"
-                      v-model="editedItem.email"
-                      label="Email *"
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs12 sm6 md2>
-                    <v-select
-                      :items="availableCurrencies"
-                      v-model="editedItem.amount.currency"
-                      label="Currency"
-                    ></v-select>
-                  </v-flex>
-
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.amount.value" label="Amount"></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-select
-                      :items="institutionsResults"
-                      item-text="name"
-                      item-value="_id"
-                      v-model="editedItem.university_id"
-                      label="University"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="editedItem.website" label="Website URL"></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs12 sm12 md12>
-                    <v-textarea
-                      v-model="editedItem.description"
-                      label="Description min 200 words"
-                    ></v-textarea>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6>
-                    <v-select :items="status" v-model="editedItem.status" label="Course Status"></v-select>
-                  </v-flex>
-
-                  <v-flex xs12 sm12 md12>
-                    <ul>
-                      <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                      <li v-if="scholarshipPicture.exists">
-                        <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
-                        <span @click="removeImage(scholarshipPicture)">Remove</span>
-                      </li>
-                      <li v-else>
-                        <img :src="editedItem.picture" width="50" height="auto">
-                      </li>
-                    </ul>
-                    <file-upload
-                      input-id="scholarshipPicture"
-                      class="btn btn-primary"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      accept="image/png, image/gif, image/jpeg, image/webp"
-                      :multiple="false"
-                      :size="1024 * 1024 * 10"
-                      @input="onPicture"
-                      ref="upload"
-                    >
-                      <i class="fa fa-plus"></i>
-                      Upload Picture
-                    </file-upload>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="normal" @click="close">Cancel</v-btn>
-              <v-btn color="green" dark @click="save">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="normal" @click="close">Cancel</v-btn>
+            <v-btn color="green" dark @click="save">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
 
     <v-data-table :headers="headers" :items="scholarships" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
-        <td class="justify-center">{{ props.item.email }}</td>
+        <td>{{ props.item._details.name }}</td>
+        <td class="justify-center">{{ props.item._details.website }}</td>
         <!-- <td class="text-xs-right">{{ props.item.amount.currency }}{{ props.item.amount.value }}</td> -->
-        <td class="justify-center">{{ props.item.description }}</td>
-        <td class="justify-center">{{ props.item.status }}</td>
+        <td class="justify-center">{{ props.item._details.description }}</td>
+        <td class="justify-center">{{ props.item.active }}</td>
 
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
@@ -146,19 +132,17 @@
 import { mapGetters } from "vuex";
 import { imageType } from "../../../dto/imageType";
 import Pagination from "@/components/shared/Pagination";
-import { GET_INSTITUTIONS_INDEX } from "../../../gql-constants/university";
-
-import {
-  GET_SCHOLARSHIPS,
-  CREATE_SCHOLARSHIP
-} from "../../../gql-constants/scholarships";
+import { Scholarship } from "../../../dto/scholarships.js";
+import { University } from "../../../dto/university";
+import { QUERIES } from "../../../gql-constants/scholarships.js"
 export default {
   components: {
     Pagination
   },
   data: () => ({
+    institutions:[],
+    dialog:false,
     title: "Manage Scholarships",
-    status: ["enable", "disable"],
     icon: "playlist_add_check",
     breadcrumbs: [
       {
@@ -175,6 +159,8 @@ export default {
       }
     ],
     scholarshipPicture: imageType,
+    defaultScholarship: Scholarship,
+    scholarships: [],
     headers: [
       {
         text: "Name",
@@ -182,108 +168,26 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Mail", value: "email" },
+      { text: "Website", value: "website" },
       // { text: "Amount", value: "amount" },
       { text: "Description", value: "description" },
       { text: "Status", value: "status" }
-    ],
-    currentIndex: null,
-    totalPages: null,
-    currentPage: null,
-    scholarshipLimit: 10,
-    dialog: false,
-    editedIndex: -1,
-
-    editedItem: {
-      _id: null,
-      first_name: "",
-      last_name: "",
-      website: "",
-      description: "",
-      picture: "",
-      amount: {
-        currency: "USD",
-        value: 0
-      },
-      email: "",
-      university_id: "",
-      created_by: "",
-      updated_by: "",
-      status: "enable"
-    },
-    defaultItem: {
-      _id: null,
-      first_name: "",
-      last_name: "",
-      website: "",
-      description: "",
-      picture: "",
-      amount: {
-        currency: "USD",
-        value: 0
-      },
-      email: "",
-      university_id: "",
-      created_by: "",
-      updated_by: "",
-      status: "enable"
-    }
+    ]
   }),
-  apollo: {
-    scholarships: {
-      query: GET_SCHOLARSHIPS,
-      variables() {
-        return {
-          text: "",
-          page: {
-            from: this.$route.query.pageindex,
-            limit: this.scholarshipLimit
-          }
-        };
-      },
-      update(data) {
-        this.$store.commit("SET_PAGES_DATA", {
-          currentIndex: data.search.scholarship.page.from,
-          totalPages: data.search.scholarship.pages.total,
-          currentPage: data.search.scholarship.pages.current,
-          listLimit: this.scholarshipLimit
-        });
-        console.log(data);
-        return data.search.scholarship.items;
-      },
-      error(error) {
-        console.log(error);
-      }
-    },
-    institutionsResults: {
-      query: GET_INSTITUTIONS_INDEX,
-      variables() {
-        return {
-          text: "",
-          page: {
-            from: 0,
-            limit: 10
-          }
-        };
-      },
-      update(data) {
-        return data.search.university.items;
-      },
-      error(error) {
-        console.log(error);
-      }
-    }
-  },
   computed: {
     ...mapGetters(["availableCurrencies", "userBasicInfoProfile"]),
     formTitle() {
-      return this.editedIndex === -1 ? "Add Scholarship" : "Edit Item";
+      return "Edit Item";
     }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    $route(to, from) {
+      console.log(to.query.pageindex);
+      this.getInstitutes(to.query.pageindex);
     }
   },
 
@@ -291,100 +195,72 @@ export default {
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Scholarships";
-      if (this.editedItem.picture)
+      if (this.defaultScholarship._details.picture)
         this.scholarshipPicture = new imageType(
           null,
           path,
           this.$store,
-          this.editedItem.picture
+          this.defaultScholarship._details.picture
         );
     },
     removeImage(imageDTO) {
       imageDTO.delete(this.$store);
     },
     initialize() {
-      this.scholarships = [
-        // {
-        //   first_name: "FirstName",
-        //   last_name: "SecondName",
-        //   mail: "mail@gmail.com",
-        //   amount: {
-        //     currency: "CURRENCY",
-        //     value: 200
-        //   },
-        //   description: "ScholarhipDescription",
-        //   website: "www.scholarship.com",
-        //   picture: "urltotheImage"
-        // }
-      ];
+      this.scholarships = [];
     },
 
     editItem(item) {
-      this.editedIndex = this.scholarships.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.defaultScholarship = new Scholarship(item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      const index = this.scholarships.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.deleteScholarship(item);
-    },
-
-    deleteScholarship(item) {
-      item.status = "disable";
-      item.amount = {
-        currency: item.amount.currency,
-        value: item.amount.value
-      };
-      this.$apollo
-        .mutate({
-          mutation: CREATE_SCHOLARSHIP,
-          variables: item
-        })
-        .then(data => {
-          console.log("Status Updated Successfully");
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        console.log("delete scholarship");
     },
 
     close() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
     },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.scholarships[this.editedIndex], this.editedItem);
-      }
-      this.editedItem.created_by = this.userBasicInfoProfile._id;
-      this.editedItem.updated_by = this.userBasicInfoProfile._id;
-      this.editedItem.amount = {
-        currency: this.editedItem.amount.currency,
-        value: this.editedItem.amount.value
-      };
-      this.$apollo
-        .mutate({
-          mutation: CREATE_SCHOLARSHIP,
-          variables: this.editedItem
-        })
-        .then(data => {
-          this.editedItem._id = data.data.createScholarship._id;
-          if (this.editedIndex == -1) {
-            // Only on create condition
-            this.scholarships.push(this.editedItem);
-          }
-        })
-        .catch(err => {
-          console.log(err);
+    async getScholarships(page) {
+      if (page === undefined) page = 0;
+      const results = await Scholarship.getScholarships(page);
+      console.log(results)
+      this.scholarships = [];
+      if (results) {
+        results.data.getScholarshipsList.scholarships.forEach(element => {
+          this.scholarships.push(new Scholarship(element));
         });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: results.data.getScholarshipsList.total_pages,
+          currentPage: results.data.getScholarshipsList.current,
+          listLimit: QUERIES.listLimit
+        });
+      }
+    },
+    openEdit() {
+      this.defaultScholarship = new Scholarship();
+    },
+    async save() {
+      const res = await this.defaultScholarship.createScholarship();
+      if (res.data.hasOwnProperty("createScholarship")) {
+        this.defaultScholarship._id = res.data.createScholarship._id;
+        this.scholarships.push(this.defaultScholarship);
+      }
       this.close();
+    },
+    async getInstitutes(page) {
+      const result = await University.getUniversities(1);
+    this.institutions = result.data.getUniversities.university;
     }
+  },
+  created() {
+    this.getInstitutes(1)
+    this.defaultScholarship = new Scholarship();
+    this.getScholarships(this.$route.query.pageindex);
+    console.log(this.defaultScholarship);
   }
 };
 </script>
