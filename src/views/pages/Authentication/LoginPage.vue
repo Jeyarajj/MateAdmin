@@ -48,10 +48,12 @@
                         <!-- Login form submit -->
                         <v-flex xs12 class="no-mrpd">
                           <v-btn
-                            color="act"
+                            color="secondary"
                             type="submit"
                             :disabled="$v.$invalid"
                             block
+                            :loading="loading"
+                            @click="loading = 'true'"
                             :class="$v.$invalid ? '' : 'white--text'"
                           >LOGIN</v-btn>
                         </v-flex>
@@ -120,6 +122,8 @@ export default {
   },
   data() {
     return {
+      loader: null,
+      loading: false,
       form: Object.assign({}, defaultForm),
       showError: false,
       errormessage: null,
@@ -137,15 +141,18 @@ export default {
     isAuthenticated(value) {
       if (value) {
         this.snackbar = true;
+        this.loading = false;
         this.$router.push({
           name: "dashboard"
         });
       } else {
+        this.loading = false;
         this.$router.push("/");
       }
     },
     authWarningMsg(value) {
       if (value) {
+        this.loading = false;
         this.showError = true;
         this.errormessage = value;
       } else {
