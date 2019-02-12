@@ -6,7 +6,7 @@
           <v-card
             class="text-xs-center margin-auto border-radius6 box-white-500-glow elevation-10 auth-box"
           >
-            <v-alert :value="showError" type="error">{{errormessage}}.</v-alert>
+            <v-alert :value="showError" type="error">{{errormessage}}</v-alert>
 
             <v-layout align-center justify-center row fill-height wrap>
               <v-flex xs12 class="text-xs-center mt-3">
