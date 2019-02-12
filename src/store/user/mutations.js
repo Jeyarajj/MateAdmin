@@ -60,9 +60,14 @@ export const userMutations = {
   },
   setcurrentUserinfo: function(state, payload) {
     state.currentUserdata = payload.data.getProfile[0];
+    localStorage.setItem(
+      'userInfo',
+      JSON.stringify(payload.data.getProfile[0])
+    );
   },
   updatecurrentUserinfo: function(state, payload) {
     state.currentUserdata = payload;
+    localStorage.setItem('userInfo', JSON.stringify(payload));
   },
   setRememberMe: function(state, payload) {
     state.rememberMe = payload;

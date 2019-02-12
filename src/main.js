@@ -21,10 +21,13 @@ import colors from 'vuetify/es5/util/colors';
 import InputTag from 'vue-input-tag';
 //import { createI18n } from './i18n/index'
 
-import Vuebar from 'vuebars'
-import Trend from 'vuetrend'
-Vue.use(Vuebar)
-Vue.use(Trend)
+import Vuebar from 'vuebars';
+import Trend from 'vuetrend';
+import VueCloneya from 'vue-cloneya';
+
+Vue.use(VueCloneya);
+Vue.use(Vuebar);
+Vue.use(Trend);
 
 //import {truncate} from 'lodash'
 import App from './App.vue';
@@ -77,9 +80,9 @@ new Vue({
   store,
   apolloProvider,
   created() {
+    this.$store.dispatch('metatags');
     this.$store.dispatch('initFirebase');
     this.$store.dispatch('checkIfUserLogin');
-    this.$store.dispatch('metatags');
     this.$store.dispatch('location');
   },
   render: h => h(App)

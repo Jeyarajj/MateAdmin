@@ -8,13 +8,8 @@ export const CREATE_ARTICLE = gql`
     $cover_image: String
     $category: String
     $short_description: Text
+    $meta_data: [MetaTag]
     $article_content: Text
-    $social_title: String
-    $social_description: String
-    $social_image_url: String
-    $google_title: String
-    $google_description: Text
-    $google_tags: [String]
     $status: String
     $created_by: ObjectID
     $updated_by: ObjectID
@@ -26,13 +21,8 @@ export const CREATE_ARTICLE = gql`
       cover_image: $cover_image
       category: $category
       short_description: $short_description
+      meta_data: $meta_data
       article_content: $article_content
-      social_title: $social_title
-      social_description: $social_description
-      social_image_url: $social_image_url
-      google_title: $google_title
-      google_description: $google_description
-      google_tags: $google_tags
       status: $status
       created_by: $created_by
       updated_by: $updated_by
@@ -43,12 +33,8 @@ export const CREATE_ARTICLE = gql`
       cover_image
       category
       short_description
+      meta_data
       article_content
-      social_title
-      social_description
-      social_image_url
-      google_description
-      google_title
       created_by
       google_tags
     }
@@ -81,17 +67,12 @@ export const GET_ARTICLE = gql`
       category
       short_description
       article_content
-      social_title
-      social_description
-      social_image_url
-      google_description
+      meta_data
       status
-      google_tags
       created_by
       updated_by
       created_at
       updated_at
-      google_title
       review_comment {
         reviewed_by
         comment
@@ -112,11 +93,7 @@ export const GET_ARTICLE_BY_ID = gql`
       cover_image
       category
       article_content
-      social_title
-      google_tags
-      social_description
-      social_image_url
-      google_description
+      meta_data
       status
       created_by {
         _id
@@ -130,7 +107,6 @@ export const GET_ARTICLE_BY_ID = gql`
       }
       created_at
       updated_at
-      google_title
       review_comment {
         reviewed_by {
           _id

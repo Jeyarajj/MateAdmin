@@ -1,19 +1,19 @@
 <template>
   <div>
-      <v-toolbar flat extended class="transparent section-definition-toolbar">
-        <v-avatar class="box-glow" tile>
-          <v-icon dark v-html="icon" v-if="icon"></v-icon>
-          <span v-else>{{ title | first2Char }}</span>
-        </v-avatar>
-        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
-        <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs :items="breadcrumbs" class="pl-0">
-            <v-icon slot="divider" color="primary">chevron_right</v-icon>
-          </v-breadcrumbs>
-          <slot></slot>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+      <v-avatar class="box-glow" tile>
+        <v-icon dark v-html="icon" v-if="icon"></v-icon>
+        <span v-else>{{ title | first2Char }}</span>
+      </v-avatar>
+      <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="toobar-extension" slot="extension">
+        <v-breadcrumbs :items="breadcrumbs" class="pl-0">
+          <v-icon slot="divider" color="primary">chevron_right</v-icon>
+        </v-breadcrumbs>
+        <slot></slot>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
 
     <v-layout row wrap>
       <v-flex v-if="$apollo.loading">
@@ -85,51 +85,44 @@
                 </v-flex>
 
                 <v-flex xs12 sm6>
-                  <v-text-field
-                    color="primary"
-                    label="Social Title"
-                    v-model="form.social_title"
-                    box
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    color="primary"
-                    label="Social Description"
-                    v-model="form.social_description"
-                    box
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    color="primary"
-                    label="Social Image Url"
-                    v-model="form.social_image_url"
-                    box
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    color="primary"
-                    label="Google Title"
-                    v-model="form.google_title"
-                    box
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    color="primary"
-                    label="Google Description"
-                    v-model="form.google_description"
-                    box
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12>
-                  <input-tag placeholder="Google Keywords" v-model="form.google_tags"></input-tag>
-                </v-flex>
-                <v-flex xs12 sm6>
                   <v-select :items="status" v-model="form.status" box label="Article Status"></v-select>
                 </v-flex>
+                <vue-cloneya :maximum="5" multiple="true" v-model="exampleMultipleData">
+                  <div class="input-group">
+                    <!-- Add the "v-cloneya-input" directive to elements you wish to set v-bind:value -->
+                    <!-- Only input, select, radio, checkbox etc. -->
+                    <select
+                      class="form-control select2"
+                      placeholder="Meta Tags"
+                      v-cloneya-input="'meta_name'"
+                    >
+                      <option
+                        v-for="(metatag,index) in metatags"
+                        :key="index"
+                        :value="metatag.value"
+                      >{{metatag.meta_label}}</option>
+                    </select>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Meta Value"
+                      v-cloneya-input="'meta_value'"
+                    >
+                    
+                    <span class="input-group-btn">
+                      <!-- Add the "v-cloneya-add" directive to elements you wish to add the click listener
+                      that will clone the root element-->
+                      <button type="button" class="btn btn-success" tabindex="-1" v-cloneya-add>
+                        <i class="fa fa-plus"></i>
+                      </button>
+                      <!-- Add the "v-cloneya-remove" directive to elements you wish to add the click listener
+                      that will remove the element-->
+                      <button type="button" class="btn btn-danger" tabindex="-1" v-cloneya-remove>
+                        <i class="fa fa-minus"></i>
+                      </button>
+                    </span>
+                  </div>
+                </vue-cloneya>
               </v-layout>
             </v-container>
             <v-flex xs12 sm12 md6>
@@ -150,13 +143,7 @@
                   <v-icon dark left>remove_circle</v-icon>Remove
                 </v-btn>
               </span>
-              <!-- <ul>
-              <v-icon v-if="counselorPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon> 
-              <li v-if="counselorPicture.exists">
-                <img :src="counselorPicture.fileUrl" width="50" height="auto">
-                <span @click="removeImage(counselorPicture)">Remove</span>
-              </li>
-              </ul>-->
+
               <file-upload
                 input-id="counselorPicture"
                 class="btn btn-primary"
@@ -230,29 +217,6 @@
               </v-container>
             </v-layout>
           </v-card>
-
-          <!-- <v-card v-for="(comment,i) in comments" :key="i">
-    <v-toolbar card dense color="transparent">
-      <v-toolbar-title><h4>Reviews</h4></v-toolbar-title>
-    </v-toolbar>
-    <v-divider></v-divider>
-    <v-card-text class="pa-0">
-      <v-list two-line class="pa-0">
-        <template>
-          <v-list-tile>
-            <v-list-tile-avatar >
-              <img :src="item.avatar">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ comment.comment }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{comment.reviewed_by.name}} {{comment.reviewed_by.email}}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
-      <v-divider></v-divider>
-    </v-card-text>
-          </v-card>-->
         </template>
       </v-flex>
     </v-layout>
@@ -306,13 +270,6 @@ export default {
       cover_image: "",
       category: { required },
       slug: "",
-      social_title: "",
-      short_description: "",
-      social_description: "",
-      social_image_url: "",
-      google_title: "",
-      google_description: "",
-      google_tags: "",
       status: ""
     }
   },
@@ -326,33 +283,34 @@ export default {
     ...mapGetters(["metatags", "currentUserdata"])
   },
 
-  apollo: {
-    articleList: {
-      query: GET_ARTICLE_BY_ID,
-      variables() {
-        return {
-          article_id: this.article_id
-        };
-      },
-      update(data) {
-        // return data.getIdArticle;
-        if (this.mode != "create") {
-          this.action = this.mode.toUpperCase();
-          this.form = data.getIdArticle;
-          this.value = data.getIdArticle.article_content;
-          this.comments = data.getIdArticle.review_comment;
-        } else {
-          this.action = "Creation";
-        }
-      },
-      error(error) {
-        console.log(error);
-      }
-    }
-  },
+  // apollo: {
+  //   articleList: {
+  //     query: GET_ARTICLE_BY_ID,
+  //     variables() {
+  //       return {
+  //         article_id: this.article_id
+  //       };
+  //     },
+  //     update(data) {
+  //       // return data.getIdArticle;
+  //       if (this.mode != "create") {
+  //         this.action = this.mode.toUpperCase();
+  //         this.form = data.getIdArticle;
+  //         this.value = data.getIdArticle.article_content;
+  //         this.comments = data.getIdArticle.review_comment;
+  //       } else {
+  //         this.action = "Creation";
+  //       }
+  //     },
+  //     error(error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // },
 
   data() {
     return {
+      exampleMultipleData: [],
       title: "Article Page",
       icon: "playlist_add_check",
       breadcrumbs: [
@@ -370,7 +328,7 @@ export default {
         }
       ],
       counselorPicture: imageType,
-      mode: this.$route.params.mode,
+      mode: this.$route.params.mode ? this.$route.params.mode : "create",
       article_id: this.$route.params.article_id,
       action: "",
       comments: [],
@@ -428,8 +386,32 @@ export default {
       }
     };
   },
-  created() {},
   methods: {
+    addClone(event) {
+      let data = [];
+      let parent = event.target.closest("div.clone-wrapper");
+      // need to change the dropdown value regarding the exampleMultipleData "meta_name"
+      for (let i = 0; i < this.metatags.length; i++) {
+        let result = this.exampleMultipleData.find(item => {
+          return item.meta_name === this.metatags[i].value;
+        });
+        if (result) continue;
+        data[i] = {
+          id: this.metatags[i].value,
+          text: this.metatags[i].meta_label
+        };
+      }
+
+      let lastChild = parent.lastChild;
+
+      let arr = window.$(lastChild).find(".select2");
+      // if (arr.indexOf(name) == -1) {
+      //   lastChild.closest(".select2").className += " " + "sundar";
+      // }
+      // window.$(function() {
+      //   window.$(arr).select2({ data: data });
+      // });
+    },
     onPicture(value) {
       let file = event.target.files[0];
       let path = "Articles/CoverImage";
@@ -453,13 +435,8 @@ export default {
         slug: this.form.slug,
         cover_image: this.form.cover_image,
         category: this.form.category,
+        meta_data: this.exampleMultipleData,
         short_description: this.form.short_description,
-        social_title: this.form.social_title,
-        social_description: this.form.social_description,
-        social_image_url: this.form.social_image_url,
-        google_description: this.form.google_description,
-        google_title: this.form.google_title,
-        google_tags: this.form.google_tags,
         created_by: this.currentUserdata._id,
         updated_by: this.currentUserdata._id,
         status: this.form.status

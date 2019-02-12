@@ -39,6 +39,7 @@
     "vue-apollo": "^3.0.0-beta.27",
     "vue-chartjs": "^3.4.0",
     "vue-ckeditor5": "^0.4.1",
+    "vue-cloneya": "^1.0.10",
     "vue-country-region-select": "^1.1.0",
     "vue-input-tag": "^2.0.4",
     "vue-meta": "^1.5.8",

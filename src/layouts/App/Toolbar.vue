@@ -33,28 +33,16 @@
     <v-menu offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-        <img
-          :src="currentUserdata._profile.photo   
-        ? currentUserdata._profile.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
-        >
+        <img v-if="currentUserdata._profile" :src="currentUserdata._profile.photo ">
+        <img v-else src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5">
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
-            <img
-              :src="currentUserdata._profile.photo 
-        ? currentUserdata._profile.photo
-        : 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5'"
-            >
-          </v-list-tile-avatar>
-
           <v-list-tile-content>
             <v-list-tile-title
               v-text="currentUserdata._profile.name ? currentUserdata._profile.name.first : ''"
             ></v-list-tile-title>
-            <v-list-tile-sub-title>{{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-sub-title>
+            <!-- <v-list-tile-sub-title>{{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-sub-title> -->
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -195,11 +183,12 @@ export default {
   },
   data() {
     return {
+      currentUserdata: "",
       title: "Vuse",
       updateDialog: false,
       datepicker: false,
       current_userid: "",
-      email:"",
+      email: "",
       updatedata: {
         _profile: {
           name: {
@@ -229,7 +218,6 @@ export default {
       navToolbarScheme: "navToolbarScheme",
       navMiniVarient: "navMiniVarient",
       userToken: "isAuthenticated",
-      currentUserdata: "currentUserdata",
       userBasicInfoProfile: "userBasicInfoProfile",
       cities: "cities",
       countries: "countries"
@@ -242,6 +230,9 @@ export default {
     userToken(value) {
       if (value === null || value === false) this.$router.push("/");
     }
+  },
+  created() {
+    this.currentUserdata = JSON.parse(localStorage.getItem("userInfo"));
   },
   methods: {
     ...mapActions({
@@ -301,7 +292,7 @@ export default {
         .then(
           data => {
             this.updatedata.email = this.email;
-            this.updatedata._id = this.current_userid
+            this.updatedata._id = this.current_userid;
             this.$store.dispatch("updatecurrentInfo", updatedata);
             this.updateDialog = false;
           },

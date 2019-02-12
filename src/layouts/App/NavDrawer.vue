@@ -23,7 +23,7 @@
             <img src="../../assets/mate_logo.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title class="headline">Hi {{currentUserdata._profile.name ? currentUserdata._profile.name.first : ''}}</v-list-tile-title>
+            <v-list-tile-title class="headline">Hi {{userdata.name ? userdata.name.first : ''}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -179,13 +179,19 @@ export default {
   data() {
     return {
       items: appDrawerItems,
-      dark: false
+      dark: false,
+      userdata: ""
     };
+  },
+  created() {
+    this.userdata = JSON.parse(localStorage.getItem("userInfo"));
   },
   mounted() {
     const ps = document.getElementById("app-drawer");
     //ps.addEventListener('mouseenter', this.miniEnterVariantHandler)
-    ps.addEventListener("mouseleave", this.miniLeaveVariantHandler);
+    if (ps) {
+      ps.addEventListener("mouseleave", this.miniLeaveVariantHandler);
+    }
   },
   beforeDestroy() {
     const ps = document.getElementById("app-drawer");
