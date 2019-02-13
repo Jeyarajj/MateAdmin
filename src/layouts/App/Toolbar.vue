@@ -38,6 +38,11 @@
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
+
+          <v-list-tile-avatar>
+            <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5">
+          </v-list-tile-avatar>
+
           <v-list-tile-content>
             <v-list-tile-title
               v-text="currentUserdata._profile.name ? currentUserdata._profile.name.first : ''"
@@ -62,9 +67,20 @@
       </v-list>
     </v-menu>
     <!-- User Update view -->
-    <v-dialog v-model="updateDialog" max-width="600">
+    <v-dialog v-model="updateDialog" persistent max-width="900">
       <v-card>
-        <v-card-title class="headline">Edit Profile</v-card-title>
+        <v-card-title class="v-toolbar__title primary--text">
+          <v-layout>
+            <v-flex row xs6>
+              <span class="v-toolbar__title primary--text">Edit Profile</span>
+            </v-flex>
+            <v-flex row xs6 text-xs-right>
+              <v-btn flat icon color="primary" @click="updateDialog = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+          </v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
@@ -79,35 +95,32 @@
               <v-form @submit.prevent="$v.$invalid ? null : submit()" ref="form">
                 <v-container grid-list-xl fluid>
                   <v-layout wrap>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="person"
                         label="First name"
                         v-model="updatedata._profile.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="email"
                         label="Email"
                         readonly
                         v-model="email"
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="phone"
                         label="Phone No."
                         v-model="updatedata._profile.phone"
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-menu
                         ref="datepicker"
                         :close-on-content-click="false"
@@ -126,7 +139,6 @@
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
-                          prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
                           v-model="updatedata._profile.dob"
@@ -135,24 +147,22 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-select
                         :items="cities"
                         item-text="name"
                         item-value="name"
                         label="City"
                         v-model="updatedata._profile.address.city"
-                        outline
                       ></v-select>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-select
                         :items="countries"
                         item-text="name"
                         item-value="name"
                         label="Country"
                         v-model="updatedata._profile.address.country"
-                        outline
                       ></v-select>
                     </v-flex>
                   </v-layout>
@@ -165,8 +175,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" @click="updateDialog = false">Close</v-btn>
-          <v-btn color="success" @click="updateclick()">Update</v-btn>
+          <v-btn color="normal" @click="updateDialog = false">Close</v-btn>
+          <v-btn color="green" dark @click="updateclick()">Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

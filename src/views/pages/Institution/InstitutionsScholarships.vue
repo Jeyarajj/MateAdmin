@@ -67,6 +67,7 @@
                   <v-textarea
                     v-model="defaultScholarship._details.description"
                     label="Description min 200 words"
+                    auto-grow rows="1"
                   ></v-textarea>
                 </v-flex>
 

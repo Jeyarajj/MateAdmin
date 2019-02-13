@@ -77,7 +77,7 @@
                       prepend-icon="event"
                       readonly
                     ></v-text-field>
-                    <v-date-picker v-model="defaultCourse._details.startDate" no-title scrollable>
+                    <v-date-picker v-model="defaultCourse._details.startDate" color="primary" no-title scrollable>
                       <v-spacer></v-spacer>
                       <v-btn flat color="primary" @click="startdate = false">Cancel</v-btn>
                       <v-btn
@@ -108,7 +108,7 @@
                       prepend-icon="event"
                       readonly
                     ></v-text-field>
-                    <v-date-picker v-model="defaultCourse._details.endDate" no-title scrollable>
+                    <v-date-picker v-model="defaultCourse._details.endDate" color="primary" no-title scrollable>
                       <v-spacer></v-spacer>
                       <v-btn flat color="primary" @click="enddate = false">Cancel</v-btn>
                       <v-btn
@@ -140,10 +140,10 @@
                   <!-- <v-text-field v-model="defaultCourse.university_id" label="University"></v-text-field> -->
                 </v-flex>
                 <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="defaultCourse._details.website" label="WebSite URL"></v-text-field>
+                  <v-text-field v-model="defaultCourse._details.website" label="Website URL"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="defaultCourse._details.description" label="Description"></v-textarea>
+                  <v-textarea v-model="defaultCourse._details.description" auto-grow rows="1" label="Description"></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
                   <v-select

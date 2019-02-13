@@ -51,7 +51,8 @@
           @click.prevent="$refs.upload.clear"
         >Cancel</v-btn>
         <v-btn
-          color="success"
+          color="green"
+          dark
           type="submit"
           class="btn btn-primary"
           @click.prevent="editSave"
@@ -70,7 +71,9 @@
   margin: 0 0.5rem;
 }
 .example-avatar .avatar-edit-image {
-  max-width: 100%;
+  max-width: 300px !important;
+  max-height: 300px !important;
+  margin: 1em;
 }
 
 .example-avatar .drop-active {
