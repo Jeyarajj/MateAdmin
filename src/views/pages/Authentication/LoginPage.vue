@@ -53,7 +53,7 @@
                             :disabled="$v.$invalid"
                             block
                             :loading="loading"
-                            @click="loading = 'true'"
+                            @click="loading = true"
                             :class="$v.$invalid ? '' : 'white--text'"
                           >LOGIN</v-btn>
                         </v-flex>

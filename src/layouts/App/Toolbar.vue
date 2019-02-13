@@ -233,6 +233,11 @@ export default {
   },
   created() {
     this.currentUserdata = JSON.parse(localStorage.getItem("userInfo"));
+    this.currentUserdata._profile.dob = new Date(
+      this.currentUserdata._profile.dob
+    )
+      .toISOString()
+      .substring(0, 10);
   },
   methods: {
     ...mapActions({
