@@ -30,7 +30,7 @@
       <v-icon>chat</v-icon>
     </v-btn>-->
     <v-spacer></v-spacer>
-    <v-menu offset-y>
+    <v-menu transition="slide-x-transition" bottom left offset-y>
       <v-avatar slot="activator" size="40">
         <!-- <img :src="authUser.avatar" :alt="authUser.name"> -->
         <img v-if="currentUserdata._profile" :src="currentUserdata._profile.photo ">
@@ -40,7 +40,8 @@
         <v-list-tile avatar>
 
           <v-list-tile-avatar>
-            <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5">
+            <img v-if="currentUserdata._profile" :src="currentUserdata._profile.photo ">
+            <img v-else src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
