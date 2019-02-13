@@ -39,13 +39,14 @@ export class Mentor {
             })
     }
 
-    static async getMentors() {
+    static async getMentors(limit,skip) {
         return apolloClient
             .query({
                 query: QUERIES.GET_MENTORS,
+                fetchPolicy: 'network-only',
                 variables: {
-                    limit: "10",
-                    skip: "0"
+                    limit: limit,
+                    skip: skip
                 }
             })
     }

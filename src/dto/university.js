@@ -51,6 +51,7 @@ export class University {
         return apolloClient
             .query({
                 query: QUERIES.GET_UNIVERSITIES,
+                fetchPolicy: 'network-only',
                 variables: {
                     limit: limit,
                     skip: page
