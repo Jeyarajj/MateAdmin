@@ -32,6 +32,7 @@ import StudentsList from '@/views/pages/Students/StudentsList';
 import Student from '@/views/pages/Students/Student';
 import StudentsApplicationsList from '@/views/pages/Students/StudentsApplicationsList';
 import CounselorsList from '@/views/pages/Counselors/CounselorsList';
+import MentorsList from '@/views/pages/Mentors/MentorsList';
 
 import MetaTags from '@/views/Settings/MetaTags';
 import ManageAdPackages from '@/views/pages/Subscriptions/ManageAdPackages';
@@ -147,6 +148,16 @@ export const routes = [
       footer: AppFooter
     },
     name: 'counselors/CounselorsList'
+  },
+  {
+    path: '/mentors/MentorsList',
+    components: {
+      default: MentorsList,
+      sidebar: AppSidebar,
+      header: AppToolbar,
+      footer: AppFooter
+    },
+    name: 'mentors/MentorsList'
   },
   {
     path: '/institution/institutionsCourses',

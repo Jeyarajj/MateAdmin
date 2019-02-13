@@ -12,15 +12,11 @@ export class Mentor {
     }
     _details = {
         name: "",
-        fieldOfStudy: "",
-        universityName: "",
-        Address: {
+        phone: "",
+        address: {
             city: "",
             country: "",
-            zip: ""
         },
-        coursePeriod:"",
-        aboutMyself: "",
         photo: ""
     }
     active = true;
@@ -60,8 +56,20 @@ export class Mentor {
             return "Blocked"
     }
 
-    getURL() {
-
+    async createMentor() {
+        if (!this._id) {
+            return apolloClient
+                .mutate({
+                    mutation: QUERIES.CREATE_MENTOR,
+                    variables: this.toJSON('create')
+                })
+        } else {
+            return apolloClient
+                .mutate({
+                    mutation: QUERIES.UPDATE_MENTOR,
+                    variables:this.toJSON('update')
+                })
+        }
     }
     updateStatus() {
         var mutationQuery;
@@ -84,22 +92,32 @@ export class Mentor {
                 console.log(err);
             });
     }
+    getPassword(){
+        return Math.random()
+        .toString(36)
+        .slice(-8);
+    
+    }
 
-    // toJSON(type) {
+    toJSON(type) {
 
-    //     switch (type) {
-    //         case "update":
-    //             return {
-
-    //             }
-    //         case "create":
-    //             return {
-    //                 email: this.email,
-    //                 password: this.data.password
-    //             }
-    //         case "default":
-    //             console.log('default')
-    //             break;
-    //     }
-    // }
+        switch (type) {
+            case "update":
+            delete this._details.__typename
+            delete this._details.address.__typename
+            return {
+                _id:this._id,
+                _details:this._details,
+            }
+            case "create":
+                return {
+                    email: this.email,
+                    password: this.getPassword(),
+                    _details: this._details
+                }
+            case "default":
+                console.log('default')
+                break;
+        }
+    }
 }

@@ -22,8 +22,8 @@
             endDate:"",
             duration:""
         }
-        created_by = "5c541361f5ba0f315db125d7"
-        updated_by = "5c541361f5ba0f315db125d7"
+        created_by = "5c5c273e9bc71525c7f84aea"
+        updated_by = "5c5c273e9bc71525c7f84aea"
         active = true;
         constructor(course) {
             if (course) {
@@ -96,25 +96,22 @@
                 return apolloClient
                     .mutate({
                         mutation: QUERIES.UPDATE_COURSE,
-                        variables: {
-                            _id: this._id,
-                            _profile: this.toJSON('update')
-                        }
+                        variables:this.toJSON('update')
                     })
             }
         }
     
         toJSON(type) {
-    
             switch (type) {
                 case "update":
-                    return {
-    
-                    }
+                delete this._details.__typename
+                return {
+                    _id:this._id,
+                    _details:this._details,
+                }
                 case "create":
                     return {
-                        email: this.email,
-                        password: this.data.password
+                        _details: this._details
                     }
                 case "default":
                     console.log('default')
