@@ -38,7 +38,6 @@
       </v-avatar>
       <v-list dense>
         <v-list-tile avatar>
-
           <v-list-tile-avatar>
             <img v-if="currentUserdata._profile" :src="currentUserdata._profile.photo ">
             <img v-else src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d5">
@@ -81,7 +80,7 @@
               </v-btn>
             </v-flex>
           </v-layout>
-          </v-card-title>
+        </v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
@@ -105,13 +104,7 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md6>
-                      <v-text-field
-                        color="primary"
-                        label="Email"
-                        readonly
-                        v-model="email"
-                        required
-                      ></v-text-field>
+                      <v-text-field color="primary" label="Email" readonly v-model="email" required></v-text-field>
                     </v-flex>
                     <v-flex xs12 md6>
                       <v-text-field
@@ -194,7 +187,6 @@ export default {
   },
   data() {
     return {
-      currentUserdata: "",
       title: "Vuse",
       updateDialog: false,
       datepicker: false,
@@ -230,6 +222,7 @@ export default {
       navMiniVarient: "navMiniVarient",
       userToken: "isAuthenticated",
       userBasicInfoProfile: "userBasicInfoProfile",
+      currentUserdata: "currentUserdata",
       cities: "cities",
       countries: "countries"
     }),
@@ -243,7 +236,11 @@ export default {
     }
   },
   created() {
-    this.currentUserdata = JSON.parse(localStorage.getItem("userInfo"));
+    this.currentUserdata._profile.dob = new Date(
+      this.currentUserdata._profile.dob
+    )
+      .toISOString()
+      .substring(0, 10);
   },
   methods: {
     ...mapActions({
@@ -302,8 +299,10 @@ export default {
         })
         .then(
           data => {
+            // this.updatedata = updatedata;
             this.updatedata.email = this.email;
             this.updatedata._id = this.current_userid;
+            // this.currentUserdata = this.updatedata;
             this.$store.dispatch("updatecurrentInfo", updatedata);
             this.updateDialog = false;
           },

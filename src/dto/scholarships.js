@@ -33,11 +33,11 @@ export class Scholarship {
     });
   }
 
-  static async getScholarships(page) {
+  static async getScholarships(limit,page) {
     return apolloClient.query({
       query: QUERIES.GET_SCHOLARSHIPS,
       variables: {
-        limit: QUERIES.limit,
+        limit: limit,
         skip: page
       }
     });
