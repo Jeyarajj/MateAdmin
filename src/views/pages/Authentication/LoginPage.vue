@@ -52,8 +52,8 @@
                             type="submit"
                             :disabled="$v.$invalid"
                             block
-                            :loading="loading"
-                            @click="loading = 'true'"
+                            :loading=loading
+                            @click="loading = true"
                             :class="$v.$invalid ? '' : 'white--text'"
                           >LOGIN</v-btn>
                         </v-flex>

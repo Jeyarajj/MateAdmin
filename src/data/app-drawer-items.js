@@ -42,6 +42,14 @@ export default [
     ]
   },
   {
+    title: 'Mentors',
+    group: 'mentors',
+    icon: 'people',
+    items: [
+      { title: 'Manage Mentors', name: 'MentorsList' }
+    ]
+  },
+  {
     title: 'Articles',
     group: 'articles',
     icon: 'rate_review',

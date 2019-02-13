@@ -8,7 +8,7 @@ import {
 import fetch from 'unfetch'
 
 const newAPIHttpLink = new HttpLink({
-  uri: "http://192.168.0.5:22641/Mate/point/graphql",
+  uri: "http://localhost:22641/Mate/point/graphql",
   credentials: 'same-origin'
 })
 
@@ -18,7 +18,7 @@ const newAPIHttpLink = new HttpLink({
  */
 export default async function newClientPromise () {
   return new Promise((resolve, reject) => {
-    fetch('http://192.168.0.5:22641/Mate/point/graphql', {
+    fetch('http://localhost:22641/Mate/point/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

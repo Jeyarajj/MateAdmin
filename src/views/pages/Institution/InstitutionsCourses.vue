@@ -279,8 +279,7 @@ export default {
       }
     },
     async getInstitutes() {
-      const page = 0;
-      const universities = await University.getUniversities(page);
+      const universities = await University.getUniversities(100,0);
       this.institutions = [];
       if (universities) {
         universities.data.getUniversities.university.forEach(element => {
