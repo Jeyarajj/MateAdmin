@@ -1,65 +1,63 @@
-const s3URL = 'https://s3.us-east-2.amazonaws.com/matefiles/';
+const s3URL = "https://s3.us-east-2.amazonaws.com/matefiles/";
 export class imageType {
-  filePath = '';
-  fileUrl = '';
+  filePath = "";
+  fileUrl = "";
   fileData = {};
-  fileName = '';
-  uploadStatus = false;
-  constructor(file, path, $store, fileUrl) {
-    this.filePath = path;
-    if (file) {
-      this.fileData = file;
-      this.fileName = this.fileData.name;
-      this.update($store);
-    } else if (fileUrl) this.fileUrl = fileUrl;
-    else console.log('Empty Object');
+  fileName = "";
+  constructor(path) {
+    if (path) this.filePath = path;
   }
 
   get fileName() {
+    if(this.fileData)
     return this.name;
+    else
+    return "No Image Selected"
   }
 
-  get filePath() {
-    return this.path;
+  setFile(file) {
+    if (file) {
+      this.fileData = file;
+      this.fileName = this.fileData.name;
+    }
+  }
+  setFileUrl(fileUrl) {
+    if(fileUrl)
+    this.fileUrl = fileUrl;
   }
   get getFileURL() {
+    if(this.fileUrl)
     return this.fileUrl;
+    else
+    return "https://i.stack.imgur.com/l60Hf.png"
   }
   get exists() {
     if (this.fileUrl) return true;
     else return false;
   }
-  update($store) {
-    if (this.fileData) {
-      this.uploadStatus = true;
-      let data = {
+ async update($store) {
+    if(this.filePath){      
+      if (this.fileData) {
+        let data = {
         folder_name: this.filePath,
         file: this.fileData
       };
-      $store.dispatch('upload', data).then(
-        res => {
-          if (res)
-            this.fileUrl =
-              s3URL + encodeURI(this.filePath) + '/' + encodeURI(this.fileName);
-          else console.log('Image upload failed');
-          this.uploadStatus = false;
-        },
-        err => {
-          this.uploadStatus = false;
-          console.log(err);
-        }
-      );
+      this.fileUrl =s3URL + encodeURI(this.filePath) + "/" + encodeURI(this.fileName);
+      return $store.dispatch("upload", data)
+      }
+    }else{
+      return "Path not set"
     }
   }
   clearValues() {
-    this.filePath = '';
-    this.fileUrl = '';
+    this.filePath = "";
+    this.fileUrl = "";
     this.fileData = {};
-    this.fileName = '';
+    this.fileName = "";
     this.uploadStatus = false;
   }
   delete($store) {
-    $store.dispatch('delete', this.fileUrl);
-    this.fileUrl = '';
+    $store.dispatch("delete", this.fileUrl);
+    this.fileUrl = "";
   }
 }
