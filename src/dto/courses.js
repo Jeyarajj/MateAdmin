@@ -44,13 +44,13 @@
                 })
         }
     
-        static async getCourses() {
+        static async getCourses(limit,page) {
             return apolloClient
                 .query({
                     query: QUERIES.GET_COURSES,
                     variables: {
-                        limit: "10",
-                        skip: "0"
+                        limit: limit,
+                        skip: page
                     }
                 })
         }

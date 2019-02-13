@@ -406,7 +406,6 @@ export default {
       val || this.close();
     },
     $route(to, from) {
-      console.log(to.query.pageindex);
       this.getInstitutes(to.query.pageindex);
     }
   },

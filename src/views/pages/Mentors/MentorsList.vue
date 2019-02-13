@@ -135,7 +135,7 @@
       </v-dialog>
     </v-toolbar>
 
-    <v-data-table :headers="headers" :items="mentorlists" class="elevation-1">
+    <v-data-table :headers="headers" :items="mentorlists" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item._details.name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
@@ -154,6 +154,7 @@
         <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
+    <Pagination/>
   </div>
 </template>
 <script>
@@ -168,8 +169,12 @@ import {
 import { validNumber } from "@/utils/validators";
 import validationMixin from "@/mixins/validationMixin";
 import { Mentor } from "../../../dto/mentors";
+import Pagination from "@/components/shared/Pagination";
 
 export default {
+  components: {
+    Pagination
+  },
   mixins: [validationMixin],
   validations: {
     defaultMentor: {
@@ -207,6 +212,7 @@ export default {
   data: () => ({
     defaultMentor: Mentor,
     mentorlists: [],
+    mentorlimit:10,
     title: "Manage Mentors",
     icon: "playlist_add_check",
     breadcrumbs: [
@@ -253,6 +259,9 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    $route(to, from) {
+      this.getMentors(to.query.pageindex);
     }
   },
   created() {
@@ -262,18 +271,18 @@ export default {
   methods: {
     async getMentors(page) {
       if (page === undefined) page = 0;
-      const mentors = await Mentor.getMentors(page);
+      const mentors = await Mentor.getMentors(this.mentorlimit,page);
       this.mentorlists = [];
       if (mentors) {
         mentors.data.getMentors.mentors.forEach(element => {
           this.mentorlists.push(new Mentor(element));
         });
-        // this.$store.commit("SET_PAGES_DATA", {
-        //   currentIndex: this.$route.query.pageindex,
-        //   totalPages: courses.data.getCoursesList.total_pages,
-        //   currentPage: courses.data.getCoursesList.current,
-        //   listLimit: QUERIES.listLimit
-        // });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: mentors.data.getMentors.total_pages,
+          currentPage: mentors.data.getMentors.current,
+          listLimit: this.mentorlimit
+        });
       }
     },
     onPicture(value) {

@@ -214,6 +214,7 @@ export default {
     ],
     dialog: false,
     courselists: [],
+    courseLimit:10,
     institutions: [],
     course_level: ["Under Graduate", "Post Graduate"],
     mode: ["Full Time", "Part Time"],
@@ -251,6 +252,9 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    $route(to, from) {
+      this.getCourses(to.query.pageindex);
     }
   },
 
@@ -264,18 +268,18 @@ export default {
   methods: {
     async getCourses(page) {
       if (page === undefined) page = 0;
-      const courses = await Course.getCourses(page);
+      const courses = await Course.getCourses(this.courseLimit,page);
       this.courselists = [];
       if (courses) {
         courses.data.getCoursesList.courses.forEach(element => {
           this.courselists.push(new Course(element));
         });
-        // this.$store.commit("SET_PAGES_DATA", {
-        //   currentIndex: this.$route.query.pageindex,
-        //   totalPages: courses.data.getCoursesList.total_pages,
-        //   currentPage: courses.data.getCoursesList.current,
-        //   listLimit: QUERIES.listLimit
-        // });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: courses.data.getCoursesList.total_pages,
+          currentPage: courses.data.getCoursesList.current,
+          listLimit: this.courseLimit
+        });
       }
     },
     async getInstitutes() {
