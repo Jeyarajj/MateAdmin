@@ -2,6 +2,7 @@
 <div class="pagination">
   <ul class="pagination__ul">
     <li @click="goTo('firstPage')"
+    v-if="totalPages > 1"
         :class="{'current-page': checkIfCurrentPage(1)}"
         class="pagination__li"> 1 </li>
     <li v-for="(page, i) in pageLists"
@@ -28,7 +29,7 @@ export default {
   name: 'Pagination',
   data () {
     return {
-      pageLists: [2, 3, 4, 5, 6, 7, 8]
+      pageLists: [2, 3, 4]
     }
   },
   computed: {
@@ -75,7 +76,7 @@ export default {
         this.pageLists = _.orderBy(newPageLists)
         return
       } else if (navType === 'onFirstPage') {
-        this.pageLists = [2, 3, 4, 5, 6, 7, 8]
+        this.pageLists = [2, 3, 4]
         return
       }
 
@@ -101,7 +102,7 @@ export default {
           }
           this.pageLists = _.orderBy(newPageLists)
         } else {
-          this.pageLists = [2, 3, 4, 5, 6, 7, 8]
+          this.pageLists = [2, 3, 4]
         }
       } else {
         this.pageLists = []

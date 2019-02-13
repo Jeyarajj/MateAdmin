@@ -162,6 +162,7 @@ export default {
     scholarshipPicture: imageType,
     defaultScholarship: Scholarship,
     scholarships: [],
+    scholarshipLimit:10,
     headers: [
       {
         text: "Name",
@@ -187,8 +188,7 @@ export default {
       val || this.close();
     },
     $route(to, from) {
-      console.log(to.query.pageindex);
-      this.getInstitutes(to.query.pageindex);
+      this.getScholarships(to.query.pageindex);
     }
   },
 
@@ -226,8 +226,7 @@ export default {
     },
     async getScholarships(page) {
       if (page === undefined) page = 0;
-      const results = await Scholarship.getScholarships(page);
-      console.log(results)
+      const results = await Scholarship.getScholarships(this.scholarshipLimit,page);
       this.scholarships = [];
       if (results) {
         results.data.getScholarshipsList.scholarships.forEach(element => {
@@ -237,7 +236,7 @@ export default {
           currentIndex: this.$route.query.pageindex,
           totalPages: results.data.getScholarshipsList.total_pages,
           currentPage: results.data.getScholarshipsList.current,
-          listLimit: QUERIES.listLimit
+          listLimit: this.scholarshipLimit
         });
       }
     },
