@@ -280,9 +280,15 @@
         <td class="justify-center">{{ props.item._details.address.addr }}</td>
         <td class="justify-center">{{ props.item.active }}</td>
 
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon v-if="props.item.active != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
+        <td class="justify-center">
+          <v-btn flat icon @click="editItem(props.item)">
+            <v-icon small color="primary">edit</v-icon>
+          </v-btn>
+
+          <v-btn flat icon @click="deleteItem(props.item)">
+            <v-icon v-if="props.item.active != 'disable'" small color="primary">delete</v-icon>
+          </v-btn>
+
         </td>
       </template>
       <template slot="no-data">

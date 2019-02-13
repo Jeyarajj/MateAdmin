@@ -117,9 +117,15 @@
         <td class="justify-center">{{ props.item._details.description }}</td>
         <td class="justify-center">{{ props.item.active }}</td>
 
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
+        <td class="justify-center">
+          <v-btn flat icon @click="editItem(props.item)">
+            <v-icon small color="primary">edit</v-icon>
+          </v-btn>
+
+          <v-btn flat icon @click="deleteItem(props.item)">
+            <v-icon v-if="props.item.status != 'disable'" small color="primary">delete</v-icon>
+          </v-btn>
+
         </td>
       </template>
       <template slot="no-data">
@@ -173,7 +179,8 @@ export default {
       { text: "Website", value: "website" },
       // { text: "Amount", value: "amount" },
       { text: "Description", value: "description" },
-      { text: "Status", value: "status" }
+      { text: "Status", value: "status" },
+      { text: "Actions", value: "actions" }
     ]
   }),
   computed: {
