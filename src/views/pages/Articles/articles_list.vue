@@ -69,17 +69,17 @@ export default {
         { text: "Created Date", value: "created_at" },
         { text: "Updated Date", value: "updated_at" },
         { text: "Action", value: "action" }
-      ],
-      articleList: []
+      ]
     };
   },
   apollo: {
     articleList: {
       query: GET_ARTICLE,
-      fetchPolicy: "network-only",
-      variables: {
-        page: 1,
-        perPage: 10
+      variables() {
+        return {
+          page: 1,
+          perPage: 10
+        };
       },
       update(data) {
         this.loader.hide();

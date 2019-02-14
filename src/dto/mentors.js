@@ -4,11 +4,13 @@ import {
 import {
     QUERIES
 } from '../gql-constants/mentors'
+import { imageType } from './imageType';
 export class Mentor {
     _id = ""
     email = ""
     data = {
-        password: ""
+        password: "",
+        photo:new imageType()
     }
     _details = {
         name: "",
@@ -26,8 +28,31 @@ export class Mentor {
                 if (!mentor._details)
                     delete mentor._details
                 Object.assign(this, mentor)
+                this.initializeImages()
             }
         }
+    }
+    initializeImages() {
+        this.data={
+            photo: new imageType(this.getPath + "/photo")
+        }
+      if (this._details.photo) this.data.photo.setFileUrl(this._details.photo);
+    }
+    setPhoto(file) {
+      this.data.photo.setFile(file);
+    }
+    removePhoto() {
+      this.data.photo=new imageType(this.getPath + "/photo")
+    }
+    async updateImages($store) {
+      if(this.data.photo){
+        if(this.data.photo.fileData)
+          await this.data.photo.update($store)
+          this._details.photo=this.data.photo.getFileURL
+      }
+    }
+    get getPath() {
+      return "Mentors/" + this._id;
     }
     static async getMentor(_id) {
         return apolloClient
