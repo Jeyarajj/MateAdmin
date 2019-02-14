@@ -118,9 +118,20 @@
     </v-card>
 
     <!-- Profile view -->
-    <v-dialog v-model="profileDialog" max-width="300">
+    <v-dialog v-model="profileDialog" max-width="600">
       <v-card>
-        <v-card-title class="headline">Profile Details</v-card-title>
+        <v-card-title>
+            <v-layout>
+              <v-flex row xs6>
+                <span class="v-toolbar__title primary--text">Profile Details</span>
+              </v-flex>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click="profileDialog = false">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
 
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center>
@@ -130,13 +141,16 @@
           </v-flex>
 
           <v-card-title primary-title>
-            <div>
-              <h3 class="headline mb-0" text-xs-center>{{defaultUser._profile.name.first}}</h3>
+              <v-flex md12>
+              <h3 class="headline text-md-center text-xs-center">{{defaultUser._profile.name.first}}</h3>
+              </v-flex>
 
-              <v-list justify-center sm12>
+              <v-flex md12>
+              <v-list justify-center>
+                
                 <v-list-tile>
                   <v-list-tile-action>
-                    <v-icon>phone</v-icon>
+                    <v-avatar size="36px" color="grey lighten-1"><v-icon small dark>phone</v-icon></v-avatar>
                   </v-list-tile-action>
 
                   <v-list-tile-content>
@@ -148,7 +162,7 @@
 
                 <v-list-tile>
                   <v-list-tile-action>
-                    <v-icon>mail</v-icon>
+                    <v-avatar size="36px" color="grey lighten-1"><v-icon small dark>mail</v-icon></v-avatar>
                   </v-list-tile-action>
 
                   <v-list-tile-content>
@@ -160,7 +174,7 @@
 
                 <v-list-tile>
                   <v-list-tile-action>
-                    <v-icon>cake</v-icon>
+                    <v-avatar size="36px" color="grey lighten-1"><v-icon small dark>cake</v-icon></v-avatar>
                   </v-list-tile-action>
 
                   <v-list-tile-content>
@@ -172,7 +186,7 @@
 
                 <v-list-tile>
                   <v-list-tile-action>
-                    <v-icon>location_on</v-icon>
+                    <v-avatar size="36px" color="grey lighten-1"><v-icon small dark>location_on</v-icon></v-avatar>
                   </v-list-tile-action>
 
                   <v-list-tile-content>
@@ -184,7 +198,7 @@
 
                 <v-list-tile>
                   <v-list-tile-action>
-                    <v-icon>location_city</v-icon>
+                    <v-avatar size="36px" color="grey lighten-1"><v-icon small dark>location_city</v-icon></v-avatar>
                   </v-list-tile-action>
 
                   <v-list-tile-content>
@@ -192,22 +206,34 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
-            </div>
+              </v-flex>
+
           </v-card-title>
         </v-card>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" @click="profileDialog = false">Close</v-btn>
+          <v-btn color="normal" @click="profileDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- User Update view -->
-    <v-dialog v-model="updateDialog" max-width="600">
+    <v-dialog v-model="updateDialog" persistent max-width="900">
       <v-card>
-        <v-card-title class="headline">Edit Profile</v-card-title>
+        <v-card-title>
+            <v-layout>
+              <v-flex row xs6>
+                <span class="v-toolbar__title primary--text">Edit Profile</span>
+              </v-flex>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click="updateDialog = false">
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
             <AvatarUpload
@@ -222,35 +248,32 @@
               <v-form @submit.prevent="$v.$invalid ? null : submit()" ref="form">
                 <v-container grid-list-xl fluid>
                   <v-layout wrap>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="person"
                         label="First name"
                         v-model="defaultUser._profile.name.first"
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="email"
                         label="Email"
                         v-model="defaultUser.email"
                         readonly
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-text-field
                         color="primary"
-                        prepend-icon="phone"
                         label="Phone No."
                         v-model="defaultUser._profile.phone"
                         required
                       ></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 md6>
                       <v-menu
                         ref="datepicker"
                         :close-on-content-click="false"
@@ -269,7 +292,6 @@
                           label="Date of Birth"
                           hint="MM/DD/YYYY format"
                           persistent-hint
-                          prepend-icon="cake"
                         ></v-text-field>
                         <v-date-picker
                           v-model="defaultUser._profile.dob"
@@ -305,8 +327,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" @click="updateDialog = false">Close</v-btn>
-          <v-btn color="success" @click="updateclick()">Update</v-btn>
+          <v-btn color="normal" @click="updateDialog = false">Close</v-btn>
+          <v-btn color="green" dark @click="updateclick()">Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
