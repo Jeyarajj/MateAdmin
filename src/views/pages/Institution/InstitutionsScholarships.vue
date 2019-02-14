@@ -72,45 +72,51 @@
                   ></v-textarea>
                 </v-flex>
 
-                <v-layout flex row pb-2 md12  v-if="defaultScholarship._id">
-              <v-flex md6>
-              <v-card class="card--flex-toolbar">
-                <v-toolbar card prominent color="blue-grey darken-3">
-                  <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
-                </v-toolbar>
-                <v-divider></v-divider>
+                <v-layout flex row pb-2 md12 v-if="defaultScholarship._id">
+                  <v-flex md6>
+                    <v-card class="card--flex-toolbar">
+                      <v-toolbar card prominent color="blue-grey darken-3">
+                        <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
+                      </v-toolbar>
+                      <v-divider></v-divider>
 
-                <v-card-text>
-                <span>
-                    <v-img srcset lazy-src :src="defaultScholarship.data.picture.fileUrl" width="250" height="auto"></v-img>
-                    <v-btn
-                      color="error"
-                      dark
-                      @click="removePicture(i)"
-                      class="removebtn_counsellor"
-                    >
-                     <v-icon dark left>remove_circle</v-icon>Remove
-                    </v-btn>
-                  </span>
-                  <file-upload
-                    input-id="scholarshipPicture"
-                    class="btn btn-primary"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="setPicture"
-                    ref="upload"
-                  >
-                    <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Add Picture
-                    </v-btn>
-                  </file-upload>
-                </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-
+                      <v-card-text>
+                        <span>
+                          <v-img
+                            srcset
+                            lazy-src
+                            :src="defaultScholarship.data.picture.fileUrl"
+                            width="250"
+                            height="auto"
+                          ></v-img>
+                          <v-btn
+                            v-if="defaultScholarship.data.picture.fileUrl"
+                            color="error"
+                            dark
+                            @click="removePicture()"
+                            class="removebtn_counsellor"
+                          >
+                            <v-icon dark left>remove_circle</v-icon>Remove
+                          </v-btn>
+                        </span>
+                        <file-upload
+                          input-id="scholarshipPicture"
+                          class="btn btn-primary"
+                          extensions="gif,jpg,jpeg,png,webp"
+                          accept="image/png, image/gif, image/jpeg, image/webp"
+                          :multiple="false"
+                          :size="1024 * 1024 * 10"
+                          @input="setPicture"
+                          ref="upload"
+                        >
+                          <v-btn color="primary" dark>
+                            <v-icon left dark>add_photo_alternate</v-icon>Add Picture
+                          </v-btn>
+                        </file-upload>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -139,7 +145,7 @@
 
           <!-- <v-btn flat icon @click="deleteItem(props.item)">
             <v-icon v-if="props.item.status != 'disable'" small color="primary">delete</v-icon>
-          </v-btn> -->
+          </v-btn>-->
         </td>
       </template>
       <template slot="no-data">
@@ -224,7 +230,7 @@ export default {
       }
       this.defaultScholarship.setPicture(file);
     },
-    removePicture(index) {
+    removePicture() {
       this.defaultScholarship.removePicture();
     },
     initialize() {

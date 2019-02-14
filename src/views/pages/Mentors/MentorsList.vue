@@ -89,39 +89,47 @@
                     :region="defaultMentor._details.address.city"
                   />
                 </v-flex>
-                <v-flex xs12 sm12 md6>
-                  <v-progress-linear
-                    v-if="counselorPicture.uploadStatus"
-                    indeterminate
-                    color="light-green darken-2"
-                    class="mb-0"
-                  ></v-progress-linear>
-                  <span v-if="counselorPicture.exists">
-                    <v-img :src="counselorPicture.fileUrl" aspect-ratio="1.7"></v-img>
+            
+                <v-layout flex row pb-2 md12  v-if="defaultMentor._id">
+              <v-flex md6>
+              <v-card class="card--flex-toolbar">
+                <v-toolbar card prominent color="blue-grey darken-3">
+                  <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
+                </v-toolbar>
+                <v-divider></v-divider>
+
+                <v-card-text>
+                <span>
+                    <v-img srcset lazy-src :src="defaultMentor.data.photo.fileUrl" width="250" height="auto"></v-img>
                     <v-btn
+                      v-if="defaultMentor.data.photo.fileUrl"
                       color="error"
                       dark
-                      @click="removeImage(counselorPicture)"
+                      @click="removePicture()"
                       class="removebtn_counsellor"
                     >
-                      <v-icon dark left>remove_circle</v-icon>Remove
+                     <v-icon dark left>remove_circle</v-icon>Remove
                     </v-btn>
-                    <!-- <span @click="removeImage(counselorPicture)"> Remove</span> -->
                   </span>
                   <file-upload
-                    input-id="counselorPicture"
+                    input-id="mentorPhoto"
+                    class="btn btn-primary"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    @input="onPicture"
+                    @input="setPicture"
                     ref="upload"
                   >
                     <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                      <v-icon left dark>add_photo_alternate</v-icon>Add Picture
                     </v-btn>
                   </file-upload>
-                </v-flex>
+                </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+
               </v-layout>
             </v-container>
           </v-card-text>
@@ -285,14 +293,18 @@ export default {
         });
       }
     },
-    onPicture(value) {
+    setPicture() {
       let file = event.target.files[0];
-      let path = "Counselors";
-      this.counselorPicture = new imageType(file, path, this.$store);
-      this.editedItem.image = this.counselorPicture.fileUrl;
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+        this.defaultMentor.data.photo.setFileUrl(
+          URL.createObjectURL(file)
+        );
+      }
+      this.defaultMentor.setPhoto(file);
     },
-    removeImage(imageDTO) {
-      imageDTO.delete(this.$store);
+    removePicture(index) {
+      this.defaultMentor.removePhoto();
     },
     openEditMentor() {
       this.defaultMentor = new Mentor();
@@ -318,6 +330,8 @@ export default {
     },
 
     async save() {
+      if(this.defaultMentor._id)
+      await this.defaultMentor.updateImages(this.$store)
       const res = await this.defaultMentor.createMentor();
       if (res.data.hasOwnProperty("createMentor")) {
         this.defaultMentor._id = res.data.createMentor._id;
