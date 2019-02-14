@@ -194,18 +194,7 @@ export default {
       let file = new File([arr], oldFile.name, { type: oldFile.type });
 
       //emit from child to parent
-      let path = "Avatar/" + this.userid;
-
-      let filename = file.name;
-      let fileURL = s3URL + encodeURI(path) + "/" + encodeURI(filename);
-      var objKey = path + "/" + file.name;
-      var params = {
-        Key: objKey,
-        ContentType: file.type,
-        Body: file
-      };
-      var result = await bucket.putObject(params).promise();
-      if (result) this.$emit("clicked", fileURL);
+      this.$emit("clicked", file);
 
       this.$refs.upload.update(oldFile.id, {
         file,
@@ -231,8 +220,8 @@ export default {
 
     inputFilter(newFile, oldFile, prevent) {
       //upload aws s3
-      let path = "Avatar/" + this.userid;
-      this.avatarPicture = new imageType(newFile.file, path, this.$store, "");
+      // let path = "Avatar/" + this.userid;
+      // this.avatarPicture = new imageType(newFile.file, path, this.$store, "");
       //upload aws s3
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {

@@ -276,13 +276,13 @@ export default {
   computed: {
     ...mapGetters(["metatags", "currentUserdata"])
   },
-  mounted() {
-    if (this.mode === "create") {
-      this.$apollo.queries.articleList.skip = true;
-    }
-  },
+  // mounted() {
+  //   if (this.mode === "create") {
+  //     this.$apollo.queries.articleList.skip = true;
+  //   }
+  // },
   apollo: {
-    articleList: {
+    articlelist: {
       query: GET_ARTICLE_BY_ID,
       variables() {
         return {

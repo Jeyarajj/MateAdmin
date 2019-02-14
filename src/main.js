@@ -13,14 +13,14 @@ import apolloProviderPromiseFunction from './apollo';
 
 Vue.use(VueRouter);
 // apollo
-// import { apolloClient } from './apollo-controller/index';
+import { apolloClient } from './apollo-controller/index';
 import VueApollo from 'vue-apollo';
 Vue.use(VueApollo);
 
 //lightbox
 import VueLazyLoad from 'vue-lazyload';
 Vue.use(VueLazyLoad);
-require('vue-image-lightbox/dist/vue-image-lightbox.min.css')
+require('vue-image-lightbox/dist/vue-image-lightbox.min.css');
 
 //Vue.use(VueApollo);
 import { isEmpty as ldIsEmpty } from 'lodash';
@@ -74,9 +74,9 @@ Vue.filter('firstChar', function(str) {
 });
 
 // Apollo Config
-// export const apolloProvider = new VueApollo({
-//   defaultClient: apolloClient
-// });
+export const apolloProvider = new VueApollo({
+  defaultClient: apolloClient
+});
 Vue.filter('formatSize', function(size) {
   if (size > 1024 * 1024 * 1024 * 1024) {
     return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB';
@@ -93,17 +93,17 @@ Vue.use(require('vue-moment'));
 new Vue({
   router,
   store,
-
+  apolloProvider,
   created() {
-    try {
-      apolloProviderPromiseFunction().then(apolloProvider => {
-        // https://github.com/Akryum/vue-apollo/src/index.js @ prepare and launch
-        this._apolloProvider = apolloProvider;
-        Vue.use(VueApollo);
-      });
-    } catch (error) {
-      //test
-    }
+    // try {
+    //   apolloProviderPromiseFunction().then(apolloProvider => {
+    //     // https://github.com/Akryum/vue-apollo/src/index.js @ prepare and launch
+    //     this._apolloProvider = apolloProvider;
+    //     Vue.use(VueApollo);
+    //   });
+    // } catch (error) {
+    //   //test
+    // }
     this.$store.dispatch('metatags');
     this.$store.dispatch('initFirebase');
     this.$store.dispatch('checkIfUserLogin');
