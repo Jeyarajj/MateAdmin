@@ -295,23 +295,6 @@
   </div>
 </template>
 
-<style>
-.upload_pic_list {
-  list-style:  none;
-  margin-top: 40px;
-  padding: 0;
-}
-
-.upload_photo_list {
-   list-style:  none;
-  padding: 0;
-}
-
-.upload_remove_btn {
-  margin-top: -50px !important;
-}
-</style>
-
 
 <script>
 import {
