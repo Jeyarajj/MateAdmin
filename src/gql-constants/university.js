@@ -20,6 +20,9 @@ export const QUERIES={
           city
           addr
         }
+        logo
+        photos
+        banners
       }
     }
     total

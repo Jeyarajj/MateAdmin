@@ -2,7 +2,7 @@ const s3URL = "https://s3.us-east-2.amazonaws.com/matefiles/";
 export class imageType {
   filePath = "";
   fileUrl = "";
-  fileData = {};
+  fileData = "";
   fileName = "";
   constructor(path) {
     if (path) this.filePath = path;
@@ -28,6 +28,8 @@ export class imageType {
   get getFileURL() {
     if(this.fileUrl)
     return this.fileUrl;
+    else if(this.fileData)
+    return this.fileData
     else
     return "https://i.stack.imgur.com/l60Hf.png"
   }
@@ -42,8 +44,8 @@ export class imageType {
         folder_name: this.filePath,
         file: this.fileData
       };
+      await $store.dispatch("upload", data)
       this.fileUrl =s3URL + encodeURI(this.filePath) + "/" + encodeURI(this.fileName);
-      return $store.dispatch("upload", data)
       }
     }else{
       return "Path not set"
@@ -52,7 +54,7 @@ export class imageType {
   clearValues() {
     this.filePath = "";
     this.fileUrl = "";
-    this.fileData = {};
+    this.fileData = ""
     this.fileName = "";
     this.uploadStatus = false;
   }
