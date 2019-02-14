@@ -99,7 +99,7 @@
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.role_name }}</td>
         <td class="justify-center">{{ props.item.role_description }}</td>
-        <td class="justify-center">{{ props.item.created_by }}</td>
+        <td class="justify-center">{{ props.item.username }}</td>
         <td class="justify-center">
           <v-btn flat icon @click="editItem(props.item)">
             <v-icon small color="primary">edit</v-icon>
@@ -183,6 +183,10 @@ export default {
     allroles: []
   }),
   computed: {
+    getUserName() {
+      let data = this.defaultRole.username;
+      return data;
+    },
     formTitle() {
       return this.editedIndex === -1 ? "New Role" : "Edit Role";
     },

@@ -1,5 +1,10 @@
 import { apolloClient } from '../apollo-controller/index';
-import { GET_ROLES, CREATE_ROLE, UPDATE_ROLE } from '../gql-constants/users';
+import {
+  GET_ROLES,
+  CREATE_ROLE,
+  UPDATE_ROLE,
+  GET_PROFILE
+} from '../gql-constants/users';
 export const modules = [
   {
     module_name: 'Student'
@@ -24,9 +29,18 @@ export class Role {
   role_description = '';
   created_by = '';
   role_permission = [];
+  username = '';
   constructor(role) {
     if (role) {
       if (role._id) Object.assign(this, role);
+      if (role.created_by) {
+        this.getProfile();
+        // return (async () => {
+        // All async code here
+        //   return this; // when done
+        // })();
+        // this.username = this.getProfile();
+      }
     }
   }
 
@@ -38,6 +52,19 @@ export class Role {
         skip: '0'
       }
     });
+  }
+  getProfile() {
+    apolloClient
+      .query({
+        query: GET_PROFILE,
+        variables: {
+          _id: this.created_by
+        },
+        fetchPolicy: 'network-only'
+      })
+      .then(data => {
+        this.username = data.data.getProfile[0]._profile.name.first;
+      });
   }
   updateStatus() {
     // var mutationQuery;
@@ -86,6 +113,7 @@ export class Role {
         variables: this.toJSON()
       });
     } else {
+      this.getProfile();
       const packet = this.toJSON();
       packet.created_by = this.created_by;
       return apolloClient.mutate({
