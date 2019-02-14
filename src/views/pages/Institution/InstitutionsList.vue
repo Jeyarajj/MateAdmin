@@ -127,131 +127,153 @@
                     v-model="defaultInstitution.active"
                     label="Institution Status"
                   ></v-select>
-                </v-flex> -->
+                </v-flex>-->
+                <v-layout flex row pb-2 md12 v-if="defaultInstitution._id">
+                  <v-flex md6>
+                    <v-card class="card--flex-toolbar">
+                      <v-toolbar card prominent color="blue-grey darken-3">
+                        <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
+                      </v-toolbar>
+                      <v-divider></v-divider>
 
+                      <v-card-text>
+                        <span>
+                          <v-img
+                            srcset
+                            lazy-src
+                            :src="defaultInstitution.data.logo.fileUrl"
+                            width="250"
+                            height="auto"
+                          ></v-img>
+                        </span>
+                        <file-upload
+                          input-id="file1"
+                          extensions="gif,jpg,jpeg,png,webp"
+                          accept="image/png, image/gif, image/jpeg, image/webp"
+                          :multiple="false"
+                          :size="1024 * 1024 * 10"
+                          @input="setLogo"
+                          ref="upload"
+                        >
+                          <v-btn color="primary" dark>
+                            <v-icon left dark>add_photo_alternate</v-icon>Add Picture
+                          </v-btn>
+                        </file-upload>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
 
-                <v-layout flex row pb-2 md12  v-if="defaultInstitution._id">
-              <v-flex md6>
-              <v-card class="card--flex-toolbar">
-                <v-toolbar card prominent color="blue-grey darken-3">
-                  <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
-                </v-toolbar>
-                <v-divider></v-divider>
+                <v-layout flex md12 row pb-2 v-if="defaultInstitution._id">
+                  <v-flex md12>
+                    <v-card class="card--flex-toolbar">
+                      <v-toolbar
+                        card
+                        prominent
+                        color="blue-grey darken-3"
+                        absolute
+                        scroll-off-screen
+                        scroll-target="#scrolling-techniques"
+                      >
+                        <v-toolbar-title class="body-2 white--text">Upload Banner</v-toolbar-title>
+                      </v-toolbar>
+                      <v-divider></v-divider>
 
-                <v-card-text>
-                <span>
-                    <v-img srcset lazy-src :src="defaultInstitution.data.logo.fileUrl" width="250" height="auto"></v-img>
-                  </span>
-                  <file-upload
-                    input-id="file1"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="setLogo"
-                    ref="upload"
-                  >
-                    <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Add Picture
-                    </v-btn>
-                  </file-upload>
-                </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
+                      <div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">
+                        <v-container style="height: 300px;">
+                          <ul class="upload_pic_list">
+                            <li v-for="(image,i) in defaultInstitution.data.banners" :key="i">
+                              <img
+                                :src="defaultInstitution.data.banners[i].fileUrl"
+                                width="100"
+                                height="auto"
+                              >
+                              <v-tooltip right>
+                                <v-btn
+                                  slot="activator"
+                                  flat
+                                  icon
+                                  color="red"
+                                  class="upload_remove_btn"
+                                  @click="removeBanner(i)"
+                                >
+                                  <v-icon>remove</v-icon>
+                                </v-btn>
+                                <span>Remove Banner</span>
+                              </v-tooltip>
+                            </li>
+                          </ul>
+                          <file-upload
+                            class="btn btn-primary"
+                            input-id="file2"
+                            extensions="gif,jpg,jpeg,png,webp"
+                            accept="image/png, image/gif, image/jpeg, image/webp"
+                            :multiple="false"
+                            :size="1024 * 1024 * 10"
+                            @input="addBanner"
+                            ref="uploadBanners"
+                          >
+                            <v-btn color="primary" dark>
+                              <v-icon left dark>add_photo_alternate</v-icon>Add Banner
+                            </v-btn>
+                          </file-upload>
+                        </v-container>
+                      </div>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
 
+                <v-layout flex md12 row pb-2 v-if="defaultInstitution._id">
+                  <v-flex md12>
+                    <v-card class="card--flex-toolbar">
+                      <v-toolbar card prominent color="blue-grey darken-3">
+                        <v-toolbar-title class="body-2 white--text">Upload Photo</v-toolbar-title>
+                      </v-toolbar>
+                      <v-divider></v-divider>
 
-                <v-layout flex md12 row pb-2  v-if="defaultInstitution._id">
-              <v-flex md12>
-              <v-card class="card--flex-toolbar">
-                <v-toolbar card prominent color="blue-grey darken-3" absolute scroll-off-screen
-      scroll-target="#scrolling-techniques">
-                  <v-toolbar-title class="body-2 white--text">Upload Banner</v-toolbar-title>
-                </v-toolbar>
-                <v-divider></v-divider>
-
-                  <div
-                  id="scrolling-techniques"
-                  class="scroll-y"
-                  style="max-height: 600px;"
-                >
-                  <v-container style="height: 300px;">
-                  <ul class="upload_pic_list">
-                    <li v-for="(image,i) in defaultInstitution.data.banners" :key="i">
-                      <img :src="defaultInstitution.data.banners[i].fileUrl" width="100" height="auto">
-                        <v-tooltip right>
-                        <v-btn slot="activator" flat icon color="red" class="upload_remove_btn"  @click="removeBanner(i)">
-                          <v-icon>remove</v-icon>
-                        </v-btn>
-                        <span>Remove Banner</span>
-                       </v-tooltip>
-                    </li>
-                  </ul>
-                  <file-upload
-                    class="btn btn-primary"
-                    input-id="file2"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="addBanner"
-                    ref="uploadBanners"
-                  >
-                    <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Add Banner
-                    </v-btn>
-                  </file-upload> 
-                  </v-container>
-                </div>         
-             </v-card>
-          </v-flex>
-        </v-layout>
-
-                <v-layout flex md12 row pb-2  v-if="defaultInstitution._id">
-              <v-flex md12>
-              <v-card class="card--flex-toolbar">
-                <v-toolbar card prominent color="blue-grey darken-3">
-                  <v-toolbar-title class="body-2 white--text">Upload Photo</v-toolbar-title>
-                </v-toolbar>
-                <v-divider></v-divider>
-
-              <div
-                  id="scrolling-techniques"
-                  class="scroll-y"
-                  style="max-height: 600px;"
-                >
-                  <v-container style="height: 300px;">
-                <ul class="upload_photo_list">
-                    <li v-for="(image,i) in defaultInstitution.data.photos" :key="i">
-                      <img :src="defaultInstitution.data.photos[i].fileUrl" width="100" height="auto">
-                       <v-tooltip right>
-                        <v-btn slot="activator" flat icon color="red" class="upload_remove_btn"  @click="removePhoto(i)">
-                          <v-icon>remove</v-icon>
-                        </v-btn>
-                        <span>Remove Image</span>
-                       </v-tooltip>
-                    </li>
-                  </ul>
-                  <file-upload
-                    class="btn btn-primary"
-                    input-id="file3"
-                    extensions="gif,jpg,jpeg,png,webp"
-                    accept="image/png, image/gif, image/jpeg, image/webp"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    @input="addPhoto"
-                    ref="uploadPhotos"
-                  >
-                    <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Add Photo
-                    </v-btn>
-                  </file-upload>
-                </v-container>
-                </div>   
-            </v-card>
-          </v-flex>
-        </v-layout>
-                 
+                      <div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">
+                        <v-container style="height: 300px;">
+                          <ul class="upload_photo_list">
+                            <li v-for="(image,i) in defaultInstitution.data.photos" :key="i">
+                              <img
+                                :src="defaultInstitution.data.photos[i].fileUrl"
+                                width="100"
+                                height="auto"
+                              >
+                              <v-tooltip right>
+                                <v-btn
+                                  slot="activator"
+                                  flat
+                                  icon
+                                  color="red"
+                                  class="upload_remove_btn"
+                                  @click="removePhoto(i)"
+                                >
+                                  <v-icon>remove</v-icon>
+                                </v-btn>
+                                <span>Remove Image</span>
+                              </v-tooltip>
+                            </li>
+                          </ul>
+                          <file-upload
+                            class="btn btn-primary"
+                            input-id="file3"
+                            extensions="gif,jpg,jpeg,png,webp"
+                            accept="image/png, image/gif, image/jpeg, image/webp"
+                            :multiple="false"
+                            :size="1024 * 1024 * 10"
+                            @input="addPhoto"
+                            ref="uploadPhotos"
+                          >
+                            <v-btn color="primary" dark>
+                              <v-icon left dark>add_photo_alternate</v-icon>Add Photo
+                            </v-btn>
+                          </file-upload>
+                        </v-container>
+                      </div>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -281,10 +303,9 @@
           <v-btn flat icon @click="editItem(props.item)">
             <v-icon small color="primary">edit</v-icon>
           </v-btn>
-
-          <v-btn flat icon @click="deleteItem(props.item)">
-            <v-icon v-if="props.item.active != 'disable'" small color="primary">delete</v-icon>
-          </v-btn>
+          <!-- <v-btn flat icon @click="deleteItem(props.item)">//
+            <v-icon v-if="props.item.active != 'disable'" small color="primary">delete</v-icon>//
+          </v-btn>-->
         </td>
       </template>
       <template slot="no-data">
@@ -297,13 +318,13 @@
 
 <style>
 .upload_pic_list {
-  list-style:  none;
+  list-style: none;
   margin-top: 40px;
   padding: 0;
 }
 
 .upload_photo_list {
-   list-style:  none;
+  list-style: none;
   padding: 0;
 }
 
@@ -369,6 +390,7 @@ export default {
     }
   },
   data: () => ({
+    loader: "",
     defaultInstitution: University,
     institutions: [],
     title: "Manage Institutions",
@@ -431,6 +453,7 @@ export default {
     }
   },
   mounted() {
+    this.loader = this.$loading.show();
     window.$(function() {
       window.$(".select2").select2({
         dropdownParent: window.$("#myModal")
@@ -445,6 +468,8 @@ export default {
         page
       );
       this.institutions = [];
+      this.loader.hide();
+
       if (universities) {
         universities.data.getUniversities.university.forEach(element => {
           this.institutions.push(new University(element));
@@ -459,37 +484,40 @@ export default {
     },
     openEditInstitution() {
       this.defaultInstitution = new University();
-
     },
     setLogo() {
       let file = event.target.files[0];
       let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
-      this.defaultInstitution.data.logo.setFileUrl(URL.createObjectURL(file));
+        this.defaultInstitution.data.logo.setFileUrl(URL.createObjectURL(file));
       }
-      this.defaultInstitution.setLogo(file)
+      this.defaultInstitution.setLogo(file);
     },
-    addBanner(){
-       let file = event.target.files[0];
-      this.defaultInstitution.addBanner(file)
+    addBanner() {
+      let file = event.target.files[0];
+      this.defaultInstitution.addBanner(file);
       let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
-      this.defaultInstitution.data.banners[this.defaultInstitution.data.banners.length-1].setFileUrl(URL.createObjectURL(file));
+        this.defaultInstitution.data.banners[
+          this.defaultInstitution.data.banners.length - 1
+        ].setFileUrl(URL.createObjectURL(file));
       }
     },
-    removeBanner(index){
-      this.defaultInstitution.removeBanner(index)
+    removeBanner(index) {
+      this.defaultInstitution.removeBanner(index);
     },
-    addPhoto(){
-       let file = event.target.files[0];
-      this.defaultInstitution.addPhoto(file)
+    addPhoto() {
+      let file = event.target.files[0];
+      this.defaultInstitution.addPhoto(file);
       let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
-      this.defaultInstitution.data.photos[this.defaultInstitution.data.photos.length-1].setFileUrl(URL.createObjectURL(file));
+        this.defaultInstitution.data.photos[
+          this.defaultInstitution.data.photos.length - 1
+        ].setFileUrl(URL.createObjectURL(file));
       }
     },
-    removePhoto(index){
-      this.defaultInstitution.removePhoto(index)
+    removePhoto(index) {
+      this.defaultInstitution.removePhoto(index);
     },
     editItem(item) {
       this.defaultInstitution = new University(item);
@@ -509,12 +537,15 @@ export default {
     },
 
     async save() {
-      if(this.defaultInstitution._id)
-      await this.defaultInstitution.updateImages(this.$store);
+      if (this.defaultInstitution._id)
+        await this.defaultInstitution.updateImages(this.$store);
       const res = await this.defaultInstitution.createUniversity();
       if (res.data.hasOwnProperty("createUniversity")) {
+        this.$toaster.success("University Saved Successfully");
         this.defaultInstitution._id = res.data.createUniversity._id;
         this.institutions.push(this.defaultInstitution);
+      } else if (res.data.hasOwnProperty("updateUniversity")) {
+        this.$toaster.success("University Updated Successfully");
       }
       this.close();
     }

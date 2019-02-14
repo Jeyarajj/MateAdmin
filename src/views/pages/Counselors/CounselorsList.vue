@@ -144,7 +144,7 @@
           </v-btn>
           <!-- <v-btn flat icon @click="deleteItem(props.item)">
             <v-icon small color="primary">delete</v-icon>
-          </v-btn> -->
+          </v-btn>-->
         </td>
       </template>
       <template slot="no-data">
@@ -189,7 +189,11 @@ export default {
       }
     }
   },
+  mounted() {
+    this.loader = this.$loading.show();
+  },
   data: () => ({
+    loader: "",
     counselors: [],
     defaultCounselor: Counselor,
     title: "Manage Counsellors",
@@ -209,7 +213,7 @@ export default {
       }
     ],
     counselorPicture: imageType,
-    counselorsLimit:10,
+    counselorsLimit: 10,
     headers: [
       {
         text: "Name",
@@ -246,6 +250,7 @@ export default {
     async getCounselors(page) {
       if (page === undefined) page = 0;
       const results = await Counselor.getCounselors(this.counselorsLimit, page);
+      this.loader.hide();
       console.log(results);
       this.counselors = [];
       if (results) {
@@ -286,8 +291,11 @@ export default {
     async save() {
       const res = await this.defaultCounselor.createCounselor();
       if (res.data.hasOwnProperty("createCounselor")) {
+        this.$toaster.success("Counselor Saved Successfully");
         this.defaultCounselor._id = res.data.createCounselor._id;
         this.counselors.push(this.defaultCounselor);
+      } else if (res.data.hasOwnProperty("updateCounselor")) {
+        this.$toaster.success("Counselor Updated Successfully");
       }
       this.close();
     }
