@@ -209,6 +209,7 @@ export default {
       }
     ],
     counselorPicture: imageType,
+    counselorsLimit:10,
     headers: [
       {
         text: "Name",
@@ -232,6 +233,9 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    $route(to, from) {
+      this.getCounselors(to.query.pageindex);
     }
   },
 
@@ -241,7 +245,7 @@ export default {
     },
     async getCounselors(page) {
       if (page === undefined) page = 0;
-      const results = await Counselor.getCounselors(10, page);
+      const results = await Counselor.getCounselors(this.counselorsLimit, page);
       console.log(results);
       this.counselors = [];
       if (results) {
@@ -252,7 +256,7 @@ export default {
           currentIndex: this.$route.query.pageindex,
           totalPages: results.data.getCounselors.total_pages,
           currentPage: results.data.getCounselors.current,
-          listLimit: 10
+          listLimit: this.counselorsLimit
         });
       }
     },

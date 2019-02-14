@@ -42,6 +42,8 @@ export const userMutations = {
     // removed all user related storage
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
+    localStorage.removeItem('userInfo');
+
     // redirect to homepage
     // reloadOnceOnly()
   },

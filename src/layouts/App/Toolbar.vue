@@ -141,23 +141,21 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <v-flex xs12 md6>
-                      <v-select
-                        :items="cities"
-                        item-text="name"
-                        item-value="name"
-                        label="City"
-                        v-model="updatedata._profile.address.city"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12 md6>
-                      <v-select
-                        :items="countries"
-                        item-text="name"
-                        item-value="name"
-                        label="Country"
+                    <v-flex xs12 sm6 md6>
+                      <country-select
+                        class="countryselectborder"
                         v-model="updatedata._profile.address.country"
-                      ></v-select>
+                        :country="updatedata._profile.address.country"
+                        topCountry="US"
+                      />
+                    </v-flex>
+                    <v-flex xs12 sm6 md6>
+                      <region-select
+                        class="regionselectborder"
+                        v-model="updatedata._profile.address.city"
+                        :country="updatedata._profile.address.country"
+                        :region="updatedata._profile.address.city"
+                      />
                     </v-flex>
                   </v-layout>
                 </v-container>

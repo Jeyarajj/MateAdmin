@@ -1,120 +1,111 @@
 <template>
   <div>
-      <v-toolbar flat extended class="transparent section-definition-toolbar">
-        <v-avatar class="box-glow" tile>
-          <v-icon dark v-html="icon" v-if="icon"></v-icon>
-          <span v-else>{{ title | first2Char }}</span>
-        </v-avatar>
-        <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
-        
-        <v-toolbar-title class="toobar-extension" slot="extension">
-          <v-breadcrumbs
-            v-if="breadcrumbs"
-            class="pl-0"
-          >
-            <v-icon slot="divider" color="primary">chevron_right</v-icon>
-            <v-breadcrumbs-item
-              v-for="item in breadcrumbs"
-              :key="item.text"
-              :disabled="item.disabled"
-            >
-              {{ item.text }}
-            </v-breadcrumbs-item>
-          </v-breadcrumbs>
-          <slot></slot>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        
-        <!-- Create Contact Modal -->
-        
-    <v-dialog v-model="contactDialog" persistent max-width="480px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">
-        <v-icon left dark>add_circle</v-icon> Add New User</v-btn>
-      <v-card>
-        <v-card-title>
-          <v-layout>
-            <v-flex row xs6>
-              <span class="v-toolbar__title primary--text">New User</span>
-            </v-flex>
-            <v-flex row xs6 text-xs-right>
-              <v-btn flat icon color="primary" @click.native="closedialog()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-alert :value="showerror" type="error">{{errormessage}}</v-alert>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field
-                :error-messages="fieldErrors('defaultUser.email')"
-                  @input="$v.defaultUser.email.$touch()"
-                  @blur="$v.defaultUser.email.$touch()"
-                  prepend-icon="email"
-                  v-model="defaultUser.email"
-                  label="Email *"
-                ></v-text-field>
+    <v-toolbar flat extended class="transparent section-definition-toolbar">
+      <v-avatar class="box-glow" tile>
+        <v-icon dark v-html="icon" v-if="icon"></v-icon>
+        <span v-else>{{ title | first2Char }}</span>
+      </v-avatar>
+      <v-toolbar-title class="primary--text">{{ title }}</v-toolbar-title>
+
+      <v-toolbar-title class="toobar-extension" slot="extension">
+        <v-breadcrumbs v-if="breadcrumbs" class="pl-0">
+          <v-icon slot="divider" color="primary">chevron_right</v-icon>
+          <v-breadcrumbs-item
+            v-for="item in breadcrumbs"
+            :key="item.text"
+            :disabled="item.disabled"
+          >{{ item.text }}</v-breadcrumbs-item>
+        </v-breadcrumbs>
+        <slot></slot>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+
+      <!-- Create Contact Modal -->
+      <v-dialog v-model="contactDialog" persistent max-width="480px">
+        <v-btn slot="activator" color="primary" dark class="mb-2">
+          <v-icon left dark>add_circle</v-icon>Add New User
+        </v-btn>
+        <v-card>
+          <v-card-title>
+            <v-layout>
+              <v-flex row xs6>
+                <span class="v-toolbar__title primary--text">New User</span>
               </v-flex>
-              <v-flex xs12>
-                <v-select
-                :error-messages="fieldErrors('defaultUser._role')"
-                  @input="$v.defaultUser._role.$touch()"
-                  @blur="$v.defaultUser._role.$touch()"
-                  :items="allroles"
-                  item-text="role_name"
-                  item-value="_id"
-                  prepend-icon="people"
-                  v-model="defaultUser._role"
-                  label="Role *"
-                ></v-select>
+              <v-flex row xs6 text-xs-right>
+                <v-btn flat icon color="primary" @click.native="closedialog()">
+                  <v-icon>close</v-icon>
+                </v-btn>
               </v-flex>
             </v-layout>
-          </v-container>
-          <small>*indicates required field</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="normal" @click.native="contactDialog=false">Close</v-btn>
-          <v-btn
-            class="white--text"
-            color="act"
-            @click.native="updateContact()"
-            :disabled="$v.defaultUser.$invalid"
-            v-if="isEditformMod"
-          >Edit</v-btn>
-          <v-btn
-            :disabled="$v.$invalid"
-            :class="$v.$invalid ? '' : 'white--text'"
-            color="act"
-            @click.native="createNewUser()"
-            v-else
-          >Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> 
-      </v-toolbar>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-alert :value="showerror" type="error">{{errormessage}}</v-alert>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field
+                    :error-messages="fieldErrors('defaultUser.email')"
+                    @input="$v.defaultUser.email.$touch()"
+                    @blur="$v.defaultUser.email.$touch()"
+                    prepend-icon="email"
+                    v-model="defaultUser.email"
+                    label="Email *"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-select
+                    :error-messages="fieldErrors('defaultUser._role')"
+                    @input="$v.defaultUser._role.$touch()"
+                    @blur="$v.defaultUser._role.$touch()"
+                    :items="allroles"
+                    item-text="role_name"
+                    item-value="_id"
+                    prepend-icon="people"
+                    v-model="defaultUser._role"
+                    label="Role *"
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="normal" @click.native="contactDialog=false">Close</v-btn>
+            <v-btn
+              class="white--text"
+              color="act"
+              @click.native="updateContact()"
+              :disabled="$v.defaultUser.$invalid"
+              v-if="isEditformMod"
+            >Edit</v-btn>
+            <v-btn
+              :disabled="$v.$invalid"
+              :class="$v.$invalid ? '' : 'white--text'"
+              color="act"
+              @click.native="createNewUser()"
+              v-else
+            >Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
 
     <v-card>
-      <v-data-table :headers="headers" :items="allusers" :search="search">
+      <v-data-table :headers="headers" :items="allusers" :hide-actions="true" :search="search">
         <template slot="items" slot-scope="props">
-          <td>{{ props.item._id }}</td>
+          <td>{{ props.item._profile.name.first }}</td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item._profile.phone}}</td>
 
           <td class="justify-center">
-          <v-btn @click="editUser(props.item)" flat icon color="primary">
-            <v-icon small>remove_red_eye</v-icon>
-          </v-btn>
-         <v-btn
-            @click="Updatedata(props.item)"
-            flat
-            icon
-            color="primary">
-            <v-icon small>edit</v-icon>
-          </v-btn>
-        </td>
+            <v-btn @click="editUser(props.item)" flat icon color="primary">
+              <v-icon small>remove_red_eye</v-icon>
+            </v-btn>
+            <v-btn @click="Updatedata(props.item)" flat icon color="primary">
+              <v-icon small>edit</v-icon>
+            </v-btn>
+          </td>
         </template>
         <v-alert
           slot="no-results"
@@ -123,6 +114,7 @@
           icon="warning"
         >Your search for "{{ search }}" found no results.</v-alert>
       </v-data-table>
+      <Pagination/>
     </v-card>
 
     <!-- Profile view -->
@@ -218,7 +210,7 @@
         <v-card-title class="headline">Edit Profile</v-card-title>
         <v-card>
           <v-flex xs12 text-xs-center layout align-center justify-center id="avatarpreview">
-            <AvatarUpload 
+            <AvatarUpload
               :avatarurl="this.defaultUser._profile.photo"
               :userid="this.defaultUser._id"
               @clicked="avatarclick"
@@ -286,25 +278,22 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
-                    <v-flex xs12>
-                      <v-select
-                        :items="cities"
-                        item-text="name"
-                        item-value="name"
-                        label="City"
-                        v-model="defaultUser._profile.address.city"
-                        outline
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12>
-                       <v-select
-                        :items="countries"
-                        item-text="name"
-                        item-value="name"
-                        label="Country"
+
+                    <v-flex xs12 sm6 md6>
+                      <country-select
+                        class="countryselectborder"
                         v-model="defaultUser._profile.address.country"
-                        outline
-                      ></v-select>
+                        :country="defaultUser._profile.address.country"
+                        topCountry="US"
+                      />
+                    </v-flex>
+                    <v-flex xs12 sm6 md6>
+                      <region-select
+                        class="regionselectborder"
+                        v-model="defaultUser._profile.address.city"
+                        :country="defaultUser._profile.address.country"
+                        :region="defaultUser._profile.address.city"
+                      />
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -329,6 +318,7 @@ import { rgba as Gradients } from "@/data/gradients";
 import { filter, findIndex } from "lodash";
 import { Users } from "../../dto/users";
 import { Role } from "../../dto/roles";
+import Pagination from "@/components/shared/Pagination";
 import {
   required,
   maxLength,
@@ -346,43 +336,45 @@ export default {
   mixins: [validationMixin],
   name: "UserList",
   components: {
-    AvatarUpload
+    AvatarUpload,
+    Pagination
   },
   validations: {
     defaultUser: {
-        email: { required, email },
-        _role: { required }
+      email: { required, email },
+      _role: { required }
     }
   },
   validationMessages: {
     defaultUser: {
-        email: {
-          required: "Email is required",
-          email: "Email must be valid"
-        },
-        _role: {
-          required: "Role is required"
-        }
+      email: {
+        required: "Email is required",
+        email: "Email must be valid"
+      },
+      _role: {
+        required: "Role is required"
+      }
     }
   },
   data() {
     return {
-    title: 'Manage Users',
-    icon: 'playlist_add_check',
-    breadcrumbs: [
-    {
-      text: 'Home',
-      disabled: true
-    },
-    {
-      text: 'Users Management',
-      disabled: true
-    },
-    {
-      text: 'Manage Users',
-      disabled: true
-    }
-    ],
+      title: "Manage Users",
+      icon: "playlist_add_check",
+      breadcrumbs: [
+        {
+          text: "Home",
+          disabled: true
+        },
+        {
+          text: "Users Management",
+          disabled: true
+        },
+        {
+          text: "Manage Users",
+          disabled: true
+        }
+      ],
+      usersLimit: 10,
       search: "",
       errormessage: "",
       showerror: false,
@@ -418,6 +410,11 @@ export default {
       datepicker: false
     };
   },
+  watch: {
+    $route(to, from) {
+      this.getUsers(to.query.pageindex);
+    }
+  },
   methods: {
     formatDate(date) {
       if (!date) return null;
@@ -440,17 +437,17 @@ export default {
       this.createusers();
     },
     editUser(data) {
-      this.defaultUser = new Users(data)
-      console.log(this.defaultUser)
+      this.defaultUser = new Users(data);
+      console.log(this.defaultUser);
       this.profileDialog = true;
     },
     Updatedata(data) {
-      this.defaultUser = new Users(data)
+      this.defaultUser = new Users(data);
       //this.defaultUser._id = id
       this.updateDialog = true;
     },
     updateclick() {
-      this.createusers()
+      this.createusers();
     },
     avatarclick(value) {
       this.defaultUser._profile.photo = value;
@@ -475,17 +472,25 @@ export default {
         if (result.data.hasOwnProperty("createAdminUser")) {
           this.defaultUser._id = result.data.createAdminUser._id;
           this.allusers.push(this.defaultUser);
-        }else if(result.data.hasOwnProperty("updateProfile")){
+        } else if (result.data.hasOwnProperty("updateProfile")) {
           this.updateDialog = false;
         }
       } else console.log("Created failed check logs");
       this.contactDialog = false;
     },
-    async getUsers() {
-      const users = await Users.getUsers();
+    async getUsers(page) {
+      if (page === undefined) page = 0;
+      const users = await Users.getUsers(this.usersLimit, page);
+      this.allusers = [];
       if (users) {
-        users.data.getUsers.forEach(element => {
+        users.data.getUsers.users.forEach(element => {
           this.allusers.push(new Users(element));
+        });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: users.data.getUsers.total_pages,
+          currentPage: users.data.getUsers.current,
+          listLimit: this.usersLimit
         });
       }
       console.log(this.allusers);
@@ -493,26 +498,22 @@ export default {
     async getRoles() {
       const roles = await Role.getRoles();
       if (roles) {
-        roles.data.getRoles.forEach(element => {
+        roles.data.getRoles.roles.forEach(element => {
           this.allroles.push(new Role(element));
         });
         console.log(this.allroles);
         console.log(roles);
       }
-    },
+    }
   },
   created() {
     this.defaultUser = new Users();
     this.getUsers();
     this.getRoles();
+    this.defaultUser.created_by = this.userBasicInfoProfile._id;
   },
   computed: {
-    ...mapGetters([
-      "userBasicInfoProfile",
-      "nationalities",
-      "cities",
-      "countries"
-    ])
+    ...mapGetters(["userBasicInfoProfile", "nationalities", "currentUserdata"])
   }
 };
 </script>
