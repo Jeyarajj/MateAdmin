@@ -187,13 +187,14 @@ export default {
       return this.editedIndex === -1 ? "New Role" : "Edit Role";
     },
 
-    ...mapGetters(["userBasicInfoProfile"])
+    ...mapGetters(["userBasicInfoProfile","currentUserdata"])
   },
 
   watch: {},
   created() {
     this.loader = this.$loading.show();
     this.getRoles();
+    this.defaultRole.created_by = this.userBasicInfoProfile._id
   },
   // apollo: {
   //   getRoles: {

@@ -25,7 +25,7 @@ export class Role {
     _id = ""
     role_name = ""
     role_description = ""
-    created_by = "5c541361f5ba0f315db125d7"
+    created_by = ""
     role_permission = []
     constructor(role) {
         if (role) {
@@ -95,11 +95,14 @@ export class Role {
                 })
             } else {
                 const packet=this.toJSON()
-                packet.created_by=this.created_by
+                packet.created_by="5c5c273e9bc71525c7f84aea"
+                console.log('cccc');
+                console.log(this);
+                console.log(packet);
                return apolloClient
                     .mutate({
                         mutation: CREATE_ROLE,
-                        variables: this.toJSON()
+                        variables: packet
                     })
             }
     }

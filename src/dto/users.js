@@ -15,6 +15,7 @@ export class Users {
     data = {
         password: ""
     }
+    created_by = ""
     _profile = {
         email: "",
         name: {
@@ -36,7 +37,6 @@ export class Users {
             city: "",
             country: ""
         },
-        created_by: "5c541361f5ba0f315db125d7"
     }
     constructor(user) {
         if (user) {
@@ -85,7 +85,8 @@ export class Users {
                 return {
                     email: this.email,
                     _role: this._role,
-                    password:this.data.password
+                    password:this.data.password,
+                    created_by: this.created_by
                 }
             case "default":
                 console.log('default')
