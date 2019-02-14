@@ -77,7 +77,12 @@
                       prepend-icon="event"
                       readonly
                     ></v-text-field>
-                    <v-date-picker v-model="defaultCourse._details.startDate" color="primary" no-title scrollable>
+                    <v-date-picker
+                      v-model="defaultCourse._details.startDate"
+                      color="primary"
+                      no-title
+                      scrollable
+                    >
                       <v-spacer></v-spacer>
                       <v-btn flat color="primary" @click="startdate = false">Cancel</v-btn>
                       <v-btn
@@ -108,7 +113,12 @@
                       prepend-icon="event"
                       readonly
                     ></v-text-field>
-                    <v-date-picker v-model="defaultCourse._details.endDate" color="primary" no-title scrollable>
+                    <v-date-picker
+                      v-model="defaultCourse._details.endDate"
+                      color="primary"
+                      no-title
+                      scrollable
+                    >
                       <v-spacer></v-spacer>
                       <v-btn flat color="primary" @click="enddate = false">Cancel</v-btn>
                       <v-btn
@@ -143,7 +153,12 @@
                   <v-text-field v-model="defaultCourse._details.website" label="Website URL"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
-                  <v-textarea v-model="defaultCourse._details.description" auto-grow rows="1" label="Description"></v-textarea>
+                  <v-textarea
+                    v-model="defaultCourse._details.description"
+                    auto-grow
+                    rows="1"
+                    label="Description"
+                  ></v-textarea>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
                   <v-select
@@ -174,7 +189,7 @@
 
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon>
+          <!-- <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon> -->
         </td>
       </template>
       <template slot="no-data">
@@ -214,7 +229,7 @@ export default {
     ],
     dialog: false,
     courselists: [],
-    courseLimit:10,
+    courseLimit: 10,
     institutions: [],
     course_level: ["Under Graduate", "Post Graduate"],
     mode: ["Full Time", "Part Time"],
@@ -268,7 +283,7 @@ export default {
   methods: {
     async getCourses(page) {
       if (page === undefined) page = 0;
-      const courses = await Course.getCourses(this.courseLimit,page);
+      const courses = await Course.getCourses(this.courseLimit, page);
       this.courselists = [];
       if (courses) {
         courses.data.getCoursesList.courses.forEach(element => {
@@ -283,7 +298,7 @@ export default {
       }
     },
     async getInstitutes() {
-      const universities = await University.getUniversities(100,0);
+      const universities = await University.getUniversities(100, 0);
       this.institutions = [];
       if (universities) {
         universities.data.getUniversities.university.forEach(element => {

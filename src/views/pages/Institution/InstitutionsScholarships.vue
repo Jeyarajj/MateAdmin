@@ -119,9 +119,9 @@
             <v-icon small color="primary">edit</v-icon>
           </v-btn>
 
-          <v-btn flat icon @click="deleteItem(props.item)">
+          <!-- <v-btn flat icon @click="deleteItem(props.item)">
             <v-icon v-if="props.item.status != 'disable'" small color="primary">delete</v-icon>
-          </v-btn>
+          </v-btn>-->
         </td>
       </template>
       <template slot="no-data">
