@@ -97,7 +97,7 @@ export const GET_ROLES = gql `
 
 export const CREATEUSER = gql `
   mutation createAdminUser($email: String!, $password: String!, $_role: ObjectID,$created_by: ObjectID) {
-    createAdminUser(email: $email, password: $password, _role: $_role,created_by: $created_by) {
+   createAdminUser(email: $email, password: $password, _role: $_role,created_by: $created_by) {
       _id
     }
   }
