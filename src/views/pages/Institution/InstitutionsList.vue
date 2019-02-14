@@ -35,7 +35,7 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md6>
                   <v-text-field
                     :error-messages="fieldErrors('defaultInstitution._details.name')"
                     @input="$v.defaultInstitution._details.name.$touch()"
@@ -45,7 +45,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md6>
                   <v-text-field
                     :error-messages="fieldErrors('defaultInstitution.email')"
                     @input="$v.defaultInstitution.email.$touch()"
@@ -121,18 +121,26 @@
                     rows="2"
                   ></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm6 md6>
+                <!-- <v-flex xs12 sm6 md6>
                   <v-select
                     :items="status"
                     v-model="defaultInstitution.active"
                     label="Institution Status"
-                    box
                   ></v-select>
-                </v-flex>
+                </v-flex> -->
 
-                <v-flex xs12 sm12 md6 v-if="defaultInstitution._id">
-                  <span>
-                    <v-img srcset lazy-src :src="defaultInstitution.data.logo.fileUrl" aspect-ratio="1.7"></v-img>
+
+                <v-layout flex row pb-2 md12  v-if="defaultInstitution._id">
+              <v-flex md6>
+              <v-card class="card--flex-toolbar">
+                <v-toolbar card prominent color="blue-grey darken-3">
+                  <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
+                </v-toolbar>
+                <v-divider></v-divider>
+
+                <v-card-text>
+                <span>
+                    <v-img srcset lazy-src :src="defaultInstitution.data.logo.fileUrl" width="250" height="auto"></v-img>
                   </span>
                   <file-upload
                     input-id="file1"
@@ -144,21 +152,39 @@
                     ref="upload"
                   >
                     <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                      <v-icon left dark>add_photo_alternate</v-icon>Add Picture
                     </v-btn>
                   </file-upload>
-                </v-flex>
+                </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
 
 
+                <v-layout flex md12 row pb-2  v-if="defaultInstitution._id">
+              <v-flex md12>
+              <v-card class="card--flex-toolbar">
+                <v-toolbar card prominent color="blue-grey darken-3" absolute scroll-off-screen
+      scroll-target="#scrolling-techniques">
+                  <v-toolbar-title class="body-2 white--text">Upload Banner</v-toolbar-title>
+                </v-toolbar>
+                <v-divider></v-divider>
 
-
-                <v-flex xs12 sm12 md12  v-if="defaultInstitution._id">
-                  <br>
-                  <br>
-                  <ul>
+                  <div
+                  id="scrolling-techniques"
+                  class="scroll-y"
+                  style="max-height: 600px;"
+                >
+                  <v-container style="height: 300px;">
+                  <ul class="upload_pic_list">
                     <li v-for="(image,i) in defaultInstitution.data.banners" :key="i">
-                      <img :src="defaultInstitution.data.banners[i].fileUrl" width="50" height="auto">
-                        <v-btn color="primary" @click="removeBanner(i)">Remove</v-btn>
+                      <img :src="defaultInstitution.data.banners[i].fileUrl" width="100" height="auto">
+                        <v-tooltip right>
+                        <v-btn slot="activator" flat icon color="red" class="upload_remove_btn"  @click="removeBanner(i)">
+                          <v-icon>remove</v-icon>
+                        </v-btn>
+                        <span>Remove Banner</span>
+                       </v-tooltip>
                     </li>
                   </ul>
                   <file-upload
@@ -174,17 +200,36 @@
                     <v-btn color="primary" dark>
                       <v-icon left dark>add_photo_alternate</v-icon>Add Banner
                     </v-btn>
-                  </file-upload>
-                </v-flex>
-                
+                  </file-upload> 
+                  </v-container>
+                </div>         
+             </v-card>
+          </v-flex>
+        </v-layout>
 
-                <v-flex xs12 sm12 md12  v-if="defaultInstitution._id">
-                  <br>
-                  <br>
-                  <ul>
+                <v-layout flex md12 row pb-2  v-if="defaultInstitution._id">
+              <v-flex md12>
+              <v-card class="card--flex-toolbar">
+                <v-toolbar card prominent color="blue-grey darken-3">
+                  <v-toolbar-title class="body-2 white--text">Upload Photo</v-toolbar-title>
+                </v-toolbar>
+                <v-divider></v-divider>
+
+              <div
+                  id="scrolling-techniques"
+                  class="scroll-y"
+                  style="max-height: 600px;"
+                >
+                  <v-container style="height: 300px;">
+                <ul class="upload_photo_list">
                     <li v-for="(image,i) in defaultInstitution.data.photos" :key="i">
-                      <img :src="defaultInstitution.data.photos[i].fileUrl" width="50" height="auto">
-                        <v-btn color="primary" @click="removePhoto(i)">Remove</v-btn>
+                      <img :src="defaultInstitution.data.photos[i].fileUrl" width="100" height="auto">
+                       <v-tooltip right>
+                        <v-btn slot="activator" flat icon color="red" class="upload_remove_btn"  @click="removePhoto(i)">
+                          <v-icon>remove</v-icon>
+                        </v-btn>
+                        <span>Remove Image</span>
+                       </v-tooltip>
                     </li>
                   </ul>
                   <file-upload
@@ -201,10 +246,12 @@
                       <v-icon left dark>add_photo_alternate</v-icon>Add Photo
                     </v-btn>
                   </file-upload>
-                </v-flex>
-                
-                
-  
+                </v-container>
+                </div>   
+            </v-card>
+          </v-flex>
+        </v-layout>
+                 
               </v-layout>
             </v-container>
           </v-card-text>
@@ -247,6 +294,25 @@
     <Pagination/>
   </div>
 </template>
+
+<style>
+.upload_pic_list {
+  list-style:  none;
+  margin-top: 40px;
+  padding: 0;
+}
+
+.upload_photo_list {
+   list-style:  none;
+  padding: 0;
+}
+
+.upload_remove_btn {
+  margin-top: -50px !important;
+}
+</style>
+
+
 <script>
 import {
   required,
