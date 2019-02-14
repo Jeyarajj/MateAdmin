@@ -55,10 +55,7 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="defaultInstitution._details.slug"
-                    label="Institution Slug"
-                  ></v-text-field>
+                  <v-text-field v-model="defaultInstitution._details.slug" label="Institution Slug"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field
@@ -113,7 +110,6 @@
                     rows="2"
                   ></v-textarea>
                 </v-flex>
-
                 <v-flex xs12 sm12 md12>
                   <v-textarea
                     v-model="defaultInstitution._details.description"
@@ -133,128 +129,82 @@
                     box
                   ></v-select>
                 </v-flex>
-                <template>
 
-                   <v-flex xs12 sm12 md6>
-                  <v-progress-linear
-                  v-if="institutionLogo.uploadStatus"
-                  indeterminate
-                  color="light-green darken-2"
-                  class="mb-0"
-                ></v-progress-linear>
-                    <span v-if="institutionLogo.exists">
-                       <v-img :src="institutionLogo.fileUrl" aspect-ratio="1.7"></v-img>
-                      <v-btn color="error" dark @click="removeImage(institutionLogo)" class="removebtn_counsellor">
-                        <v-icon dark left>remove_circle</v-icon>Remove
-                      </v-btn>
-                    </span>
-                    <span>
-                      <v-img :src="defaultInstitution._details.logo" aspect-ratio="1.7"></v-img>
-                    </span>
+                <v-flex xs12 sm12 md6 v-if="defaultInstitution._id">
+                  <span>
+                    <v-img srcset lazy-src :src="defaultInstitution.data.logo.fileUrl" aspect-ratio="1.7"></v-img>
+                  </span>
                   <file-upload
                     input-id="file1"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    @input="onInstitutionLogo"
-                    ref="upload">
+                    @input="setLogo"
+                    ref="upload"
+                  >
                     <v-btn color="primary" dark>
-                        <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                      <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
                     </v-btn>
-                 </file-upload>
+                  </file-upload>
                 </v-flex>
 
 
-                  <!-- <v-icon v-if="institutionLogo.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                  <v-flex xs12 sm12 md12>
-                    <ul>
-                      <li v-if="institutionLogo.exists">
-                        <img :src="institutionLogo.fileUrl" width="50" height="auto">
-                        <span @click="removeImage(institutionLogo)">Remove</span>
-                      </li>
-                      <li v-else>
-                        <img :src="defaultInstitution._details.logo" height="50" width="auto">
-                      </li>
-                    </ul>
-                    <file-upload
-                      input-id="file1"
-                      class="btn btn-primary"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      accept="image/png, image/gif, image/jpeg, image/webp"
-                      :multiple="false"
-                      :size="1024 * 1024 * 10"
-                      @input="onInstitutionLogo"
-                      ref="upload"
-                    >
-                      <v-btn color="primary" dark>
-                        <v-icon left dark>add_photo_alternate</v-icon>Upload Logo
-                      </v-btn>
-                    </file-upload>
-                  </v-flex> -->
-                  <v-flex xs12 sm12 md12>
-                    <br>
-                    <br>
-                    <ul>
-                      <!-- <div v-if="institutionBanners.length > 0">
-                        <li v-for="(image,i) in institutionBanners" :key="i">
-                          <span>{{image.fileData.name}}</span> -
-                          <img :src="image.fileUrl" width="50" height="auto">
-                          <span @click="removeBannerImage(i)">Remove</span>
-                        </li>
-                      </div>-->
-                      <li v-for="(image,i) in defaultInstitution._details.banners" :key="i">
-                        <img :src="image" width="50" height="auto">
-                      </li>
-                    </ul>
-                    <file-upload
-                      class="btn btn-primary"
-                      input-id="file2"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      accept="image/png, image/gif, image/jpeg, image/webp"
-                      :multiple="true"
-                      :size="1024 * 1024 * 10"
-                      @input="onInstitutionBanner"
-                      ref="uploadBanners"
-                    >
-                      <v-btn color="primary" dark>
-                        <v-icon left dark>add_photo_alternate</v-icon>Upload Banner
-                      </v-btn>
-                    </file-upload>
-                  </v-flex>
-                  <v-flex xs12 sm12 md12>
-                    <br>
-                    <br>
-                    <ul>
-                      <!-- <div v-if="institutionPhotos.length > 0">
-                        <li v-for="(image,i) in institutionPhotos" :key="i">
-                          <v-icon v-if="image.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
 
-                          <span>{{image.fileData.name}}</span> -
-                          <img :src="image.fileUrl" width="50" height="auto">
-                          <span @click="removeBannerImage(i)">Remove</span>
-                        </li>
-                      </div>-->
-                      <li v-for="(image,i) in defaultInstitution._details.photos" :key="i">
-                        <img :src="image" width="50" height="auto">
-                      </li>
-                    </ul>
-                    <file-upload
-                      class="btn btn-primary"
-                      input-id="file3"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      accept="image/png, image/gif, image/jpeg, image/webp"
-                      :multiple="true"
-                      :size="1024 * 1024 * 10"
-                      @input="onInstitutionPhotos"
-                      ref="uploadPhotos"
-                    >
-                      <v-btn color="primary" dark>
-                        <v-icon left dark>add_photo_alternate</v-icon>Upload Photos
-                      </v-btn>
-                    </file-upload>
-                  </v-flex>
-                </template>
+
+                <v-flex xs12 sm12 md12  v-if="defaultInstitution._id">
+                  <br>
+                  <br>
+                  <ul>
+                    <li v-for="(image,i) in defaultInstitution.data.banners" :key="i">
+                      <img :src="defaultInstitution.data.banners[i].fileUrl" width="50" height="auto">
+                        <v-btn color="primary" @click="removeBanner(i)">Remove</v-btn>
+                    </li>
+                  </ul>
+                  <file-upload
+                    class="btn btn-primary"
+                    input-id="file2"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="false"
+                    :size="1024 * 1024 * 10"
+                    @input="addBanner"
+                    ref="uploadBanners"
+                  >
+                    <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Add Banner
+                    </v-btn>
+                  </file-upload>
+                </v-flex>
+                
+
+                <v-flex xs12 sm12 md12  v-if="defaultInstitution._id">
+                  <br>
+                  <br>
+                  <ul>
+                    <li v-for="(image,i) in defaultInstitution.data.photos" :key="i">
+                      <img :src="defaultInstitution.data.photos[i].fileUrl" width="50" height="auto">
+                        <v-btn color="primary" @click="removePhoto(i)">Remove</v-btn>
+                    </li>
+                  </ul>
+                  <file-upload
+                    class="btn btn-primary"
+                    input-id="file3"
+                    extensions="gif,jpg,jpeg,png,webp"
+                    accept="image/png, image/gif, image/jpeg, image/webp"
+                    :multiple="false"
+                    :size="1024 * 1024 * 10"
+                    @input="addPhoto"
+                    ref="uploadPhotos"
+                  >
+                    <v-btn color="primary" dark>
+                      <v-icon left dark>add_photo_alternate</v-icon>Add Photo
+                    </v-btn>
+                  </file-upload>
+                </v-flex>
+                
+                
+  
               </v-layout>
             </v-container>
           </v-card-text>
@@ -288,7 +238,6 @@
           <v-btn flat icon @click="deleteItem(props.item)">
             <v-icon v-if="props.item.active != 'disable'" small color="primary">delete</v-icon>
           </v-btn>
-
         </td>
       </template>
       <template slot="no-data">
@@ -425,7 +374,10 @@ export default {
   methods: {
     async getInstitutes(page) {
       if (page === undefined) page = 0;
-      const universities = await University.getUniversities(QUERIES.listLimit,page);
+      const universities = await University.getUniversities(
+        QUERIES.listLimit,
+        page
+      );
       this.institutions = [];
       if (universities) {
         universities.data.getUniversities.university.forEach(element => {
@@ -441,46 +393,38 @@ export default {
     },
     openEditInstitution() {
       this.defaultInstitution = new University();
+
     },
-    onInstitutionLogo(value) {
+    setLogo() {
       let file = event.target.files[0];
-      let path = "Institution/" + this.editedItem._id + "/Logo";
-      this.institutionLogo = new imageType(file, path, this.$store);
-      this.editedItem.logourl = this.institutionLogo.fileurl;
-    },
-    removeImage(imageDTO) {
-      imageDTO.delete(this.$store);
-    },
-    onInstitutionBanner(value) {
-      let bannerurl = [];
-      for (let index = 0; index < event.target.files.length; index++) {
-        const element = event.target.files[index];
-        let file = element;
-        let path = "Institution/" + this.editedItem._id + "/Banner";
-        let image = new imageType(file, path, this.$store);
-        console.log(image.fileUrl);
-
-        bannerurl.push(image.fileUrl);
-        this.institutionBanners.push(image);
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+      this.defaultInstitution.data.logo.setFileUrl(URL.createObjectURL(file));
       }
-      this.editedItem.bannerurl = bannerurl;
+      this.defaultInstitution.setLogo(file)
     },
-    onInstitutionPhotos(value) {
-      let photos = [];
-      for (let index = 0; index < event.target.files.length; index++) {
-        const element = event.target.files[index];
-        let file = element;
-        let path = "Institution/" + this.editedItem._id + "/Photos";
-        let image = new imageType(file, path, this.$store);
-        photos.push(image.fileUrl);
-        this.institutionPhotos.push(image);
+    addBanner(){
+       let file = event.target.files[0];
+      this.defaultInstitution.addBanner(file)
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+      this.defaultInstitution.data.banners[this.defaultInstitution.data.banners.length-1].setFileUrl(URL.createObjectURL(file));
       }
     },
-    removeBannerImage(index) {
-      this.institutionBanners[index].delete(this.$store);
-      this.institutionBanners.splice(index, 1);
+    removeBanner(index){
+      this.defaultInstitution.removeBanner(index)
     },
-
+    addPhoto(){
+       let file = event.target.files[0];
+      this.defaultInstitution.addPhoto(file)
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+      this.defaultInstitution.data.photos[this.defaultInstitution.data.photos.length-1].setFileUrl(URL.createObjectURL(file));
+      }
+    },
+    removePhoto(index){
+      this.defaultInstitution.removePhoto(index)
+    },
     editItem(item) {
       this.defaultInstitution = new University(item);
       this.dialog = true;
@@ -499,6 +443,8 @@ export default {
     },
 
     async save() {
+      if(this.defaultInstitution._id)
+      await this.defaultInstitution.updateImages(this.$store);
       const res = await this.defaultInstitution.createUniversity();
       if (res.data.hasOwnProperty("createUniversity")) {
         this.defaultInstitution._id = res.data.createUniversity._id;
