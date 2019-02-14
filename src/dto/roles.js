@@ -5,6 +5,8 @@ import {
   UPDATE_ROLE,
   GET_PROFILE
 } from '../gql-constants/users';
+import { Users } from './users';
+
 export const modules = [
   {
     module_name: 'Student'
@@ -34,7 +36,9 @@ export class Role {
     if (role) {
       if (role._id) Object.assign(this, role);
       if (role.created_by) {
-        this.getProfile();
+        Users.getProfile(this.created_by).then(data => {
+          this.username = data.data.getProfile[0]._profile.name.first;
+        });
         // return (async () => {
         // All async code here
         //   return this; // when done
@@ -53,19 +57,7 @@ export class Role {
       }
     });
   }
-  getProfile() {
-    apolloClient
-      .query({
-        query: GET_PROFILE,
-        variables: {
-          _id: this.created_by
-        },
-        fetchPolicy: 'network-only'
-      })
-      .then(data => {
-        this.username = data.data.getProfile[0]._profile.name.first;
-      });
-  }
+
   updateStatus() {
     // var mutationQuery;
     // if (!this.active) {
@@ -113,7 +105,9 @@ export class Role {
         variables: this.toJSON()
       });
     } else {
-      this.getProfile();
+      Users.getProfile(this.created_by).then(data => {
+        this.username = data.data.getProfile[0]._profile.name.first;
+      });
       const packet = this.toJSON();
       packet.created_by = this.created_by;
       return apolloClient.mutate({
