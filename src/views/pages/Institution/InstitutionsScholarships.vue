@@ -71,15 +71,11 @@
                   ></v-textarea>
                 </v-flex>
 
-                <v-flex xs12 sm12 md12>
+                <v-flex xs12 sm12 md12 v-if="defaultScholarship._id">
                   <ul>
-                    <v-icon v-if="scholarshipPicture.uploadStatus">fas fa-circle-notch fa-spin</v-icon>
-                    <li v-if="scholarshipPicture.exists">
-                      <img :src="scholarshipPicture.fileUrl" width="50" height="auto">
-                      <span @click="removeImage(scholarshipPicture)">Remove</span>
-                    </li>
-                    <li v-else>
-                      <img :src="defaultScholarship._details.picture" width="50" height="auto">
+                    <li>
+                      <img :src="defaultScholarship.data.picture.fileUrl" width="50" height="auto">
+                      <span @click="removePicture()">Remove</span>
                     </li>
                   </ul>
                   <file-upload
@@ -89,7 +85,7 @@
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    @input="onPicture"
+                    @input="setPicture"
                     ref="upload"
                   >
                     <i class="fa fa-plus"></i>
@@ -200,24 +196,20 @@ export default {
   },
 
   methods: {
-    onPicture(value) {
+    setPicture(){
       let file = event.target.files[0];
-      let path = "Scholarships";
-      if (this.defaultScholarship._details.picture)
-        this.scholarshipPicture = new imageType(
-          null,
-          path,
-          this.$store,
-          this.defaultScholarship._details.picture
-        );
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+      this.defaultScholarship.data.picture.setFileUrl(URL.createObjectURL(file));
+      }
+      this.defaultScholarship.setPicture(file)
     },
-    removeImage(imageDTO) {
-      imageDTO.delete(this.$store);
+    removePicture(index){
+      this.defaultScholarship.removePicture()
     },
     initialize() {
       this.scholarships = [];
     },
-
     editItem(item) {
       this.defaultScholarship = new Scholarship(item);
       this.dialog = true;
@@ -251,6 +243,8 @@ export default {
       this.defaultScholarship = new Scholarship();
     },
     async save() {
+        if(this.defaultScholarship._id)
+      await this.defaultScholarship.updateImages(this.$store);
       const res = await this.defaultScholarship.createScholarship();
       if (res.data.hasOwnProperty("createScholarship")) {
         this.defaultScholarship._id = res.data.createScholarship._id;
@@ -259,7 +253,7 @@ export default {
       this.close();
     },
     async getInstitutes(page) {
-      const result = await University.getUniversities(1);
+      const result = await University.getUniversities(100,0);
     this.institutions = result.data.getUniversities.university;
     }
   },
