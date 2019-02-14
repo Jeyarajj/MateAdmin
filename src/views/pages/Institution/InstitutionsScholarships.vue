@@ -277,15 +277,17 @@ export default {
       this.defaultScholarship = new Scholarship();
     },
     async save() {
+      this.loader = this.$loading.show();
       if (this.defaultScholarship._id)
         await this.defaultScholarship.updateImages(this.$store);
       const res = await this.defaultScholarship.createScholarship();
+      this.loader.hide();
       if (res.data.hasOwnProperty("createScholarship")) {
-        this.$loading.success("Scholarship Saved Successfully");
+        this.$toaster.success("Scholarship Saved Successfully");
         this.defaultScholarship._id = res.data.createScholarship._id;
         this.scholarships.push(this.defaultScholarship);
-      } else if (res.data.hasOwnProperty("createScholarship")) {
-        this.$loading.success("Scholarship Updated Successfully");
+      } else if (res.data.hasOwnProperty("updateScholarship")) {
+        this.$toaster.success("Scholarship Updated Successfully");
       }
       this.close();
     },

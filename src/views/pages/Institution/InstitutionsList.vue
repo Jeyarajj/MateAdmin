@@ -537,9 +537,11 @@ export default {
     },
 
     async save() {
+      this.loader = this.$loading.show();
       if (this.defaultInstitution._id)
         await this.defaultInstitution.updateImages(this.$store);
       const res = await this.defaultInstitution.createUniversity();
+      this.loader.hide();
       if (res.data.hasOwnProperty("createUniversity")) {
         this.$toaster.success("University Saved Successfully");
         this.defaultInstitution._id = res.data.createUniversity._id;
