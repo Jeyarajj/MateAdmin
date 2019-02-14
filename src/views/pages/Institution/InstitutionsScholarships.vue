@@ -144,6 +144,7 @@ export default {
   },
   data: () => ({
     institutions: [],
+    loader: "",
     dialog: false,
     title: "Manage Scholarships",
     icon: "playlist_add_check",
@@ -179,6 +180,9 @@ export default {
       { text: "Actions", value: "actions" }
     ]
   }),
+  mounted() {
+    this.loader = this.$loading.show();
+  },
   computed: {
     ...mapGetters(["availableCurrencies", "userBasicInfoProfile"]),
     formTitle() {
@@ -231,6 +235,7 @@ export default {
         this.scholarshipLimit,
         page
       );
+      this.loader.hide();
       this.scholarships = [];
       if (results) {
         results.data.getScholarshipsList.scholarships.forEach(element => {
@@ -252,8 +257,11 @@ export default {
         await this.defaultScholarship.updateImages(this.$store);
       const res = await this.defaultScholarship.createScholarship();
       if (res.data.hasOwnProperty("createScholarship")) {
+        this.$loading.success("Scholarship Saved Successfully");
         this.defaultScholarship._id = res.data.createScholarship._id;
         this.scholarships.push(this.defaultScholarship);
+      } else if (res.data.hasOwnProperty("createScholarship")) {
+        this.$loading.success("Scholarship Updated Successfully");
       }
       this.close();
     },

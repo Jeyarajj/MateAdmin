@@ -302,7 +302,7 @@
         <td class="justify-center">
           <v-btn flat icon @click="editItem(props.item)">
             <v-icon small color="primary">edit</v-icon>
-          </v-btn>//
+          </v-btn>
           <!-- <v-btn flat icon @click="deleteItem(props.item)">//
             <v-icon v-if="props.item.active != 'disable'" small color="primary">delete</v-icon>//
           </v-btn>-->

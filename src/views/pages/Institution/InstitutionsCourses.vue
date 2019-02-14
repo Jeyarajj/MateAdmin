@@ -210,6 +210,7 @@ export default {
     Pagination
   },
   data: () => ({
+    loader: "",
     defaultCourse: Course,
     title: "Manage Courses",
     icon: "playlist_add_check",
@@ -263,7 +264,9 @@ export default {
       return this.editedIndex === -1 ? "New Course" : "Edit Course";
     }
   },
-
+  mounted() {
+    this.loader = this.$loading.show();
+  },
   watch: {
     dialog(val) {
       val || this.close();
@@ -284,6 +287,7 @@ export default {
     async getCourses(page) {
       if (page === undefined) page = 0;
       const courses = await Course.getCourses(this.courseLimit, page);
+      this.loader.hide();
       this.courselists = [];
       if (courses) {
         courses.data.getCoursesList.courses.forEach(element => {
@@ -331,10 +335,12 @@ export default {
 
     async saveData() {
       const res = await this.defaultCourse.createCourse();
-      console.log(res);
       if (res.data.hasOwnProperty("createCourse")) {
+        this.$toaster.success("Course Created Successfully");
         this.defaultCourse._id = res.data.createCourse._id;
         this.courselists.push(this.defaultCourse);
+      } else if (res.data.hasOwnProperty("updateCourse")) {
+        this.$toaster.success("Course Updated Successfully");
       }
       this.close();
     }
