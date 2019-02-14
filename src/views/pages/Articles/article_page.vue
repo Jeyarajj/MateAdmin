@@ -45,12 +45,7 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md4>
-                  <v-text-field
-                    color="primary"
-                    label="Article Slug"
-                    v-model="form.slug"
-                    required
-                  ></v-text-field>
+                  <v-text-field color="primary" label="Article Slug" v-model="form.slug" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12>
                   <v-textarea
@@ -85,42 +80,42 @@
                 </v-flex>
 
                 <v-flex xs12 sm6 class="meta_background">
-                <vue-cloneya :maximum="5" multiple="true" v-model="exampleMultipleData">
-                  <div class="input-group">
-                    <!-- Add the "v-cloneya-input" directive to elements you wish to set v-bind:value -->
-                    <!-- Only input, select, radio, checkbox etc. -->
-                    <select
-                      class="form-control select2 articlepage_metaselect round"
-                      placeholder="Meta Tags"
-                      v-cloneya-input="'meta_name'"
-                    >
-                      <option
-                        v-for="(metatag,index) in metatags"
-                        :key="index"
-                        :value="metatag.value"
-                      >{{metatag.meta_label}}</option>
-                    </select>
-                    <input
-                      type="text"
-                      class="form-control articlepage_metainput"
-                      placeholder="Enter Meta value"
-                      v-cloneya-input="'meta_value'">
-                    
-                    <span class="input-group-btn">
-                      <!-- Add the "v-cloneya-add" directive to elements you wish to add the click listener
-                      that will clone the root element-->
-                      <v-btn flat icon v-cloneya-add>
-                        <v-icon color="primary">add_circle</v-icon>
-                      </v-btn>
+                  <vue-cloneya :maximum="5" multiple="true" v-model="exampleMultipleData">
+                    <div class="input-group">
+                      <!-- Add the "v-cloneya-input" directive to elements you wish to set v-bind:value -->
+                      <!-- Only input, select, radio, checkbox etc. -->
+                      <select
+                        class="form-control select2 articlepage_metaselect round"
+                        placeholder="Meta Tags"
+                        v-cloneya-input="'meta_name'"
+                      >
+                        <option
+                          v-for="(metatag,index) in metatags"
+                          :key="index"
+                          :value="metatag.value"
+                        >{{metatag.meta_label}}</option>
+                      </select>
+                      <input
+                        type="text"
+                        class="form-control articlepage_metainput"
+                        placeholder="Enter Meta value"
+                        v-cloneya-input="'meta_value'"
+                      >
+                      
+                      <span class="input-group-btn">
+                        <!-- Add the "v-cloneya-add" directive to elements you wish to add the click listener
+                        that will clone the root element-->
+                        <v-btn flat icon v-cloneya-add>
+                          <v-icon color="primary">add_circle</v-icon>
+                        </v-btn>
 
-                      <v-btn flat icon v-cloneya-remove>
-                        <v-icon color="primary">remove_circle</v-icon>
-                      </v-btn>
-                    </span>
-                  </div>
-                </vue-cloneya>
+                        <v-btn flat icon v-cloneya-remove>
+                          <v-icon color="primary">remove_circle</v-icon>
+                        </v-btn>
+                      </span>
+                    </div>
+                  </vue-cloneya>
                 </v-flex>
-
               </v-layout>
             </v-container>
             <v-flex xs12 sm12 md6>

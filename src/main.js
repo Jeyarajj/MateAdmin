@@ -9,12 +9,14 @@ window.$ = window.jQuery = jQuery;
 import 'select2'; // globally assign select2 fn to $ element
 import 'select2/dist/css/select2.css';
 import './stylus/main.styl';
+import apolloProviderPromiseFunction from './apollo';
+
 Vue.use(VueRouter);
 // apollo
-import { apolloClient } from './apollo-controller/index';
+// import { apolloClient } from './apollo-controller/index';
 import VueApollo from 'vue-apollo';
-Vue.use(VueApollo);
-
+//Vue.use(VueApollo);
+import { isEmpty as ldIsEmpty } from 'lodash';
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import colors from 'vuetify/es5/util/colors';
@@ -65,9 +67,9 @@ Vue.filter('firstChar', function(str) {
 });
 
 // Apollo Config
-export const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
-});
+// export const apolloProvider = new VueApollo({
+//   defaultClient: apolloClient
+// });
 Vue.filter('formatSize', function(size) {
   if (size > 1024 * 1024 * 1024 * 1024) {
     return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB';
@@ -84,8 +86,17 @@ Vue.use(require('vue-moment'));
 new Vue({
   router,
   store,
-  apolloProvider,
+
   created() {
+    try {
+      apolloProviderPromiseFunction().then(apolloProvider => {
+        // https://github.com/Akryum/vue-apollo/src/index.js @ prepare and launch
+        this._apolloProvider = apolloProvider;
+        Vue.use(VueApollo);
+      });
+    } catch (error) {
+      //test
+    }
     this.$store.dispatch('metatags');
     this.$store.dispatch('initFirebase');
     this.$store.dispatch('checkIfUserLogin');

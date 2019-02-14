@@ -84,7 +84,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'usersmanagement/UsersList'
+    name: 'usersmanagement/UsersList',
+    meta: {
+      authenticated: true
+    }
   },
   {
     path: '/usersmanagement/userRoles',
@@ -94,7 +97,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'usersmanagement/UserRoles'
+    name: 'usersmanagement/UserRoles',
+    meta: {
+      authenticated: true
+    }
   },
   {
     path: '/articles/articles_List',
@@ -104,7 +110,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'articles/Articles_List'
+    name: 'articles/Articles_List',
+    meta: {
+      authenticated: true
+    }
   },
   {
     path: '/articles/article_Page/:mode?/:article_id?',
@@ -114,7 +123,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'articles/Article_Page'
+    name: 'articles/Article_Page',
+    meta: {
+      authenticated: true
+    }
   },
 
   {
@@ -125,7 +137,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'institutions/InstitutionsList'
+    name: 'institutions/InstitutionsList',
+    meta: {
+      authenticated: true
+    }
   },
 
   {
@@ -136,7 +151,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'institutions/InstitutionsBulkImport'
+    name: 'institutions/InstitutionsBulkImport',
+    meta: {
+      authenticated: true
+    }
   },
 
   {
@@ -147,7 +165,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'counselors/CounselorsList'
+    name: 'counselors/CounselorsList',
+    meta: {
+      authenticated: true
+    }
   },
   {
     path: '/mentors/MentorsList',
@@ -157,7 +178,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'mentors/MentorsList'
+    name: 'mentors/MentorsList',
+    meta: {
+      authenticated: true
+    }
   },
   {
     path: '/institution/institutionsCourses',
@@ -178,7 +202,10 @@ export const routes = [
       header: AppToolbar,
       footer: AppFooter
     },
-    name: 'institutions/InstitutionsScholarships'
+    name: 'institutions/InstitutionsScholarships',
+    meta: {
+      authenticated: true
+    }
   },
 
   {
