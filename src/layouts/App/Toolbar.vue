@@ -190,8 +190,9 @@ export default {
       updateDialog: false,
       datepicker: false,
       current_userid: "",
-      avatarPicture:imageType,
+      avatarPicture: new imageType("Avatar/" + this.current_userid),
       email: "",
+      loader:"",
       updatedata: {
         _profile: {
           name: {
@@ -280,13 +281,17 @@ export default {
     },
     avatarclick(file) {
       let path = "Avatar/" + this.current_userid;
-       this.avatarPicture = new imageType(path);
-       this.avatarPicture.setFile(file)
+      this.avatarPicture = new imageType(path);
+      this.avatarPicture.setFile(file);
     },
     async updateclick() {
       //this.updatedata.userid = this.$route.query.uid;
-      await this.avatarPicture.update(this.$store)
-      this.updatedata._profile.photo = this.avatarPicture.getFileURL
+      if (this.avatarPicture.fileData) {
+        this.loader = this.$loading.show();
+        await this.avatarPicture.update(this.$store);
+        this.updatedata._profile.photo = this.avatarPicture.getFileURL;
+        this.loader.hide();
+      }
       var dateobj = new Date(this.updatedata._profile.dob);
       this.updatedata._profile.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
@@ -307,6 +312,7 @@ export default {
             this.updatedata._id = this.current_userid;
             // this.currentUserdata = this.updatedata;
             this.$store.dispatch("updatecurrentInfo", updatedata);
+            this.$toaster.success("Profile Updated Successfully");
             this.updateDialog = false;
           },
           error => {

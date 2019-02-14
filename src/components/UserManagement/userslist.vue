@@ -350,6 +350,7 @@ import {
 import { mapGetters } from "vuex";
 import { validNumber } from "@/utils/validators";
 import validationMixin from "@/mixins/validationMixin";
+import { imageType } from "../../dto/imageType";
 // import { defaultUserPic, users, authUser } from "@/data/dummyData";
 
 import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
@@ -399,7 +400,9 @@ export default {
       usersLimit: 10,
       search: "",
       errormessage: "",
+      loader:"",
       showerror: false,
+      avatarPicture: new imageType("Users/" + this.current_userid + "/Picture"),
       city: [],
       country: [],
       headers: [
@@ -468,11 +471,19 @@ export default {
       //this.defaultUser._id = id
       this.updateDialog = true;
     },
-    updateclick() {
+    async updateclick() {
+      if (this.avatarPicture.fileData) {
+        this.loader = this.$loading.show();
+        await this.avatarPicture.update(this.$store);
+        this.defaultUser._profile.photo = this.avatarPicture.getFileURL;
+        this.loader.hide();
+      }
       this.createusers();
     },
-    avatarclick(value) {
-      this.defaultUser._profile.photo = value;
+    avatarclick(file) {
+      let path = "Users/" + this.current_userid + "/Picture";
+      this.avatarPicture = new imageType(path);
+      this.avatarPicture.setFile(file);
     },
     updateUser(updatedata) {},
     showdialog() {
@@ -492,9 +503,11 @@ export default {
       const result = await this.defaultUser.createUser();
       if (result) {
         if (result.data.hasOwnProperty("createAdminUser")) {
+          this.$toaster.success("User Created Successfully");
           this.defaultUser._id = result.data.createAdminUser._id;
           this.allusers.push(this.defaultUser);
         } else if (result.data.hasOwnProperty("updateProfile")) {
+          this.$toaster.success("User Updated Successfully");
           this.updateDialog = false;
         }
       } else console.log("Created failed check logs");
