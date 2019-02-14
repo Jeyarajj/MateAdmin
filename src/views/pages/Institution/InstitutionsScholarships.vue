@@ -67,7 +67,8 @@
                   <v-textarea
                     v-model="defaultScholarship._details.description"
                     label="Description min 200 words"
-                    auto-grow rows="1"
+                    auto-grow
+                    rows="1"
                   ></v-textarea>
                 </v-flex>
 
@@ -121,7 +122,6 @@
           <v-btn flat icon @click="deleteItem(props.item)">
             <v-icon v-if="props.item.status != 'disable'" small color="primary">delete</v-icon>
           </v-btn>
-
         </td>
       </template>
       <template slot="no-data">
@@ -137,14 +137,14 @@ import { imageType } from "../../../dto/imageType";
 import Pagination from "@/components/shared/Pagination";
 import { Scholarship } from "../../../dto/scholarships.js";
 import { University } from "../../../dto/university";
-import { QUERIES } from "../../../gql-constants/scholarships.js"
+import { QUERIES } from "../../../gql-constants/scholarships.js";
 export default {
   components: {
     Pagination
   },
   data: () => ({
-    institutions:[],
-    dialog:false,
+    institutions: [],
+    dialog: false,
     title: "Manage Scholarships",
     icon: "playlist_add_check",
     breadcrumbs: [
@@ -164,7 +164,7 @@ export default {
     scholarshipPicture: imageType,
     defaultScholarship: Scholarship,
     scholarships: [],
-    scholarshipLimit:10,
+    scholarshipLimit: 10,
     headers: [
       {
         text: "Name",
@@ -196,16 +196,18 @@ export default {
   },
 
   methods: {
-    setPicture(){
+    setPicture() {
       let file = event.target.files[0];
       let URL = window.URL || window.webkitURL;
       if (URL && URL.createObjectURL) {
-      this.defaultScholarship.data.picture.setFileUrl(URL.createObjectURL(file));
+        this.defaultScholarship.data.picture.setFileUrl(
+          URL.createObjectURL(file)
+        );
       }
-      this.defaultScholarship.setPicture(file)
+      this.defaultScholarship.setPicture(file);
     },
-    removePicture(index){
-      this.defaultScholarship.removePicture()
+    removePicture(index) {
+      this.defaultScholarship.removePicture();
     },
     initialize() {
       this.scholarships = [];
@@ -225,7 +227,10 @@ export default {
     },
     async getScholarships(page) {
       if (page === undefined) page = 0;
-      const results = await Scholarship.getScholarships(this.scholarshipLimit,page);
+      const results = await Scholarship.getScholarships(
+        this.scholarshipLimit,
+        page
+      );
       this.scholarships = [];
       if (results) {
         results.data.getScholarshipsList.scholarships.forEach(element => {
@@ -243,8 +248,8 @@ export default {
       this.defaultScholarship = new Scholarship();
     },
     async save() {
-        if(this.defaultScholarship._id)
-      await this.defaultScholarship.updateImages(this.$store);
+      if (this.defaultScholarship._id)
+        await this.defaultScholarship.updateImages(this.$store);
       const res = await this.defaultScholarship.createScholarship();
       if (res.data.hasOwnProperty("createScholarship")) {
         this.defaultScholarship._id = res.data.createScholarship._id;
@@ -253,12 +258,12 @@ export default {
       this.close();
     },
     async getInstitutes(page) {
-      const result = await University.getUniversities(100,0);
-    this.institutions = result.data.getUniversities.university;
+      const result = await University.getUniversities(100, 0);
+      this.institutions = result.data.getUniversities.university;
     }
   },
   created() {
-    this.getInstitutes(1)
+    this.getInstitutes(1);
     this.defaultScholarship = new Scholarship();
     this.getScholarships(this.$route.query.pageindex);
     console.log(this.defaultScholarship);
