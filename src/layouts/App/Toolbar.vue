@@ -179,6 +179,7 @@ import { authUser } from "@/data/dummyData";
 import { mapActions, mapGetters } from "vuex";
 import AvatarUpload from "@/components/PreviewUpload/AvatarUpload.vue";
 import { UPDATE_USER } from "@/gql-constants/users";
+import { imageType } from "../../dto/imageType";
 export default {
   components: {
     AvatarUpload
@@ -189,6 +190,7 @@ export default {
       updateDialog: false,
       datepicker: false,
       current_userid: "",
+      avatarPicture:imageType,
       email: "",
       updatedata: {
         _profile: {
@@ -276,12 +278,15 @@ export default {
         this.updatedata._profile.address.country = "";
       }
     },
-    avatarclick(value) {
-      this.updatedata._profile.photo = value;
+    avatarclick(file) {
+      let path = "Avatar/" + this.current_userid;
+       this.avatarPicture = new imageType(path);
+       this.avatarPicture.setFile(file)
     },
-    updateclick() {
+    async updateclick() {
       //this.updatedata.userid = this.$route.query.uid;
-      console.log(this.updatedata._profile);
+      await this.avatarPicture.update(this.$store)
+      this.updatedata._profile.photo = this.avatarPicture.getFileURL
       var dateobj = new Date(this.updatedata._profile.dob);
       this.updatedata._profile.dob = dateobj.toISOString();
       this.updateUser(this.updatedata);
