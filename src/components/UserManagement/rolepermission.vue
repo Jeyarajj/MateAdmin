@@ -187,14 +187,14 @@ export default {
       return this.editedIndex === -1 ? "New Role" : "Edit Role";
     },
 
-    ...mapGetters(["userBasicInfoProfile","currentUserdata"])
+    ...mapGetters(["userBasicInfoProfile", "currentUserdata"])
   },
 
   watch: {},
   created() {
     this.loader = this.$loading.show();
     this.getRoles();
-    this.defaultRole.created_by = this.userBasicInfoProfile._id
+    this.defaultRole.created_by = this.userBasicInfoProfile._id;
   },
   // apollo: {
   //   getRoles: {
@@ -238,11 +238,16 @@ export default {
       }
     },
     async createRole() {
+      this.defaultRole.created_by = this.userBasicInfoProfile._id;
+
       const result = await this.defaultRole.createRole();
       if (result) {
         if (result.data.hasOwnProperty("createAdminUserRole")) {
+          this.$toaster.success("Role Created Successfully");
           this.defaultRole._id = result.data.createAdminUserRole._id;
           this.allroles.push(this.defaultRole);
+        } else if (result.data.hasOwnProperty("updateAdminUserRole")) {
+          this.$toaster.success("Role Updated Successfully");
         }
       } else console.log("Created failed check logs");
       this.dialog = false;
