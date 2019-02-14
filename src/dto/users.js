@@ -55,12 +55,13 @@ export class Users {
       fetchPolicy: 'network-only'
     });
   }
-  static async getUsers() {
+  static async getUsers(limit,skip) {
     return apolloClient.query({
       query: GET_USERS_DATA,
+      fetchPolicy: 'network-only',
       variables: {
-        limit: '10',
-        skip: '0'
+        limit: limit,
+        skip: skip
       }
     });
   }

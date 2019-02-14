@@ -75,6 +75,7 @@ export const GET_PUBLIC_PROFILE_Q = gql`
 export const GET_USERS_DATA = gql`
   query publicProfile($skip: Number, $limit: Number) {
     getUsers(limit: $limit, skip: $skip) {
+     users{
       _id
       email
       _profile {
@@ -89,6 +90,10 @@ export const GET_USERS_DATA = gql`
         }
         dob
       }
+     }
+     total
+    current
+    total_pages
     }
   }
 `;
@@ -96,6 +101,7 @@ export const GET_USERS_DATA = gql`
 export const GET_ROLES = gql`
   query Roles($limit: Number, $skip: Number) {
     getRoles(limit: $limit, skip: $skip) {
+    roles{
       _id
       role_name
       role_description
@@ -110,6 +116,10 @@ export const GET_ROLES = gql`
           publish
         }
       }
+    }
+    total
+    current
+    total_pages
     }
   }
 `;

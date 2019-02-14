@@ -95,7 +95,7 @@
       </v-dialog>
     </v-toolbar>
 
-    <v-data-table :headers="headers" :items="allroles" class="elevation-1">
+    <v-data-table :headers="headers" :items="allroles"  :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="justify-center">{{ props.item.role_name }}</td>
         <td class="justify-center">{{ props.item.role_description }}</td>
@@ -110,6 +110,7 @@
         <v-alert :value="true" color="error" icon="warning">Sorry, nothing to display here :(</v-alert>
       </template>
     </v-data-table>
+    <Pagination/>
   </div>
 </template>
 
@@ -126,8 +127,12 @@ import {
 import { Role, AccessPermission, modules } from "../../dto/roles";
 import { validNumber } from "@/utils/validators";
 import validationMixin from "@/mixins/validationMixin";
+import Pagination from "@/components/shared/Pagination";
 
 export default {
+  components: {
+    Pagination
+  },
   mixins: [validationMixin],
   validations: {
     defaultRole: {
@@ -164,6 +169,7 @@ export default {
       }
     ],
     dialog: false,
+    roleLimit:10,
     accessControls: ["create", "update", "delete", "view", "publish"],
     headers: [
       { text: "Role Name", value: "role_name" },
@@ -194,7 +200,11 @@ export default {
     ...mapGetters(["userBasicInfoProfile", "currentUserdata"])
   },
 
-  watch: {},
+  watch: {
+    $route(to, from) {
+      this.getRoles(to.query.pageindex);
+    }
+  },
   created() {
     this.loader = this.$loading.show();
     this.getRoles();
@@ -230,14 +240,22 @@ export default {
       this.initializeRole(role.role_permission);
       this.dialog = true;
     },
-    async getRoles() {
-      const roles = await Role.getRoles();
+    async getRoles(page) {
+      if (page === undefined) page = 0;
+      const roles = await Role.getRoles(this.roleLimit,page);
       this.loader.hide();
       this.defaultRole = new Role();
       this.initializeRole(modules);
+      this.allroles = []
       if (roles) {
-        roles.data.getRoles.forEach(element => {
+        roles.data.getRoles.roles.forEach(element => {
           this.allroles.push(new Role(element));
+        });
+        this.$store.commit("SET_PAGES_DATA", {
+          currentIndex: this.$route.query.pageindex,
+          totalPages: roles.data.getRoles.total_pages,
+          currentPage: roles.data.getRoles.current,
+          listLimit: this.roleLimit
         });
       }
     },

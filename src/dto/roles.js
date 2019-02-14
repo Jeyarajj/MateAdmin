@@ -51,6 +51,7 @@ export class Role {
   static async getRoles() {
     return apolloClient.query({
       query: GET_ROLES,
+      fetchPolicy: 'network-only',
       variables: {
         limit: '10',
         skip: '0'
