@@ -99,7 +99,7 @@
     <v-card>
       <v-data-table :headers="headers" :items="allusers" :search="search">
         <template slot="items" slot-scope="props">
-          <td>{{ props.item._id }}</td>
+          <td>{{ props.item._profile.name.first }}</td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item._profile.phone}}</td>
 
@@ -505,11 +505,13 @@ export default {
     this.defaultUser = new Users();
     this.getUsers();
     this.getRoles();
+    this.defaultUser.created_by = this.userBasicInfoProfile._id
   },
   computed: {
     ...mapGetters([
       "userBasicInfoProfile",
       "nationalities",
+      "currentUserdata",
       "cities",
       "countries"
     ])
