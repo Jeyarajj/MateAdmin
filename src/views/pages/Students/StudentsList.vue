@@ -26,7 +26,7 @@
     </v-toolbar>
     <v-data-table :headers="headers" :items="studentsList" class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item._id }}<br>{{ props.item.profile.name }}</td>
+        <td @click="openStudent(props.item._id)">{{ props.item.profile.name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
         <td class="justify-center">
         <v-switch
@@ -116,7 +116,13 @@ export default {
     }
   },
 
-  methods: {   
+  methods: {  
+    openStudent(_id){
+       this.$router.push({
+        name: "studentProfile/",
+        params: { student_id: _id }
+      });
+    } 
   }
 };
 </script>
