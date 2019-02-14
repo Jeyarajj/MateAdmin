@@ -15,6 +15,11 @@ import { apolloClient } from './apollo-controller/index';
 import VueApollo from 'vue-apollo';
 Vue.use(VueApollo);
 
+//lightbox
+import VueLazyLoad from 'vue-lazyload';
+Vue.use(VueLazyLoad);
+require('vue-image-lightbox/dist/vue-image-lightbox.min.css')
+
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import colors from 'vuetify/es5/util/colors';
