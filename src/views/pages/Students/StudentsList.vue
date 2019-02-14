@@ -28,11 +28,12 @@
       <template slot="items" slot-scope="props">
         <td>{{ props.item._id }}<br>{{ props.item.profile.name }}</td>
         <td class="justify-center">{{ props.item.email }}</td>
-        <td class="justify-center layout px-0">
+        <td class="justify-center">
         <v-switch
-        :label="`: ${props.item.status}`"
+        :label="`${props.item.status}`"
         v-model="props.item.active"
         @change="props.item.updateStatus()"
+        color="green"
       ></v-switch>
         </td>
       </template>

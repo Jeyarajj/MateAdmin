@@ -1,4 +1,53 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
+
+export const QUERIES = {
+  CREATE: gql`
+    mutation createCounselor(
+      $email: String
+      $password: String
+      $_details: CounselorDetailsInput
+    ) {
+      createCounselor(email: $email, password: $password, _details: $_details) {
+        _id
+      }
+    }
+  `,
+  UPDATE: gql`
+    mutation updateCounselor($_id: ObjectID, $_details: CounselorDetailsInput) {
+      updateCounselor(_id: $_id, _details: $_details) {
+        _id
+      }
+    }
+  `,
+  BLOCK: ``,
+  UNBLOCK: ``,
+  GETLIST: gql`
+    query getCounselors($limit: Number, $skip: Number) {
+      getCounselors(limit: $limit, skip: $skip) {
+        total
+        total_pages
+        current
+        counselor {
+          _id
+          email
+          _details {
+            name
+            slug
+            description
+            address {
+              city
+              country
+              addr
+            }
+            website
+          }
+          active
+        }
+      }
+    }
+  `,
+  GET: ``
+};
 
 export const UPDATE_COUNSELOR = gql`
   mutation updatecounselor(

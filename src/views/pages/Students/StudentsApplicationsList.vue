@@ -25,20 +25,20 @@
         <v-spacer></v-spacer>
 
     </v-toolbar>
-    <v-data-table :headers="headers" :items="getApplications" class="elevation-1">
+    <v-data-table :headers="headers" :items="getApplications" :hide-actions="true" class="elevation-1">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.student_id }}</td>
         <td>{{ props.item.course_id }}</td>
         <td>{{ props.item.message }}</td>
         <!-- <td class="justify-center">{{ props.item.email }}</td> -->
-        <td class="justify-center layout px-0">
+        <td class="justify-center">
           <v-icon small class="mr-2">edit</v-icon>
           <v-icon small>delete</v-icon>
         </td>
       </template>
-      <template slot="no-data">
+      <!-- <template slot="no-data">
         <v-btn color="primary">Reset</v-btn>
-      </template>
+      </template> -->
     </v-data-table>
   </div>
 </template>
