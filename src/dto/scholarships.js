@@ -1,7 +1,11 @@
 import { apolloClient } from "../apollo-controller/index";
 import { QUERIES } from "../gql-constants/scholarships";
+import { imageType } from "../dto/imageType";
 export class Scholarship {
   _id = "";
+  data={
+    picture:new imageType()
+  }
   _details = {
     name: "",
     website: "",
@@ -21,9 +25,35 @@ export class Scholarship {
       if (scholarship._id) {
         if (!scholarship._details) delete scholarship._details;
         Object.assign(this, scholarship);
+        this.initializeImages()
       }
     }
   }
+
+
+initializeImages() {
+    this.data={
+      picture: new imageType(this.getPath + "/picture")
+    }
+  if (this._details.picture) this.data.picture.setFileUrl(this._details.picture);
+}
+setPicture(file) {
+  this.data.picture.setFile(file);
+}
+removePicture() {
+  this.data.picture=new imageType(this.getPath + "/picture")
+}
+async updateImages($store) {
+  if(this.data.picture){
+    if(this.data.picture.fileData)
+      await this.data.picture.update($store)
+      this._details.picture=this.data.picture.getFileURL
+  }
+}
+get getPath() {
+  return "Scholarships/" + this._id;
+}
+
   static async getScholarship(_id) {
     return apolloClient.query({
       query: QUERIES.GET_SCHOLARSHIP,
