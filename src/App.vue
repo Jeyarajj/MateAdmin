@@ -25,6 +25,18 @@ export default {
       colorScheme: "colorScheme"
     })
   },
+  watch: {
+    "$store.getters.isAuthenticated": function(isAuthenticated) {
+      if (isAuthenticated) {
+        if (this.$route.query.redirect) {
+          this.$router.push({
+            path: decodeURIComponent(this.$route.query.redirect)
+          });
+        }
+      }
+    }
+  },
+
   methods: {
     handleSubdrawer(value) {
       this.subDrawer = value;

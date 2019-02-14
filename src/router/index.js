@@ -120,7 +120,7 @@ export default router;
  */
 router.beforeEach((to, from, next) => {
   let willRedirect = false;
-  let initializedStore = store.getters;
+  let initializedStore = store;
   // if (initializedStore) {
   //   const abilities = defineAbilitiesFor(initializedStore.getters.rolePermission)
   //   const canNavigate = to.matched.some(route => {
@@ -141,8 +141,8 @@ router.beforeEach((to, from, next) => {
       to,
       from,
       next,
-      initializedStore.isAuthenticated,
-      initializedStore.isUserEmailVerified
+      initializedStore.getters.isAuthenticated,
+      initializedStore.getters.isUserEmailVerified
     );
   } else {
     window.firebaseWaitInterval = window.setInterval(() => {
@@ -154,8 +154,8 @@ router.beforeEach((to, from, next) => {
           to,
           from,
           next,
-          initializedStore.isAuthenticated,
-          initializedStore.isUserEmailVerified
+          initializedStore.getters.isAuthenticated,
+          initializedStore.getters.isUserEmailVerified
         );
       }
     }, 200);
