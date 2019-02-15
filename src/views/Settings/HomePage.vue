@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-container fluid grid-list-xl class="pb-0">
     <v-toolbar flat color="white">
       <v-toolbar-title>My CRUD</v-toolbar-title>
       <v-divider
@@ -89,6 +90,7 @@
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
+    </v-container>
   </div>
 </template>
 

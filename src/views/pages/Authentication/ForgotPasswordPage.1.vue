@@ -74,7 +74,7 @@
         stage: 1,
         email: null,
         code: null,
-        backgroundImg: '/static/doc-images/HexesisMaterial01.png'
+        backgroundImg: require('@/assets/HexesisMaterial01.png')
       }
     },
     methods: {

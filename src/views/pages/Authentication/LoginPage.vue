@@ -11,7 +11,7 @@
             <v-layout align-center justify-center row fill-height wrap>
               <v-flex xs12 class="text-xs-center mt-3">
                 <img
-                  src="../../../assets/mate_logo.png"
+                  src="@/assets/mate_logo.png"
                   alt="`Mate`"
                   class="text-xs-center"
                   height="100"
@@ -25,7 +25,7 @@
                     <v-flex xs12 pa-0>
                       <v-text-field
                         color="primary"
-                        label="Email"
+                        label="Email ID"
                         v-model="form.email"
                         required
                         :error-messages="fieldErrors('form.email')"
@@ -111,11 +111,11 @@ export default {
   validationMessages: {
     form: {
       email: {
-        required: "Please enter email",
+        required: "Please enter your email ID",
         email: "Email must be valid"
       },
       password: {
-        required: "Please enter password",
+        required: "Please enter your password",
         minLength: "Password must be of 6 characters"
       }
     }
@@ -129,8 +129,8 @@ export default {
       errormessage: null,
       snackbar: false,
       searched: [],
-      //backgroundImg: '../../../assets/HexesisMaterial01.png'
-      backgroundImg: ""
+      backgroundImg: require('@/assets/HexesisMaterial01.png')
+      //backgroundImg: ""
     };
   },
   components: {},

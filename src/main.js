@@ -38,7 +38,7 @@ import 'v-toaster/dist/v-toaster.css';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 // Init plugin
-Vue.use(Loading, { 'is-full-page': true, loader: 'dots', color: 'red' });
+Vue.use(Loading, { 'is-full-page': true, loader: 'dots', color: 'primary' });
 Vue.use(Toaster, { timeout: 2000 });
 Vue.use(VueCloneya);
 Vue.use(Vuebar);

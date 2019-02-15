@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-container fluid grid-list-xl class="pb-0">
     <v-toolbar flat extended class="transparent section-definition-toolbar">
       <v-avatar class="box-glow" tile>
         <v-icon dark v-html="icon" v-if="icon"></v-icon>
@@ -70,6 +71,8 @@
                 <v-flex xs12 sm6 md6>
                   <v-text-field v-model="defaultCounselor._details.website" label="Website"></v-text-field>
                 </v-flex>
+
+                <v-flex xs12 sm6 md6></v-flex>
 
                 <v-flex xs12 sm6 md6>
                   <country-select
@@ -151,6 +154,7 @@
         <v-btn color="primary">Reset</v-btn>
       </template>
     </v-data-table>
+    </v-container>
   </div>
 </template>
 <script>

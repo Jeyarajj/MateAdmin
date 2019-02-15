@@ -25,7 +25,7 @@
                     <v-flex xs12 pa-0>
                       <v-text-field
                         color="primary"
-                        label="Email"
+                        label="Email ID"
                         v-model="form.email"
                         required
                         :error-messages="fieldErrors('form.email')"
@@ -89,7 +89,7 @@ export default {
   validationMessages: {
     form: {
       email: {
-        required: "Please enter email",
+        required: "Please enter your registered email ID",
         email: "Email must be valid"
       }
     }
@@ -97,8 +97,8 @@ export default {
   data() {
     return {
       form: Object.assign({}, defaultForm),
-      //backgroundImg: '../../../assets/HexesisMaterial01.png'
-      backgroundImg: "",
+      backgroundImg: require('@/assets/HexesisMaterial01.png'),
+      //backgroundImg: "",
       showSuccess: false,
       showError:false,
       successMessage: null,
