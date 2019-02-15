@@ -36,7 +36,7 @@ export default [
   {
     title: 'Counselors',
     group: 'counselors',
-    icon: 'people',
+    icon: 'supervisor_account',
     items: [
       { title: 'Manage Counselors', name: 'CounselorsList' }
     ]
@@ -44,7 +44,7 @@ export default [
   {
     title: 'Mentors',
     group: 'mentors',
-    icon: 'people',
+    icon: 'accessibility',
     items: [
       { title: 'Manage Mentors', name: 'MentorsList' }
     ]
