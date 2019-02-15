@@ -187,9 +187,10 @@
         <td class="justify-center">{{ props.item._details.degree }}</td>
         <td class="justify-center">{{ props.item.status }}</td>
 
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-          <!-- <v-icon v-if="props.item.status != 'disable'" small @click="deleteItem(props.item)">delete</v-icon> -->
+        <td class="justify-center">
+        <v-btn flat icon @click="editItem(props.item)">
+            <v-icon small color="primary">edit</v-icon>
+          </v-btn>
         </td>
       </template>
       <template slot="no-data">
@@ -254,7 +255,8 @@ export default {
       },
       { text: "Couse Level", value: "course_level" },
       { text: "Degree", value: "degree" },
-      { text: "Status", value: "status" }
+      { text: "Status", value: "status" },
+      { text: "Actions", value: "actions" }
     ],
     coursedata: "",
     editedIndex: -1

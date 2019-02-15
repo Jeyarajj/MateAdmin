@@ -42,7 +42,6 @@
               <v-layout wrap>
                 <v-flex xs12 sm6 md12>
                   <v-text-field
-                    prepend-icon="person"
                     v-model="defaultMentor._details.name"
                     :error-messages="fieldErrors('defaultMentor._details.name')"
                     @input="$v.defaultMentor._details.name.$touch()"
@@ -53,7 +52,6 @@
 
                 <v-flex xs12 sm6 md6>
                   <v-text-field
-                    prepend-icon="email"
                     v-model="defaultMentor.email"
                     :error-messages="fieldErrors('defaultMentor.email')"
                     @input="$v.defaultMentor.email.$touch()"
@@ -65,7 +63,6 @@
 
                 <v-flex xs12 sm6 md6>
                   <v-text-field
-                    prepend-icon="phone"
                     v-model="defaultMentor._details.phone"
                     :error-messages="fieldErrors('defaultMentor._details.phone')"
                     @input="$v.defaultMentor._details.phone.$touch()"

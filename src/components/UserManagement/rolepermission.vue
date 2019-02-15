@@ -71,6 +71,7 @@
                         <v-checkbox
                           v-model="defaultRole.role_permission[index2].has_access[access]"
                           :value="true"
+                          color="light-green lighten-1"
                           class="Rolepermission-14"
                         ></v-checkbox>
                       </td>
@@ -88,7 +89,7 @@
               @click="createRole()"
               :disabled="$v.$invalid"
               :class="$v.$invalid ? '' : 'white--text'"
-              color="act"
+              color="green"
             >Save</v-btn>
           </v-card-actions>
         </v-card>
