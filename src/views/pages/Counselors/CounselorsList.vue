@@ -87,40 +87,44 @@
                     :region="defaultCounselor._details.address.city"
                   />
                 </v-flex>
-                <v-flex xs12 sm12 md6>
-                  <v-progress-linear
-                    v-if="counselorPicture.uploadStatus"
-                    indeterminate
-                    color="light-green darken-2"
-                    class="mb-0"
-                  ></v-progress-linear>
-                  <span v-if="counselorPicture.exists">
-                    <v-img :src="counselorPicture.fileUrl" aspect-ratio="1.7"></v-img>
+              <v-flex md6 v-if="defaultCounselor._id">
+              <v-card class="card--flex-toolbar">
+                <v-toolbar card prominent color="blue-grey darken-3">
+                  <v-toolbar-title class="body-2 white--text">Upload Picture</v-toolbar-title>
+                </v-toolbar>
+                <v-divider></v-divider>
+
+                <v-card-text>
+                <span>
+                    <v-img srcset lazy-src :src="defaultCounselor.data.photo.fileUrl" width="250" height="auto"></v-img>
                     <v-btn
+                      v-if="defaultCounselor.data.photo.fileUrl"
                       color="error"
                       dark
-                      @click="removeImage(counselorPicture)"
+                      @click="removePicture()"
                       class="removebtn_counsellor"
                     >
-                      <v-icon dark left>remove_circle</v-icon>Remove
+                     <v-icon dark left>remove_circle</v-icon>Remove
                     </v-btn>
-                    <!-- <span @click="removeImage(counselorPicture)"> Remove</span> -->
                   </span>
                   <file-upload
-                    input-id="counselorPicture"
+                    input-id="counselorPhoto"
+                    class="btn btn-primary"
                     extensions="gif,jpg,jpeg,png,webp"
                     accept="image/png, image/gif, image/jpeg, image/webp"
                     :multiple="false"
                     :size="1024 * 1024 * 10"
-                    @input="onPicture"
+                    @input="setPicture"
                     ref="upload"
                   >
                     <v-btn color="primary" dark>
-                      <v-icon left dark>add_photo_alternate</v-icon>Upload Picture
+                      <v-icon left dark>add_photo_alternate</v-icon>Add Picture
                     </v-btn>
                   </file-upload>
-                </v-flex>
-              </v-layout>
+                </v-card-text>
+            </v-card>
+          </v-flex>
+           </v-layout>
             </v-container>
           </v-card-text>
 
@@ -243,7 +247,20 @@ export default {
     }
   },
 
-  methods: {
+  methods: {  
+     setPicture() {
+      let file = event.target.files[0];
+      let URL = window.URL || window.webkitURL;
+      if (URL && URL.createObjectURL) {
+        this.defaultCounselor.data.photo.setFileUrl(
+          URL.createObjectURL(file)
+        );
+      }
+      this.defaultCounselor.setPhoto(file);
+    },
+    removePicture(index) {
+      this.defaultCounselor.removePhoto();
+    },
     openEdit() {
       this.defaultCounselor = new Counselor();
     },
@@ -265,16 +282,6 @@ export default {
         });
       }
     },
-    onPicture(value) {
-      let file = event.target.files[0];
-      let path = "Counselors";
-      this.counselorPicture = new imageType(file, path, this.$store);
-      this.defaultCounselor._details.photo = this.counselorPicture.fileUrl;
-    },
-    removeImage(imageDTO) {
-      imageDTO.delete(this.$store);
-    },
-
     editItem(item) {
       this.defaultCounselor = new Counselor(item);
       this.dialog = true;
@@ -289,7 +296,10 @@ export default {
       this.dialog = false;
     },
     async save() {
+      this.loader=this.$loading.show()
+      await this.defaultCounselor.updateImages(this.$store)
       const res = await this.defaultCounselor.createCounselor();
+      this.loader.hide()
       if (res.data.hasOwnProperty("createCounselor")) {
         this.$toaster.success("Counselor Saved Successfully");
         this.defaultCounselor._id = res.data.createCounselor._id;
