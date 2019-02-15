@@ -40,6 +40,7 @@ export const QUERIES = {
               addr
             }
             website
+            photo
           }
           active
         }
