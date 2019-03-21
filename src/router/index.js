@@ -1,177 +1,670 @@
-import Vue from 'vue';
+import Vue from 'vue'
+import Router from 'vue-router'
 
-import _ from 'lodash';
+// Containers
+const DefaultContainer = () => import('@/containers/DefaultContainer')
 
-import Router from 'vue-router';
-import { store } from '../store/index';
-import { routes } from './routes';
+// Views
+const Dashboard = () => import('@/views/Dashboard')
 
-Vue.use(Router);
+// Access Management
+const RolePermission = () => import('@/views/pages/AccessManagement/RolePermission')
+const UsersList = () => import('@/views/pages/AccessManagement/UsersList')
 
-const router = new Router({
-  mode: 'history',
-  routes
-});
+// Content Management
+const HomepageSettings = () => import('@/views/pages/ContentManagement/HomepageSettings')
+const Articles = () => import('@/views/pages/ContentManagement/Articles')
+const ArticlePage = () => import('@/views/pages/ContentManagement/ArticlePage')
+const ArticleComments = () => import('@/views/pages/ContentManagement/ArticleComments')
+const Counsellors = () => import('@/views/pages/ContentManagement/Counsellors')
+const Countries = () => import('@/views/pages/ContentManagement/Countries')
+const MateJourney = () => import('@/views/pages/ContentManagement/MateJourney')
 
-/*
- * router.beforeEach((to, from, next) => { if (to.meta.requiresAuth) { const
- * authUser = localStorage.getItem('access_token') if (authUser) { next() } else {
- * next({name: 'Login'}) } } next() })
- */
+// Institutions
+const ManageInstitutions = () => import('@/views/pages/Institutions/ManageInstitutions')
+const ManageCourses = () => import('@/views/pages/Institutions/ManageCourses')
+const ManageScholarships = () => import('@/views/pages/Institutions/ManageScholarships')
+const BulkImport = () => import('@/views/pages/Institutions/BulkImport')
 
-/**
- * If the route can't be accessed directly for some reason, it should be redirected to somewhere else.
- * We get the route as specified in the metadata and replace any current params which are also going to be present in the target route.
- * Currently it only supports route parameters and not query parameters.
- *
- * @param {Object} to - Same as the param to which is received by Vue Router's navigation guards.
- * @param {Object} from - Same as the param from which is received by Vue Router's navigation guards.
- * @param {Function} next - Same as the param next which is received by Vue Router's navigation guards.
- * @param {Boolean} isAuthenticated - A Boolean flag which indicates if the user is authenticated or not.
- * @param {Boolean} isVerified - A Boolean flag which indicates if the user's email has been verified or not.
- *
- * @returns {Boolean} A Boolean value which will say if redirection will happen or not.
- */
-function checkForDirectURLAccess(to, from, next, isAuthenticated, isVerified) {
-  if (to.matched.some(route => route.meta.privateRouteGuard)) {
-    return to.meta.privateRouteGuard(
-      to,
-      from,
-      next,
-      isAuthenticated,
-      isVerified
-    );
-  }
-  const toParameters = _.cloneDeep(to.params);
+// Configurations
+const Metatags = () => import('@/views/pages/Configurations/Metatags')
 
-  if (to.matched.some(route => route.meta.redirectOnURLAccess)) {
-    let newTargetURL = to.meta.redirectOnURLAccess;
-    for (const parameter in toParameters) {
-      if (toParameters.hasOwnProperty(parameter)) {
-        const parameterValue = toParameters[parameter];
-        if (parameterValue) {
-          newTargetURL = newTargetURL
-            .split(`:${parameter}`)
-            .join(parameterValue);
+// Marketing
+const ContactsManagement = () => import('@/views/pages/Marketing/ContactsManagement')
+const MarketingBulkUpload = () => import('@/views/pages/Marketing/MarketingBulkUpload')
+
+// Ad Management
+
+// Content
+const ManageWebContent = () => import('@/views/pages/Content/ManageWebContent')
+const ManageComments = () => import('@/views/pages/Content/ManageComments')
+
+// Settings
+const Notifications = () => import('@/views/pages/Settings/Notifications')
+const Profile = () => import('@/views/pages/Settings/Profile')
+const SecurityPrivacy = () => import('@/views/pages/Settings/SecurityPrivacy')
+
+// Reports
+const CustomReportsReview = () => import('@/views/pages/Reports/CustomReportsReview')
+const BulkDownload = () => import('@/views/pages/Reports/BulkDownload')
+
+const Colors = () => import('@/views/theme/Colors')
+const Typography = () => import('@/views/theme/Typography')
+
+const Charts = () => import('@/views/Charts')
+const Widgets = () => import('@/views/Widgets')
+
+// Views - Components
+const Cards = () => import('@/views/base/Cards')
+const Switches = () => import('@/views/base/Switches')
+const Tabs = () => import('@/views/base/Tabs')
+const Breadcrumbs = () => import('@/views/base/Breadcrumbs')
+const Carousels = () => import('@/views/base/Carousels')
+const Collapses = () => import('@/views/base/Collapses')
+const Jumbotrons = () => import('@/views/base/Jumbotrons')
+const ListGroups = () => import('@/views/base/ListGroups')
+const Navs = () => import('@/views/base/Navs')
+const Navbars = () => import('@/views/base/Navbars')
+const Paginations = () => import('@/views/base/Paginations')
+const Popovers = () => import('@/views/base/Popovers')
+const ProgressBars = () => import('@/views/base/ProgressBars')
+const Tooltips = () => import('@/views/base/Tooltips')
+
+// Views - Buttons
+const StandardButtons = () => import('@/views/buttons/StandardButtons')
+const ButtonGroups = () => import('@/views/buttons/ButtonGroups')
+const Dropdowns = () => import('@/views/buttons/Dropdowns')
+const BrandButtons = () => import('@/views/buttons/BrandButtons')
+
+// Views - Editors
+const TextEditors = () => import('@/views/editors/TextEditors')
+const CodeEditors = () => import('@/views/editors/CodeEditors')
+
+// Views - Forms
+const BasicForms = () => import('@/views/forms/BasicForms')
+const AdvancedForms = () => import('@/views/forms/AdvancedForms')
+const ValidationForms = () => import('@/views/forms/ValidationForms')
+
+// Views GoogleMaps
+const GoogleMaps = () => import('@/views/GoogleMaps')
+
+// Views - Icons
+const Flags = () => import('@/views/icons/Flags')
+const FontAwesome = () => import('@/views/icons/FontAwesome')
+const SimpleLineIcons = () => import('@/views/icons/SimpleLineIcons')
+const CoreUIIcons = () => import('@/views/icons/CoreUIIcons')
+
+// Views - Notifications
+const Alerts = () => import('@/views/notifications/Alerts')
+const Badges = () => import('@/views/notifications/Badges')
+const Modals = () => import('@/views/notifications/Modals')
+const Toastr = () => import('@/views/notifications/Toastr')
+
+// Views - Tables
+const Tables = () => import('@/views/tables/Tables')
+const DataTable = () => import('@/views/tables/DataTable')
+
+// Views - Pages
+const Page404 = () => import('@/views/pages/Page404')
+const Page500 = () => import('@/views/pages/Page500')
+const Login = () => import('@/views/pages/Login')
+const Register = () => import('@/views/pages/Register')
+
+// Users
+const Users = () => import('@/views/users/Users')
+const User = () => import('@/views/users/User')
+
+// Plugins
+const Draggable = () => import('@/views/plugins/Draggable')
+const Calendar = () => import('@/views/plugins/Calendar')
+const Spinners = () => import('@/views/plugins/Spinners')
+
+// Views - UI Kits
+const Invoice = () => import('@/views/apps/invoicing/Invoice')
+const Compose = () => import('@/views/apps/email/Compose')
+const Inbox = () => import('@/views/apps/email/Inbox')
+const Message = () => import('@/views/apps/email/Message')
+
+Vue.use(Router)
+
+export default new Router({
+  mode: 'hash', // https://router.vuejs.org/api/#mode
+  linkActiveClass: 'open active',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: [
+    {
+      path: '/',
+      redirect: '/dashboard',
+      name: 'Home',
+      component: DefaultContainer,
+      children: [
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: Dashboard
+        },
+        {
+          path: 'pages/AccessManagement/RolePermission',
+          name: 'Role Permission',
+          component: RolePermission
+        },
+        {
+          path: 'pages/AccessManagement/UsersList',
+          name: 'Users List',
+          component: UsersList
+        },
+
+        {
+          path: 'pages/Institutions/ManageInstitutions',
+          name: 'Manage Institutions',
+          component: ManageInstitutions
+        },
+        {
+          path: 'pages/Institutions/ManageCourses',
+          name: 'Manage Courses',
+          component: ManageCourses
+        },
+        {
+          path: 'pages/Institutions/ManageScholarships',
+          name: 'Manage Scholarships',
+          component: ManageScholarships
+        },
+        {
+          path: 'pages/Institutions/BulkImport',
+          name: 'Bulk Import',
+          component: BulkImport
+        },
+
+        {
+          path: 'pages/ContentManagement/Counsellors',
+          name: 'Counsellors',
+          component: Counsellors
+        },
+
+        {
+          path: 'pages/ContentManagement/Countries',
+          name: 'Countries',
+          component: Countries
+        },
+
+        {
+          path: 'pages/ContentManagement/MateJourney',
+          name: 'Mate Journey',
+          component: MateJourney
+        },
+        
+        {
+          path: 'pages/Marketing/ContactsManagement',
+          name: 'Contacts Management',
+          component: ContactsManagement
+        },
+
+        {
+          path: 'pages/Marketing/MarketingBulkUpload',
+          name: 'Bulk Upload',
+          component: MarketingBulkUpload
+        },
+
+        {
+          path: 'pages/ContentManagement/Articles',
+          name: 'Articles',
+          component: Articles
+        },
+        {
+          path: 'pages/ContentManagement/ArticlePage',
+          name: 'Article Page',
+          component: ArticlePage
+        },
+        {
+          path: 'pages/ContentManagement/ArticleComments',
+          name: 'Article Comments',
+          component: ArticleComments
+        },
+
+        {
+          path: 'pages/Content/ManageWebContent',
+          name: 'Manage Web Content',
+          component: ManageWebContent
+        },
+        {
+          path: 'pages/Content/ManageComments',
+          name: 'Manage Comments',
+          component: ManageComments
+        },
+
+        {
+          path: 'pages/ContentManagement/HomepageSettings',
+          name: 'Homepage Settings',
+          component: HomepageSettings
+        },
+        {
+          path: 'pages/Settings/Notifications',
+          name: 'Notifications',
+          component: Notifications
+        },
+        {
+          path: 'pages/Settings/Profile',
+          name: 'Profile',
+          component: Profile
+        },
+        {
+          path: 'pages/Settings/SecurityPrivacy',
+          name: 'Security & Privacy',
+          component: SecurityPrivacy
+        },
+        {
+          path: 'pages/Configurations/Metatags',
+          name: 'Meta Tags',
+          component: Metatags
+        },
+
+        {
+          path: 'pages/Reports/CustomReportsReview',
+          name: 'Custom Reports Review',
+          component: CustomReportsReview
+        },
+        {
+          path: 'pages/Reports/BulkDownload',
+          name: 'Bulk Download',
+          component: BulkDownload
+        },
+
+
+
+        {
+          path: 'theme',
+          redirect: '/theme/colors',
+          name: 'Theme',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'colors',
+              name: 'Colors',
+              component: Colors
+            },
+            {
+              path: 'typography',
+              name: 'Typography',
+              component: Typography
+            }
+          ]
+        },
+        {
+          path: 'charts',
+          name: 'Charts',
+          component: Charts
+        },
+        {
+          path: 'widgets',
+          name: 'Widgets',
+          component: Widgets
+        },
+        {
+          path: 'users',
+          meta: { label: 'Users'},
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Users,
+            },
+            {
+              path: ':id',
+              meta: { label: 'User Details'},
+              name: 'User',
+              component: User,
+            },
+          ]
+        },
+        {
+          path: 'base',
+          redirect: '/base/cards',
+          name: 'Base',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'breadcrumbs',
+              name: 'Breadcrumbs',
+              component: Breadcrumbs
+            },
+            {
+              path: 'cards',
+              name: 'Cards',
+              component: Cards
+            },
+            {
+              path: 'carousels',
+              name: 'Carousels',
+              component: Carousels
+            },
+            {
+              path: 'collapses',
+              name: 'Collapses',
+              component: Collapses
+            },
+            {
+              path: 'jumbotrons',
+              name: 'Jumbotrons',
+              component: Jumbotrons
+            },
+            {
+              path: 'list-groups',
+              name: 'List Groups',
+              component: ListGroups
+            },
+            {
+              path: 'navs',
+              name: 'Navs',
+              component: Navs
+            },
+            {
+              path: 'navbars',
+              name: 'Navbars',
+              component: Navbars
+            },
+            {
+              path: 'paginations',
+              name: 'Paginations',
+              component: Paginations
+            },
+            {
+              path: 'popovers',
+              name: 'Popovers',
+              component: Popovers
+            },
+            {
+              path: 'progress-bars',
+              name: 'Progress Bars',
+              component: ProgressBars
+            },
+            {
+              path: 'switches',
+              name: 'Switches',
+              component: Switches
+            },
+            {
+              path: 'tabs',
+              name: 'Tabs',
+              component: Tabs
+            },
+            {
+              path: 'tooltips',
+              name: 'Tooltips',
+              component: Tooltips
+            }
+          ]
+        },
+        {
+          path: 'buttons',
+          redirect: '/buttons/standard-buttons',
+          name: 'Buttons',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'standard-buttons',
+              name: 'Standard Buttons',
+              component: StandardButtons
+            },
+            {
+              path: 'button-groups',
+              name: 'Button Groups',
+              component: ButtonGroups
+            },
+            {
+              path: 'dropdowns',
+              name: 'Dropdowns',
+              component: Dropdowns
+            },
+            {
+              path: 'brand-buttons',
+              name: 'Brand Buttons',
+              component: BrandButtons
+            }
+          ]
+        },
+        {
+          path: 'editors',
+          redirect: '/editors/text-editors',
+          name: 'Editors',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'text-editors',
+              name: 'Text Editors',
+              component: TextEditors
+            },
+            {
+              path: 'code-editors',
+              name: 'Code Editors',
+              component: CodeEditors
+            }
+          ]
+        },
+        {
+          path: 'forms',
+          redirect: '/forms/basic-forms',
+          name: 'Forms',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'basic-forms',
+              name: 'Basic Forms',
+              component: BasicForms
+            },
+            {
+              path: 'advanced-forms',
+              name: 'Advanced Forms',
+              component: AdvancedForms
+            },
+            {
+              path: 'validation-forms',
+              name: 'Form Validation',
+              component: ValidationForms
+            }
+          ]
+        },
+        {
+          path: 'google-maps',
+          name: 'Google Maps',
+          component: GoogleMaps
+        },
+        {
+          path: 'icons',
+          redirect: '/icons/font-awesome',
+          name: 'Icons',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'coreui-icons',
+              name: 'CoreUI Icons',
+              component: CoreUIIcons
+            },
+            {
+              path: 'flags',
+              name: 'Flags',
+              component: Flags
+            },
+            {
+              path: 'font-awesome',
+              name: 'Font Awesome',
+              component: FontAwesome
+            },
+            {
+              path: 'simple-line-icons',
+              name: 'Simple Line Icons',
+              component: SimpleLineIcons
+            }
+          ]
+        },
+        {
+          path: 'notifications',
+          redirect: '/notifications/alerts',
+          name: 'Notifications',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'alerts',
+              name: 'Alerts',
+              component: Alerts
+            },
+            {
+              path: 'badges',
+              name: 'Badges',
+              component: Badges
+            },
+            {
+              path: 'modals',
+              name: 'Modals',
+              component: Modals
+            },
+            {
+              path: 'toastr',
+              name: 'Toastr',
+              component: Toastr
+            }
+          ]
+        },
+        {
+          path: 'plugins',
+          redirect: '/plugins/draggable',
+          name: 'Plugins',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'draggable',
+              name: 'Draggable Cards',
+              component: Draggable
+            },
+            {
+              path: 'calendar',
+              name: 'Calendar',
+              component: Calendar
+            },
+            {
+              path: 'spinners',
+              name: 'Spinners',
+              component: Spinners
+            },
+          ]
+        },
+        {
+          path: 'tables',
+          redirect: '/tables/tables',
+          name: 'Tables',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'tables',
+              name: 'Simple Tables',
+              component: Tables
+            },
+            {
+              path: 'data-table',
+              name: 'Data Table',
+              component: DataTable
+            },
+          ]
+        },
+        {
+          path: 'apps',
+          name: 'Apps',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'invoicing',
+              redirect: '/apps/invoicing/invoice',
+              name: 'Invoicing',
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: 'invoice',
+                  name: 'Invoice',
+                  component: Invoice
+                }
+              ]
+            },
+            {
+              path: 'email',
+              redirect: '/apps/email/inbox',
+              name: 'Email',
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: 'compose',
+                  name: 'Compose',
+                  component: Compose
+                },
+                {
+                  path: 'inbox',
+                  name: 'Inbox',
+                  component: Inbox
+                },
+                {
+                  path: 'message',
+                  name: 'Message',
+                  component: Message
+                }
+              ]
+            }
+          ]
         }
-      }
-    }
-    next({
-      path: newTargetURL
-    });
-    return true;
-  } else if (to.matched.some(route => route.meta.verified) && !isVerified) {
-    next({
-      path: '/'
-    });
-    return true;
-  } else {
-    next();
-    return false;
-  }
-}
-
-/**
- * Checks if the route needs authentication before accessing it.
- * Conditionally calls for {checkForDirectURLAccess} to see if the route also needs special checking on direct URL access.
- *
- * @param {Object} to - Same as the param to which is received by Vue Router's navigation guards.
- * @param {Object} from - Same as the param from which is received by Vue Router's navigation guards.
- * @param {Function} next - Same as the param next which is received by Vue Router's navigation guards.
- * @param {Boolean} isAuthenticated - A Boolean flag which indicates if the user is authenticated or not.
- * @param {Boolean} isVerified - A Boolean flag which indicates if the user's email has been verified or not.
- *
- * @returns {Boolean} A Boolean value which will say if redirection will happen or not.
- */
-function checkForAuthenticatedAccess(
-  to,
-  from,
-  next,
-  isAuthenticated,
-  isVerified
-) {
-  if (to.matched.some(route => route.meta.authenticated)) {
-    if (isAuthenticated) {
-      return checkForDirectURLAccess(
-        to,
-        from,
-        next,
-        isAuthenticated,
-        isVerified
-      );
-    } else {
-      next({
-        path: '/',
-        query: {
-          redirect: to.fullPath
+      ]
+    },
+    {
+      path: '/pages',
+      redirect: '/pages/404',
+      name: 'Pages',
+      component: {
+        render (c) { return c('router-view') }
+      },
+      children: [
+        {
+          path: '404',
+          name: 'Page404',
+          component: Page404
+        },
+        {
+          path: '500',
+          name: 'Page500',
+          component: Page500
+        },
+        {
+          path: 'login',
+          name: 'Login',
+          component: Login
+        },
+        {
+          path: 'register',
+          name: 'Register',
+          component: Register
         }
-      });
-      return true;
+      ]
     }
-  } else {
-    return checkForDirectURLAccess(to, from, next, isAuthenticated, isVerified);
-  }
-}
-
-export default router;
-
-/**
- * Main Authentication Guard for Vue Router.
- */
-router.beforeEach((to, from, next) => {
-  let willRedirect = false;
-  let initializedStore = store;
-  // if (initializedStore) {
-  //   const abilities = defineAbilitiesFor(initializedStore.getters.rolePermission)
-  //   const canNavigate = to.matched.some(route => {
-  //     return abilities.can(route.meta.action, route.meta.resource)
-  //   })
-  //   console.log(canNavigate)
-  //   if (!canNavigate) {
-  //     return next('/')
-  //   }
-  // }
-
-  // Firebase might not have been initialized yet so we don't know if the authentication is valid.
-  // We should wait for Firebase initialization if the user is attempting to access any router other than the root path.
-  if (to.path === '/') {
-    next();
-  } else if (initializedStore) {
-    willRedirect = checkForAuthenticatedAccess(
-      to,
-      from,
-      next,
-      initializedStore.getters.isAuthenticated,
-      initializedStore.getters.isUserEmailVerified
-    );
-  } else {
-    window.firebaseWaitInterval = window.setInterval(() => {
-      let initializedStore = store.getters;
-      if (initializedStore) {
-        // Firebase has been initialized and we can see if the user has been authenticated or not
-        window.clearInterval(window.firebaseWaitInterval);
-        willRedirect = checkForAuthenticatedAccess(
-          to,
-          from,
-          next,
-          initializedStore.getters.isAuthenticated,
-          initializedStore.getters.isUserEmailVerified
-        );
-      }
-    }, 200);
-  }
-  // if (initializedStore) {
-  //   if (!initializedStore.isAuthenticated) {
-  //     next('/');
-  //     return true;
-  //   }
-  // }
-  // if (!willRedirect) {
-  //   next('/');
-  // }
-  // Clear Header Bar notices when the user navigates to another route.
-  // Will not disperse the notice if the route is supposed to be redirected to somewhere else.
-  if (initializedStore && !willRedirect) {
-    //initializedStore.dispatch('disperseLastNotice');
-  }
-});
+  ]
+})

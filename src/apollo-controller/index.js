@@ -41,7 +41,7 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:22641/Mate/point/graphql'
+  uri: 'http://dev.api.themate.org:22641/Mate/point/graphql'
 });
 
 const authLink = setContext((_, { headers }) => {

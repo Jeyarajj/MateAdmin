@@ -89,7 +89,7 @@ export class Role {
   toJSON() {
     const roles = [];
     this.role_permission.forEach(ele => {
-      const out = ele.toJSON();
+      const out = AccessPermission.toJSON(ele)
       roles.push(out);
     });
     return {
@@ -106,9 +106,9 @@ export class Role {
         variables: this.toJSON()
       });
     } else {
-      Users.getProfile(this.created_by).then(data => {
-        this.username = data.data.getProfile[0]._profile.name.first;
-      });
+      // Users.getProfile(this.created_by).then(data => {
+      //   this.username = data.data.getProfile[0]._profile.name.first;
+      // });
       const packet = this.toJSON();
       packet.created_by = this.created_by;
       return apolloClient.mutate({
@@ -118,6 +118,7 @@ export class Role {
     }
   }
 }
+
 export class AccessPermission {
   module_name = '';
   // label = ""
@@ -128,15 +129,15 @@ export class AccessPermission {
     view: false,
     publish: false
   };
-  toJSON() {
+  static toJSON(param) {
     return {
-      module_name: this.module_name,
+      module_name: param.module_name,
       has_access: {
-        create: this.has_access.create,
-        update: this.has_access.update,
-        delete: this.has_access.delete,
-        view: this.has_access.view,
-        publish: this.has_access.publish
+        create: param.has_access.create,
+        update: param.has_access.update,
+        delete: param.has_access.delete,
+        view: param.has_access.view,
+        publish: param.has_access.publish
       }
     };
   }

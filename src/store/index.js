@@ -9,8 +9,6 @@ import { user } from './user/user';
 import { FileUpload } from './Fileupload/fileupload';
 import { nationalities } from './locale/nationalities';
 import { currencies } from './locale/currencies';
-import navigation from './modules/navigation';
-import swatch from './modules/swatch';
 import pagination from './shared-components/pagination';
 
 Vue.use(Vuex);
@@ -19,10 +17,8 @@ export const store = new Vuex.Store({
   modules: {
     user,
     FileUpload,
-    navigation,
     nationalities,
     currencies,
-    swatch,
     pagination
   },
   actions: {
